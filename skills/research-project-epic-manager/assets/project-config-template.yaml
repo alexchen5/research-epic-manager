@@ -1,0 +1,108 @@
+project:
+  name: "transformer-efficiency"
+  topic: "Efficient attention mechanisms for transformer models"
+  description: "Comparative study of sparse attention, linear attention, and FFT-based attention"
+
+research:
+  # Topic boundaries that ARE part of the research scope and should appear
+  # in issue briefs and the synthesis prompt.
+  boundaries:
+    - "Focus on encoder-only transformer architectures"
+    - "Exclude sparse attention methods based on clustering"
+
+execution:
+  # Execution constraints that limit HOW the work is done but are NOT part
+  # of the research contribution. These are filtered out of issue briefs
+  # and synthesis prompts automatically by the skill.
+  constraints:
+    - "CPU-only: no GPU or accelerator hardware"
+    - "Maximum 90 minutes total wall-clock run time"
+    - "All datasets must be publicly available (< 5 GB)"
+  workspace: "research-project-manager"  # Skill workspace name for project-scoped directories
+
+planning:
+  # Dynamic just-in-time issue lifecycle (the default). The epic manager
+  # opens issues at each stage entry (stage-anchor issue first, then splits
+  # for parallel work, then rework issues when a gate routes a stage back).
+  # Issues are NEVER pre-generated in bulk at scoping time.
+  dynamic_issues: true
+  # The legacy planning.num_issues field is REMOVED from the schema. If a
+  # legacy config still carries it, it is tolerated and ignored.
+  issue_template: "default"
+
+autonomy:
+  # Autonomous-by-default: the epic manager runs end-to-end
+  # without stopping for human approval at plan approval, stage boundaries,
+  # review gates, settlement, or synthesis; it decides, records the decision
+  # plus rationale on the orchestration-log (and on the affected issue when
+  # issue-scoped), and proceeds. Humans stay reachable mid-run via the
+  # user-input front-end channel: the epic manager routes input onto the
+  # affected issues through the owning issue managers' comments (marked
+  # [human-directive: <digest>] with date + routing interpretation), and
+  # project-level inputs are additionally summarised on the
+  # orchestration-log. Escalation narrows to genuine blockers only:
+  # loop-limit blocks, catastrophic failure rates, missing route targets.
+  # mode: "autonomous" (default) | "gated" (legacy human-approval stops)
+  mode: autonomous
+
+dispatch:
+  max_concurrent: 3
+  retry_on_block: true
+  max_retries: 3
+  collection_timeout: 300
+  manager_model: auto
+  issue_model: auto
+
+ideation:
+  # Hypothesis-stage iterative ideation loop (generate -> multi-criteria
+  # review -> revise). The thread of the hypothesis anchor issue IS the
+  # revision history: proposal v1 comment -> critique comments (dispatcher-
+  # posted) -> proposal v2 comment -> ... Stop conditions, evaluated every
+  # round: pass (every component, every criterion >= 4), cap (round ==
+  # max_rounds), plateau (no criterion improved vs the previous round AND
+  # the failing set unchanged). Plateau detection is enabled by default
+  # (not a config switch).
+  max_rounds: 3        # round cap; 0 disables the ideation loop entirely
+  reviewers: 2         # reviewer perspectives per round (the cost lever)
+  on_exhaust: block    # stop-without-pass behaviour: "block" surfaces the
+                       # hypothesis stage as a blocked state awaiting input
+                       # (genuine-blocker escalation), or "proceed" continues
+                       # with the best triple flagged (flagged: true)
+
+review:
+  default_criteria: ["correctness", "clarity", "coverage"]
+  # Informational only: the engine derives PASS/FAIL from reviewer scores at
+  # PASS_THRESHOLD=4 (any criterion < 4 fails the round). See review_engine.py.
+  pass_threshold: 4
+  # Per-gate limits below replace the deprecated review.max_review_rounds field.
+  # Legacy fallback, when needed, is synthesis.max_review_rounds; these are
+  # distinct from the review per-gate limits.
+
+  # Red-team review gate max-loop limits (per-gate and total).
+  # Set any to 0 to disable that gate (linear passthrough).
+  # Missing fields in legacy configs normalize to 0 (disabled).
+  # When max_writeup_review_loops is EXPLICITLY present (any value, incl. 0),
+  # it takes precedence over synthesis.max_review_rounds. The skill records
+  # this presence at parse time (_writeup_loop_present) BEFORE normalizing,
+  # so an explicit 0 (= disabled) is never confused with an absent field.
+  # The legacy synthesis.max_review_rounds fallback is used ONLY when
+  # max_writeup_review_loops is absent entirely.
+  max_hypothesis_review_loops: 3   # hypothesis gate (Significance/Originality)
+  max_experiment_review_loops: 3   # analysis gate (Quality/Significance/Originality)
+  max_writeup_review_loops: 3      # writeup Clarity gate (Phase E)
+  max_total_project_loops: 10      # total across all gates before escalation
+
+synthesis:
+  format: "report"
+  model: auto
+  # Max review-revise cycles for the deliverable (0 = one-shot, 1+ = iterative)
+  max_review_rounds: 2
+
+perspectives:
+  - "evaluate-for-correctness"
+  - "evaluate-for-clarity"
+  - "evaluate-for-novelty"
+
+verifiers:
+  code: "python3 scripts/verify_code.py"
+  data: "python3 scripts/verify_data.py"
