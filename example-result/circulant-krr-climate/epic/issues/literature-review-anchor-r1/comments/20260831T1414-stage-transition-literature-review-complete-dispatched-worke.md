@@ -1,0 +1,3 @@
+# 2026-08-31T14:14 -- Comment
+
+**Agent**: Stage transition: literature review complete. Dispatched worker stalled without producing an artifact (interrupted after extended runtime); the epic manager executed the stage inline as fallback. Artifact review.md committed on literature-review-anchor-r1 (commit 76e9b7e) and merged to master (a795a1f). Verification: 25 annotated entries (13 web-verified in-session via web search, 15 model-knowledge -- all flags explicit), >= 3 gaps (G1 primary: no CPU-exact KRR-on-grid recipe; G2 resource accounting absent; G3 random-split leakage in field reconstruction; G4 off-grid ENSO-index prediction), concepts 25 terms, ASCII-clean. Concept index built over the corpus: ideas/concept-index.json (281 entities, 39340 cooccurrences).

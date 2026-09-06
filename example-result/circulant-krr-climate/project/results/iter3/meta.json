@@ -1,0 +1,7 @@
+{
+ "iteration": 3,
+ "plan_ref": "ideas/experiments/experiment-plan-iter3.json",
+ "T1b_citation_lock": "results/iter2/T1b-CG-masked-train.json only",
+ "n_negative_eigenvalues_recorded": true,
+ "honest_framing": "no new circulant/FFT/GRF-simulation mathematics; O(N log N)+low-rank claims only for the stationary BCCB/BTTB class; S1 bounded-residual approximate; S2 masked-Gram equivalence empirically tested; components all classical: Martucci DCT/DST symmetric convolution (entry 45), ADMM/FISTA spectral-spatial splitting (entries 46-52), Ambikasaran HSS low-rank (entry 54), Trench direct Toeplitz solve (66), Gohberg-Semencul (67); no new-mathematics claim; the claim is the grid-KRR-targeted integration (whole-sample symmetric embedding + boundary-banded low-rank correction G5; spectral-spatial AM with circulant-accelerated Anderson mixing G6) plus its empirical evaluation"
+}

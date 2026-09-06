@@ -1,0 +1,16 @@
+{
+ "arm": "T2-ENSO-index",
+ "dataset.origin": "real-kaplan-sst-v2",
+ "simulation_marker": null,
+ "cv": "5-fold temporal-block CV over 2005 months",
+ "functional_vs_zero_model": {
+  "rmse_functional": 0.08560663058877599,
+  "rmse_zero_model": 0.7954623202967714,
+  "rmse_direct_head": 0.2695884553171268
+ },
+ "corr_functional": 0.9971167747264731,
+ "n_cv_months": 2005,
+ "wall_clock_s": 5.02,
+ "peak_rss_gb": 0.907,
+ "scope_note": "The functional-vs-direct-head comparison is a 5-fold temporal-block CV over the full 2005 months (2016-2022 participates as CV folds): a leakage-safe METHOD comparison, NOT a future-blind forecast claim."
+}

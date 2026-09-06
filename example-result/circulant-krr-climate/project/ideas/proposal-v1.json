@@ -1,0 +1,18 @@
+{
+ "round": 1,
+ "components": {
+  "problem": "Textbook exact kernel ridge regression (KRR) is intractable on regular-grid climate fields under consumer hardware: the Gram matrix is N-by-N (O(N^2) memory) and the solve is O(N^3). Practitioners therefore default to randomized approximations (Random Fourier Features, Nystrom, KISS-GP) without quantifying the exactness loss, and existing climate-ML studies (deep ENSO forecasting, WeatherBench) are GPU/cluster-scale and report no CPU budgets, memory, or flop/byte costs. Gap: no published CPU-only recipe for EXACT kernel machines on full-resolution regular-grid climate fields with honest resource accounting and leakage-aware evaluation (G1-G4 in the stage-1 review).",
+  "method": "Circulant-block KRR (FFT-KRR): for a stationary kernel on a regular rectangular grid, the kernel matrix is (block-)circulant; by the convolution theorem the ridge solve (K + lambda I) alpha = y becomes a pointwise spectral shrinkage in the Fourier domain. Training and grid prediction cost O(N log N) via FFT with O(N) memory, never forming the N-by-N matrix. Off-grid prediction (e.g., a scalar ENSO index from a field) uses trigonometric interpolation of the stationary kernel cross-covariances, also O(N log N). Implementation: NumPy/SciPy FFT only; kernel family: Matern(3/2), Matern(5/2), squared-exponential, periodic-seasonal + spatial product on the lat/lon grid.",
+  "experiment_design": "Substrate: publicly available NOAA-family SST anomaly fields (Kaplan SST v2 via NOAA PSL if fetchable; else bundled synthetic-from-physics fields WITH explicit simulation markers in every artifact and the paper). Tasks: (T1) masked-field reconstruction (random-pixel and spatial-block masks, 10/30/50% missing) under leave-one-field-out and spatial-block cross-validation; (T2) Nino3.4 index regression from full and reconstructed fields. Baselines (scikit-learn): exact KernelRidge on n-subsamples (n = 2k, 5k, 10k), Nystrom, Random Fourier Features. Metrics: RMSE, R2, predictive-interval coverage/calibration, wall-clock, peak RSS, estimated flops and bytes; budget <= 90 min total, 12 cores, 7 GB RAM. Ablations: FFT-KRR vs exact-KRR-on-subsample (accuracy-per-flop and accuracy-per-byte), kernel choice, ridge lambda sweep, block-CV vs random-split optimism gap."
+ },
+ "grounding": {
+  "gaps_addressed": [
+   "G1",
+   "G2",
+   "G3",
+   "G4"
+  ],
+  "corpus": "docs/literature-review/review.md",
+  "concept_index": "ideas/concept-index.json"
+ }
+}

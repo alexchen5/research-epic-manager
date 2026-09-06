@@ -1,0 +1,14 @@
+{
+ "iteration": 4,
+ "dataset.origin": "all-arms aggregate: synthetic-grf-free-boundary + real-kaplan-sst-v2",
+ "simulation_marker": null,
+ "plan_ref": "ideas/experiments/experiment-plan-iter4.json",
+ "proposal_ref": "ideas/proposal-iter4-v4.json",
+ "T1b_citation_lock": "results/iter2/T1b-CG-masked-train.json only (rate means 245.1/276.1/280.9 @ tol 1e-8, span 233-291, per-field residual 4.69e-9..9.81e-9, RMSE means 0.529-0.541); EXECUTION_NOTES.md and results/analysis.json pre-fix figures SUPERSEDED, never cited",
+ "n_negative_eigenvalues_recorded": true,
+ "honest_framing": "classical components ONLY (reviewer-r2 guard verbatim): Martucci 45 DCT/DST symmetric convolution (DST2-class (2d-1) WSS embedding reading per plan-iter4 glossary); Trench 66 and Gohberg-Semencul 67 exact Toeplitz/Hankel inversion; Stewart 73 stabilized superfast Toeplitz solve (O(n log^3 n)); Ambikasaran HSS 54; Graham 70 CEM PSD conditions (CIRCULANT-class floor-error conventions only -- NO DCT/DST-class PSD floor theorem claimed); Barrowes-Teixeira-Kong 72 3D multilevel block-Toeplitz matvec; Strang 42/74 symmetric-boundary eigenbasis; T. Chan 43, Chan-Jin 44, Ng 52 circulant/BTTB preconditioner lineage; Templates 69 tolerance conventions; ADMM/FISTA family 46-52; Frangella-Tropp-Udell 71 randomized Nystrom preconditioning; Woodbury 53 (component replaced by F1's exact center). No new-mathematics claim; no SOTA-ENSO claim; no O(N^2)-free claim outside the stationary BCCB/BTTB class (F1 center O(nb^3)/O(nb^2), disclosed).",
+ "invalidated_history_banner": "results/iter3/*.json are INVALIDATED HISTORY: cited ONLY as honest negatives under the G9+ attribution (median gap 47.3574% < 50% bar; residual 532.2245; DST2 61.62%, capture 0.7467/0.7284; speedups 0.2374x/0.1560x/0.1624x; Anderson no-variant stall 4.1e5-7.4e5 vs 259-384; A1 over-budget 1530.3 s; total 2296.5 s / 0.9786 GB) -- never as qualifying claims.",
+ "rounding_note": "0.1 s rounding convention honored (iteration-3 template: per_arm_elapsed_sum 2296.4 vs measured total 2296.5 s)",
+ "dataset_origin_simulation_marker": "every results/iter4 artifact carries dataset.origin and simulation_marker (null for real Kaplan); synthetic GRF domains labeled synthetic with generator description and seeds",
+ "3d_psd_caveat": "3D WSS-type symmetric embeddings are empirically non-PSD on the tested kernels/grids: n_neg 24^3 {matern32: 289, matern52: 4578, rbf: 7662}; 48^3 {0, 1468, 4222}; 2D rbf 11 at 64x64 / 3 at 128x128 [honest-negative provenance]; floored solve != free solve; floor error reported per-row as MEASURED a-posteriori quantity (B5, Graham 70 convention); no theorem-backed floor bound claimed; no 3D exactness claim."
+}

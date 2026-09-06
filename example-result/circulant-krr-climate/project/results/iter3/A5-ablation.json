@@ -1,0 +1,162 @@
+{
+ "arm": "A5-ablation",
+ "dataset.origin": "synthetic",
+ "simulation_marker": "grf_boundary free v2",
+ "lambda": 0.01,
+ "grid": [
+  128,
+  128
+ ],
+ "budget_min": 5,
+ "clock_elapsed_s": 18.3,
+ "rows": [
+  {
+   "kernel": "matern32",
+   "seed": 0,
+   "grid": [
+    128,
+    128
+   ],
+   "full": {
+    "iters": 383,
+    "rel_res": 9.958270494234276e-07,
+    "conv": true
+   },
+   "no_anderson": {
+    "iters": 500,
+    "rel_res": 744158.5399183325,
+    "conv": false
+   },
+   "re_nocorr": {
+    "rel_res": 44.81186709078948
+   }
+  },
+  {
+   "kernel": "matern32",
+   "seed": 1,
+   "grid": [
+    128,
+    128
+   ],
+   "full": {
+    "iters": 379,
+    "rel_res": 9.878714979334317e-07,
+    "conv": true
+   },
+   "no_anderson": {
+    "iters": 500,
+    "rel_res": 544248.4090787669,
+    "conv": false
+   },
+   "re_nocorr": {
+    "rel_res": 66.97542319580106
+   }
+  },
+  {
+   "kernel": "matern32",
+   "seed": 2,
+   "grid": [
+    128,
+    128
+   ],
+   "full": {
+    "iters": 384,
+    "rel_res": 9.929564835631448e-07,
+    "conv": true
+   },
+   "no_anderson": {
+    "iters": 500,
+    "rel_res": 617655.6171124324,
+    "conv": false
+   },
+   "re_nocorr": {
+    "rel_res": 56.168538816098476
+   }
+  },
+  {
+   "kernel": "rbf",
+   "seed": 0,
+   "grid": [
+    128,
+    128
+   ],
+   "full": {
+    "iters": 261,
+    "rel_res": 9.634258441971335e-07,
+    "conv": true
+   },
+   "no_anderson": {
+    "iters": 500,
+    "rel_res": 412623.60278010654,
+    "conv": false
+   },
+   "re_nocorr": {
+    "rel_res": 66.71387568156932
+   }
+  },
+  {
+   "kernel": "rbf",
+   "seed": 1,
+   "grid": [
+    128,
+    128
+   ],
+   "full": {
+    "iters": 259,
+    "rel_res": 9.864140247382176e-07,
+    "conv": true
+   },
+   "no_anderson": {
+    "iters": 500,
+    "rel_res": 410264.9402279765,
+    "conv": false
+   },
+   "re_nocorr": {
+    "rel_res": 79.0215872623485
+   }
+  },
+  {
+   "kernel": "rbf",
+   "seed": 2,
+   "grid": [
+    128,
+    128
+   ],
+   "full": {
+    "iters": 260,
+    "rel_res": 9.76237634977383e-07,
+    "conv": true
+   },
+   "no_anderson": {
+    "iters": 500,
+    "rel_res": 439064.62788446975,
+    "conv": false
+   },
+   "re_nocorr": {
+    "rel_res": 85.60467047112542
+   }
+  }
+ ],
+ "notes": "no-precond / torus-precond variants omitted from this run if budget-capped (recorded in variant_status: 2 of 4 plan variants executed; no_circulant_preconditioner and torus_bccb_vs_free omitted-budget-capped)",
+ "wall_clock_s": 18.3,
+ "peak_rss_gb": 0.9786376953125,
+ "peak_rss_note": "whole-run peak RSS (upper bound); the arm clock is arm-scoped",
+ "variant_status": {
+  "plan_variants": 4,
+  "executed": [
+   "re_without_correction",
+   "no_anderson_mixing"
+  ],
+  "omitted": {
+   "no_circulant_preconditioner": {
+    "status": "omitted-budget-capped",
+    "note": "budget-capped; honest not-completed per plan (A5 budget 5 min)"
+   },
+   "torus_bccb_vs_free_operator": {
+    "status": "omitted-budget-capped",
+    "note": "budget-capped; honest not-completed per plan (A5 budget 5 min)"
+   }
+  },
+  "coverage": "2 of 4 plan variants executed; omission disclosed in this artifact and mirrored in results/analysis/analysis-iter3.json honest_negatives"
+ }
+}

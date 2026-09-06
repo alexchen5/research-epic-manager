@@ -1,0 +1,18 @@
+{
+ "arm": "A6-tooling",
+ "dataset.origin": "synthetic",
+ "simulation_marker": "grf_boundary.py v1",
+ "budget_min": 5,
+ "clock_elapsed_s": 0.0,
+ "selfcheck_pass": true,
+ "wall_selfcheck_s": 0.04528866708278656,
+ "wall_mixed_boundary_sample_36x72_s": 0.004322750028222799,
+ "tools": [
+  "scripts/grf_boundary.py",
+  "scripts/fft_krr_embed.py (re_ablrc_nd, ssam_cam_nd)"
+ ],
+ "generator_description": "boundary-controlled GRF: free/Dirichlet-zero/Neumann-zero/mixed boundary-value sets; stationary kernels via whole-sample-symmetric circulant-embedding exact sampling (CE, O(N log N)); Paciorek-Schervish non-stationary covariance evaluation + small-grid dense sample (O(N^3), tool scope, no O(N log N) claim for the non-stationary path); conditional simulation via the standard identity. Neumann set implemented as boundary-layer value conditioning (gradient-zero conditioning documented as a tool limitation, not claimed).",
+ "wall_clock_s": 0.0,
+ "peak_rss_gb": 0.9786376953125,
+ "peak_rss_note": "whole-run peak RSS (upper bound); the arm clock is arm-scoped"
+}

@@ -1,0 +1,38 @@
+{
+ "arm": "joint-S1xS2",
+ "dataset.origin": "synthetic+real-kaplan",
+ "simulation_marker": null,
+ "budget_min": 0,
+ "s1_verdict": "NOT-validated",
+ "s2_verdict": "REFUTED",
+ "s1_pooled": {
+  "median_gap_bccb": 3.6751367505095462,
+  "median_gap_naive": 2.160959956518465,
+  "median_gap_reduction_naive_vs_bccb_pct": 35.64479846738635,
+  "median_gap_reduction_w_design_vs_bccb_pct": 47.357394387537596,
+  "median_res_w_design": 532.2244857049865,
+  "median_rank_w_design": 1233.0,
+  "median_naive_res": 896.4332431132681,
+  "w_claimable_guard": {
+   "64_8": null,
+   "128_16": true,
+   "24_3": false
+  },
+  "w_design_coverage": {
+   "n_rows_with_w_design": 75,
+   "n_rows_total": 141
+  }
+ },
+ "s2_pooled": {
+  "median_speedup_ssam_vs_pcg_synthetic": 0.23744422743561644,
+  "median_iters_pcg_synthetic": 192.0,
+  "median_iters_ssam_synthetic": 278.5,
+  "median_rel_res_pcg": 8.641536482500882e-07,
+  "median_rel_res_ssam": 9.81274681493777e-07,
+  "median_rmse_masked_pcg_kaplan": 0.3504163481654986,
+  "median_rmse_masked_ssam_kaplan": 0.3504185203984058,
+  "ssam_converged_frac": 0.776595744680851,
+  "pcg_converged_frac": 1.0
+ },
+ "joint_statement": "RE-ABLRC (boundary) + SSAM-CAM (masked) integration claim assessed from A1+A2 measurements only; no additional solves."
+}

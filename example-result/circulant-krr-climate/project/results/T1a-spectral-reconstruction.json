@@ -1,0 +1,201 @@
+{
+ "arm": "T1a-spectral-reconstruction",
+ "dataset.origin": "synthetic-[simulated]-from-physics",
+ "simulation_marker": "synthetic-from-physics (Kaplan-like), seed=20260831",
+ "n_heldout": 48,
+ "lambda_selection": {
+  "matern32": {
+   "lambda": 0.0001,
+   "rmse": 0.07157131418878367,
+   "sweep": [
+    0.07157131418878367,
+    0.10907869427179326,
+    0.2135091259624573,
+    0.2908585903297415,
+    0.3463938405310515,
+    0.46908470662926793,
+    0.6626260510340585,
+    0.8588273316228936
+   ]
+  },
+  "rbf": {
+   "lambda": 0.0001,
+   "rmse": 0.3209381074398897,
+   "sweep": [
+    0.3209381074398897,
+    0.33182731734480364,
+    0.34164505294612724,
+    0.34973903391693484,
+    0.3686604928413981,
+    0.44900154625415417,
+    0.6004975055316082,
+    0.8450023194832421
+   ]
+  }
+ },
+ "per_mask_metrics": {
+  "matern32|random_10%": {
+   "rmse_mean": 0.07188339069418043,
+   "rmse_std_over_fields": 0.007168814121543979,
+   "r2": 0.9955122641308292,
+   "conformal_coverage": 0.9036858974358974,
+   "conformal_coverage_std": 0.03695743538064472,
+   "conformal_n_fields": 48,
+   "conformal_mean_width": 0.23822109960398039,
+   "conformal_width_std": 0.023980036961549104,
+   "n_heldout": 48,
+   "target_coverage": 0.9,
+   "coverage_below_target": false
+  },
+  "matern32|random_30%": {
+   "rmse_mean": 0.07127360657183598,
+   "rmse_std_over_fields": 0.005908021853994798,
+   "r2": 0.9955550872465322,
+   "conformal_coverage": 0.901296058269066,
+   "conformal_coverage_std": 0.02069727779441695,
+   "conformal_n_fields": 48,
+   "conformal_mean_width": 0.23577982683724538,
+   "conformal_width_std": 0.020791290737883064,
+   "n_heldout": 48,
+   "target_coverage": 0.9,
+   "coverage_below_target": false
+  },
+  "matern32|random_50%": {
+   "rmse_mean": 0.0717250485779871,
+   "rmse_std_over_fields": 0.0061770575417750195,
+   "r2": 0.9955229705098655,
+   "conformal_coverage": 0.9063143004115227,
+   "conformal_coverage_std": 0.01605901973217873,
+   "conformal_n_fields": 48,
+   "conformal_mean_width": 0.2388008389537518,
+   "conformal_width_std": 0.02111187496332533,
+   "n_heldout": 48,
+   "target_coverage": 0.9,
+   "coverage_below_target": false
+  },
+  "matern32|halo_w1": {
+   "rmse_mean": 0.07188051355453713,
+   "rmse_std_over_fields": 0.01572006862728728,
+   "r2": 0.9951606240665788,
+   "conformal_coverage": 0.9054487179487181,
+   "conformal_coverage_std": 0.12287602126094598,
+   "conformal_n_fields": 48,
+   "conformal_mean_width": 0.26548040633599157,
+   "conformal_width_std": 0.07801258881959477,
+   "n_heldout": 48,
+   "target_coverage": 0.9,
+   "coverage_below_target": false
+  },
+  "matern32|halo_w2": {
+   "rmse_mean": 0.07449949457386025,
+   "rmse_std_over_fields": 0.012020834227689273,
+   "r2": 0.9950173615188066,
+   "conformal_coverage": 0.8813131313131314,
+   "conformal_coverage_std": 0.12102784814466423,
+   "conformal_n_fields": 48,
+   "conformal_mean_width": 0.250660237994799,
+   "conformal_width_std": 0.04754290109029012,
+   "n_heldout": 48,
+   "target_coverage": 0.9,
+   "coverage_below_target": true
+  },
+  "matern32|halo_w4": {
+   "rmse_mean": 0.07316570658255911,
+   "rmse_std_over_fields": 0.008983059210836494,
+   "r2": 0.9955385305080833,
+   "conformal_coverage": 0.893631436314363,
+   "conformal_coverage_std": 0.06246671251685368,
+   "conformal_n_fields": 48,
+   "conformal_mean_width": 0.24350006760522458,
+   "conformal_width_std": 0.03423391331175289,
+   "n_heldout": 48,
+   "target_coverage": 0.9,
+   "coverage_below_target": true
+  },
+  "rbf|random_10%": {
+   "rmse_mean": 0.32340015741926914,
+   "rmse_std_over_fields": 0.014609411991469142,
+   "r2": 0.9098765183315302,
+   "conformal_coverage": 0.9072115384615383,
+   "conformal_coverage_std": 0.03034183331824934,
+   "conformal_n_fields": 48,
+   "conformal_mean_width": 1.0843981644224099,
+   "conformal_width_std": 0.07670524789413392,
+   "n_heldout": 48,
+   "target_coverage": 0.9,
+   "coverage_below_target": false
+  },
+  "rbf|random_30%": {
+   "rmse_mean": 0.32158688255166185,
+   "rmse_std_over_fields": 0.010057736367876019,
+   "r2": 0.9100392352480628,
+   "conformal_coverage": 0.9049914310197087,
+   "conformal_coverage_std": 0.025094231717092307,
+   "conformal_n_fields": 48,
+   "conformal_mean_width": 1.075305955726035,
+   "conformal_width_std": 0.05833570948117843,
+   "n_heldout": 48,
+   "target_coverage": 0.9,
+   "coverage_below_target": false
+  },
+  "rbf|random_50%": {
+   "rmse_mean": 0.3213592595062977,
+   "rmse_std_over_fields": 0.00785952598172162,
+   "r2": 0.9107351747482881,
+   "conformal_coverage": 0.9049318415637861,
+   "conformal_coverage_std": 0.01723847743678842,
+   "conformal_n_fields": 48,
+   "conformal_mean_width": 1.0681791411894006,
+   "conformal_width_std": 0.0412655289615874,
+   "n_heldout": 48,
+   "target_coverage": 0.9,
+   "coverage_below_target": false
+  },
+  "rbf|halo_w1": {
+   "rmse_mean": 0.317209346133845,
+   "rmse_std_over_fields": 0.04469159168984462,
+   "r2": 0.9082713387233105,
+   "conformal_coverage": 0.9342948717948718,
+   "conformal_coverage_std": 0.09804497133296428,
+   "conformal_n_fields": 48,
+   "conformal_mean_width": 1.3079492233381982,
+   "conformal_width_std": 0.3806922556861163,
+   "n_heldout": 48,
+   "target_coverage": 0.9,
+   "coverage_below_target": false
+  },
+  "rbf|halo_w2": {
+   "rmse_mean": 0.3209326727235127,
+   "rmse_std_over_fields": 0.02470561011623596,
+   "r2": 0.9093465509782299,
+   "conformal_coverage": 0.9059343434343434,
+   "conformal_coverage_std": 0.08464070503656518,
+   "conformal_n_fields": 48,
+   "conformal_mean_width": 1.1399864169847862,
+   "conformal_width_std": 0.18285279603058827,
+   "n_heldout": 48,
+   "target_coverage": 0.9,
+   "coverage_below_target": false
+  },
+  "rbf|halo_w4": {
+   "rmse_mean": 0.3231849223333653,
+   "rmse_std_over_fields": 0.013978908417190093,
+   "r2": 0.9140830319892155,
+   "conformal_coverage": 0.910230352303523,
+   "conformal_coverage_std": 0.036470700062430236,
+   "conformal_n_fields": 48,
+   "conformal_mean_width": 1.0965837923552002,
+   "conformal_width_std": 0.08740436182092458,
+   "n_heldout": 48,
+   "target_coverage": 0.9,
+   "coverage_below_target": false
+  }
+ },
+ "optimism_gap": {
+  "random_30pct_rmse_mean": 0.07127360657183598,
+  "halo_w2_rmse_mean": 0.07449949457386025,
+  "gap": -0.003225888002024266
+ },
+ "wall_clock_s": 11.54,
+ "peak_rss_gb": 5.059
+}

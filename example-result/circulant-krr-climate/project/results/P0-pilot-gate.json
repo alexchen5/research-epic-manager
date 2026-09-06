@@ -1,0 +1,75 @@
+{
+ "arm": "P0-pilot-gate",
+ "dataset.origin": "synthetic-[simulated]-from-physics",
+ "simulation_marker": "synthetic-from-physics (Kaplan-like), seed=20260831",
+ "grid": [
+  32,
+  32
+ ],
+ "lambda": 0.001,
+ "results": {
+  "matern32": {
+   "spectral_vs_dense_torus_inf": 3.255387071021687e-10,
+   "spectral_vs_dense_torus_rel": 2.309224115053083e-12,
+   "torus_vs_free_gap_inf": 142.7228861319473,
+   "torus_vs_free_gap_rel": 1.7420271551030668,
+   "min_eigenvalue_raw": -0.46383648849777026,
+   "n_negative_eigenvalues": 46,
+   "padding_sweep_maxdiff_vs_free": {
+    "0.5": 53.46827,
+    "1.0": 53.46827,
+    "2.0": 68.831546
+   },
+   "ell_sweep_torus_vs_free_rel": {
+    "1.0": 0.259533,
+    "2.0": 0.355817,
+    "4.0": 1.742027,
+    "8.0": 2.081233
+   }
+  },
+  "rbf": {
+   "spectral_vs_dense_torus_inf": 8.372040838366956e-10,
+   "spectral_vs_dense_torus_rel": 1.800037529829593e-12,
+   "torus_vs_free_gap_inf": 283.789344877615,
+   "torus_vs_free_gap_rel": 0.42964568524072605,
+   "min_eigenvalue_raw": -0.00262924964176392,
+   "n_negative_eigenvalues": 247,
+   "padding_sweep_maxdiff_vs_free": {
+    "0.5": 526.789847,
+    "1.0": 526.789847,
+    "2.0": 462.677508
+   },
+   "ell_sweep_torus_vs_free_rel": {
+    "1.0": 0.607064,
+    "2.0": 0.430778,
+    "4.0": 0.429646,
+    "8.0": 1.61471
+   }
+  }
+ },
+ "floor_eps_sensitivity_rbf_rmse": {
+  "0.0": 0.09450933977176637,
+  "1e-08": 0.09450897096481824,
+  "1e-06": 0.09446472147622739,
+  "0.0001": 0.08897418121091909,
+  "0.01": 0.010867667243117498
+ },
+ "grid_size_torus_vs_free_delta_rel": {
+  "pilot": {
+   "matern32": 1.742,
+   "rbf": 0.4296
+  },
+  "scaling_72x36": {
+   "matern32": 1.1248,
+   "rbf": 0.5702
+  },
+  "scaling_144x72": {
+   "matern32": 0.3078,
+   "rbf": 0.3705
+  }
+ },
+ "gate_passed": true,
+ "gate_definition": "spectral == dense-torus to 1e-6 rel (solve exactness for the torus kernel); torus-vs-free gap reported per kernel/ell (disclosed modeling qualification)",
+ "wall_clock_s": 11.24,
+ "peak_rss_gb": 5.059
+}

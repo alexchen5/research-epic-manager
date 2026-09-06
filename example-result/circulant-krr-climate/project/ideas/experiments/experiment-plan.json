@@ -1,0 +1,146 @@
+{
+  "stage": "experiment_planning",
+  "issue": "experiment-planning-anchor-r1",
+  "primary_research_question": "Algorithmic/methodological: exact kernel ridge regression on regular-grid climate fields via circulant embedding (Dietrich-Newsam / Wood-Chan) and FFT spectral shrinkage - O(N log N) train/predict, O(N) memory, no explicit N-by-N Gram matrix - with leakage-free evaluation, kernel-consistent off-grid Nino3.4 functional prediction, and resource accounting (wall-clock, peak RSS, flops, bytes; accuracy-per-flop, accuracy-per-byte) as first-class axes.",
+  "substrate": "AI-for-climate: sea-surface temperature (SST) anomaly fields; tasks: masked-field reconstruction (gap-filling) and Nino3.4 (ENSO) index regression. Climate is the experimental substrate, not the claimed contribution.",
+  "source_of_truth": {
+    "proposal": "ideas/proposal-final.json (commit cbbf03a, merged to master 332900a)",
+    "corpus": "docs/literature-review/review.md",
+    "gate_feedback": "hypothesis gate r1 PASS; merged feedback: exactness qualifies as exact-for-embedded-torus / approximate-for-free-boundary; numeric halo/block-CV protocol; matched-flops baselines; pilot-to-production scaling model; reproducible synthetic fallback.",
+    "data_readiness_probe": "NOAA PSL Kaplan SST reachable (200) but sst.mon.anom.nc is netCDF-4/HDF5 (magic 0x89HDF), not readable by scipy.io.netcdf_file (classic only); h5py/xarray not in allowed stack. THREDDS DAP2 .ascii => 400; IRIDL .ascii => auth-redirect page. Real-data route unreliable under allowed stack; synthetic-from-physics fallback likely fires, with explicit [simulated] markers.",
+    "constraints": "CPU-only; numpy/scipy/scikit-learn/matplotlib only; 12 cores; ~7 GB RAM; total experiment wall-clock <= 90 min; datasets < 2 GB."
+  },
+  "arms": [
+    {
+      "id": "P0-pilot-gate",
+      "name": "32x32 pilot correctness gate",
+      "goal": "Validate the FFT-KRR (circulant-embedded spectral shrinkage) solver against a dense exact N x N KRR solve. Pass threshold (pre-committed): |alpha_fft - alpha_dense|_inf < 1e-6 * max|alpha_dense| and |pred_fft - pred_dense|_inf < 1e-6 on 10 random holdout cells, for Matern(3/2) and squared-exponential kernels at 32x32 = 1024 cells, ridge lambda = 1e-3. Also produce padding-size sweep: embedding boundary error vs padding fraction {0.5, 1, 2}x, demonstrating error decay.",
+      "inputs": "synthetic-from-physics field (see datasets) at 32x32",
+      "outputs": "results/pilot_gate.json",
+      "budget_est": "~5 s"
+    },
+    {
+      "id": "T1a-spectral-reconstruction",
+      "name": "Exact spectral masked-field reconstruction (masks as prediction targets)",
+      "goal": "Train FFT-KRR on complete fields; impute masked held-out pixels (10/30/50% random-pixel masks; spatial-halo masks with halo width w in {1,2,4}). CV: leave-one-field-out over 48 held-out months (per season) and spatial-block CV (8x4 blocks, leave-block-out). Report RMSE, R2, split-conformal coverage + mean width per mask type/rate, plus resource axes. Optimism arm: compare identical models under random point-wise splits vs block/halo splits (quantifies G3 leakage optimism).",
+      "inputs": "Kaplan SST v2 (72x36) if stdlib-readable data source is found; else synthetic-from-physics (same lat/lon grid) with [simulated] markers",
+      "outputs": "results/t1a_reconstruction_metrics.json, results/t1a_per_field_predictions.npz (or sample), results/optimism_gap.json",
+      "budget_est": "~8 min (48 LOFO fits x 2 kernels x 3 pads + halo/block CV folds)"
+    },
+    {
+      "id": "T1b-cg-masked-train",
+      "name": "FFT-preconditioned CG with masked training inputs",
+      "goal": "Train with 10/30/50% masked inputs via FFT-preconditioned conjugate gradient on the observed-subset system; report iterations, wall-clock, peak RSS, final RMSE vs T1a (same test masks). No claim of one-shot exactness in the masked regime; convergence tol 1e-8, max 2000 iters.",
+      "inputs": "same data as T1a",
+      "outputs": "results/t1b_cg_metrics.json",
+      "budget_est": "~6 min"
+    },
+    {
+      "id": "T2-enso-index",
+      "name": "Nino3.4 index regression (kernel-consistent functional prediction)",
+      "goal": "Predict monthly Nino3.4 index = area-weighted mean SST anomaly over 5N-5S, 120-170W (Trenberth 1997) as kernel-consistent linear functional of the fitted field via trigonometric interpolation of stationary cross-covariances (O(N log N), no grid resampling). 5-fold temporal-block CV (blocks of 60 months). Inputs: full fields and T1a-reconstructed fields. Zero-model ablation: predict index from unmasked truth via the same interpolation path to separate interpolation error from KRR error.",
+      "inputs": "same data as T1a",
+      "outputs": "results/t2_enso_metrics.json, results/t2_ablation.json",
+      "budget_est": "~5 min"
+    },
+    {
+      "id": "B-baselines",
+      "name": "scikit-learn baselines, commensurable via cost sweeps",
+      "goal": "Baselines on the same tasks: exact KernelRidge on subsamples n in {2k, 5k, 10k}; Nystrom landmarks {500, 2k, 5k, 10k}; Random Fourier Features {500, 2k, 5k, 10k} (kernels: Matern(3/2), squared-exponential via RBF). Matched-flops/matched-bytes variant (same estimated op count as one FFT-KRR fit) for accuracy-per-flop and accuracy-per-byte comparison. Resource axes: wall-clock, peak RSS (GB), estimated flops and bytes per fit.",
+      "inputs": "same data as T1a (downsampled to fitted budget)",
+      "outputs": "results/baselines_metrics.json",
+      "budget_est": "~15 min (n=10k dense solve ~3-5 min; sweeps dominate)"
+    },
+    {
+      "id": "S-scaling",
+      "name": "Pilot-to-production scaling model",
+      "goal": "Measure wall-clock/memory for FFT-KRR at grids 32x32 (1024), 72x36 (2592), 144x72 (10368), and extrapolate to 0.25-degree global (~1.04M cells) with the O(N log N)/O(N) model vs the 7 GB cap (embedding-matrix storage threshold). Report measured vs predicted.",
+      "inputs": "synthetic fields at each grid size",
+      "outputs": "results/scaling_metrics.json",
+      "budget_est": "~3 min"
+    }
+  ],
+  "datasets": {
+    "primary": {
+      "name": "Kaplan SST v2 monthly anomalies",
+      "source": "NOAA PSL (psl.noaa.gov/data/gridded/data.kaplan_sst.html)",
+      "urls": [
+        "https://psl.noaa.gov/thredds/fileServer/Datasets/kaplan_sst/sst.mon.anom.nc",
+        "https://psl.noaa.gov/thredds/fileServer/Datasets/kaplan_sst/sst.mean.anom.nc"
+      ],
+      "grid": "5-degree, 72x36 = 2592 cells, monthly, period 1856-2017+ (extended)",
+      "license_note": "NOAA PSL public domain distribution; acknowledgment of PSL requested for publications",
+      "readability": "netCDF-4/HDF5 (magic 0x89HDF) - NOT readable by scipy.io.netcdf_file; no h5py/xarray in stack. Attempt stdlib-readable route: THREDDS DAP2 .ascii with corrected constraint syntax; if unavailable, fallback fires."
+    },
+    "fallback": {
+      "name": "synthetic-from-physics SST-anomaly-like fields",
+      "generator": "Circulant-embedded Matern(3/2 or 5/2) stationary Gaussian random field on the 72x36 lat/lon grid with latitude-scaling amplitude, Kaplan-like EOF structure (dominant spatial modes with low-frequency temporal coefficients), monthly sampling over 1950-2023 (888 fields), optional seasonal cycle; seed fixed (20260831); parameterization and seed recorded in the generator script and every artifact marker.",
+      "markers": "Every artifact JSON and CSV from fallback data carries [simulated] in dataset.origin; the paper states the fallback explicitly.",
+      "size": "< 100 MB"
+    }
+  },
+  "metrics": {
+    "accuracy": ["RMSE", "R2"],
+    "uncertainty": ["split-conformal predictive interval coverage", "mean interval width"],
+    "resource_axes_every_table": ["wall_clock_s", "peak_rss_gb", "estimated_flops", "estimated_bytes", "accuracy_per_flop", "accuracy_per_byte"],
+    "hardware": "12-core consumer CPU, ~7 GB RAM"
+  },
+  "cv_design": {
+    "t1": "leave-one-field-out over 48 held-out months (12 per season x 4 seasons) + spatial-block CV (8x4 blocks, leave-block-out)",
+    "t1_masks": "random-pixel masks 10/30/50%; spatial-halo masks with halo width w in {1,2,4} separating test pixels from training support (G3 leakage closure)",
+    "t2": "5-fold temporal-block CV (block = 60 consecutive months) for the index regression; no random point splits",
+    "optimism": "identical model trained under random point-wise split vs block/halo split; report both RMSEs and the gap (G3 measurement)"
+  },
+  "baselines": {
+    "exact_krr_subsample_n": [2000, 5000, 10000],
+    "nystrom_landmarks": [500, 2000, 5000, 10000],
+    "rff_features": [500, 2000, 5000, 10000],
+    "matched_cost": "run each baseline at the estimated flops/bytes of one FFT-KRR fit for the accuracy-per-flop / accuracy-per-byte frontier"
+  },
+  "hyperparameters": {
+    "kernels": ["Matern 3/2", "Matern 5/2", "squared-exponential (RBF)", "periodic-time x spatial (ENSO T2)"],
+    "ridge_lambda": "log-sweep of 8 values: 1e-4 .. 1e2 (log-spaced)",
+    "selection": "fixed validation set per arm (block-respecting); report sensitivity, no marginal-likelihood claims",
+    "conditioning": "condition-number estimate of the embedded spectral diagonal reported per experiment"
+  },
+  "pilot_gate": {
+    "grid": "32x32 (1024 cells)",
+    "pass": "|alpha_fft - alpha_dense|_inf < 1e-6 * max|alpha_dense| AND |pred_fft - pred_dense|_inf < 1e-6 on 10 holdout cells, kernels Matern(3/2) + RBF, lambda 1e-3",
+    "embedding_error_sweep": "padding fraction {0.5, 1, 2}x; report boundary-error decay vs padding",
+    "failure_action": "pilot blocked => diagnostic artifacts (pilot_gate.json with diffs) committed; stage blocked with concrete reason"
+  },
+  "budget_table": {
+    "total_cap": "90 min wall-clock, 12 cores, 7 GB RAM",
+    "arms": [
+      {"arm": "P0 pilot gate", "estimate": "~5 s"},
+      {"arm": "T1a spectral reconstruction (LOFO 48 fits + halo/block CV)", "estimate": "~8 min"},
+      {"arm": "T1b CG masked train", "estimate": "~6 min"},
+      {"arm": "T2 ENSO index + ablation", "estimate": "~5 min"},
+      {"arm": "Baselines sweeps (exact n=10k ~3-5 min; Nystrom/RFF sweeps)", "estimate": "~15 min"},
+      {"arm": "Scaling model", "estimate": "~3 min"},
+      {"arm": "Overhead (data fetch/fallback gen, warmup)", "estimate": "~10 min"}
+    ],
+    "sum_max": "~47 min (under 90 min cap, ~1x margin)"
+  },
+  "scaling_model": {
+    "formula": "train = c1 * N * log2(N) FFTs (2D), memory = c2 * N (plus padded embedding (2N)2), solve = elementwise",
+    "grids": [
+      {"grid": "32x32", "N": 1024},
+      {"grid": "72x36", "N": 2592},
+      {"grid": "144x72", "N": 10368},
+      {"grid_extrapolated": "0.25-degree global", "N": 1048576, "note": "embedding storage (2N)2 float64 = 32-64 GB exceeds 7 GB cap; threshold reported"}
+    ]
+  },
+  "risks_fallbacks": [
+    {"risk": "Synthetic fallback fires (netCDF-4 unreadable, ASCII endpoints flaky)", "fallback": "Pre-committed generator + [simulated] markers; paper discloses mode explicitly", "trigger": "all real-data stdlib-readable routes fail during execution"},
+    {"risk": "Embedding boundary error threatens 'exact' claim", "fallback": "Pilot sweep quantifies error; claim qualified as exact-for-embedded-torus / approximate-for-free-boundary", "trigger": "padding sweep"},
+    {"risk": "Baseline memory blow-up (n=10k float64 Gram = 800 MB)", "fallback": "Peak RSS monitored vs 7 GB cap; sizes pre-chosen to fit; matched-bytes variant", "trigger": "peak_rss_gb approaching 6.5 GB"},
+    {"risk": "90-min budget exceeded", "fallback": "Per-arm budget table + monotonic wall-clock logging; prune sweeps (report partial grid) if approaching cap, and record", "trigger": "total wall-clock > 80 min"}
+  ],
+  "execution_contract": {
+    "script": "scripts/run_pipeline.sh (single end-to-end target; Makefile: make run-all)",
+    "artifacts_dir": "results/ (every arm -> *_metrics.json)",
+    "markers": "data mode marker in every artifact JSON (dataset.origin: real|synthetic-with-[simulated])",
+    "budget_watch": "scripts logs cumulative wall-clock; abort-and-record at 85 min"
+  }
+}

@@ -1,0 +1,3 @@
+# 2026-08-31T14:27 -- Comment
+
+**Agent**: [proposal-v2] Proposal v2 (round 2) posted; five revisions applied per the ideation-r1 critique: (1) structural honesty - BTTB not circulant, circulant embedding with empirically quantified boundary error; (2) masked-input reconciliation - T1a masks-as-prediction-targets on complete-field training, T1b FFT-preconditioned CG with iteration/resource reporting; (3) budget arithmetic for all arms (sum well under 90 min); (4) split-conformal predictive intervals with coverage+width metrics; (5) commensurable Nystrom/RFF/subsample sweeps on an accuracy-vs-cost frontier. Artifact: ideas/proposal-v2.json on hypothesis-ideation-r1.

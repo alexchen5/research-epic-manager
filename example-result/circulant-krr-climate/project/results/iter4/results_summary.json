@@ -1,0 +1,41 @@
+{
+ "iteration": 4,
+ "dataset.origin": "all-arms aggregate: synthetic-grf-free-boundary + real-kaplan-sst-v2 (per-arm artifacts carry their own)",
+ "simulation_marker": null,
+ "total_wall_clock_s": 2571.3,
+ "per_arm_elapsed_sum": 2571.0,
+ "rounding_note": "the per-arm elapsed values are 0.1 s-rounded monotonic arm clocks; their sum (2571.0 s) may differ from the measured total (2571.3 s) by a rounding artifact, not a timing error (iteration-3 template: per_arm_elapsed_sum 2296.4 vs measured 2296.5 s [honest-negative disclosure])",
+ "peak_rss_gb": 1.0479583740234375,
+ "cgroup_disclosure": "actual container cgroup ~2 GB; peak RSS reported vs that cap (project <= 7 GB envelope claim superseded)",
+ "hard_stop_45min": true,
+ "verify_iter4_pass": true,
+ "verify_wall_s": 0.11,
+ "verify_stderr_tail": null,
+ "arms": {
+  "A1-F1": {
+   "verdict": "NOT-validated-guard",
+   "rows": 110,
+   "elapsed_s": 1247.0,
+   "exceeded": true
+  },
+  "A2-F2": {
+   "verdict": "REFUTED",
+   "rows": 147,
+   "elapsed_s": 1099.6,
+   "exceeded": true
+  },
+  "A3-multidomain": {
+   "verdict": "REFUTED",
+   "rows": 24,
+   "elapsed_s": 224.3,
+   "exceeded": true
+  },
+  "A4-tooling": {
+   "selfcheck": true,
+   "elapsed_s": 0.1,
+   "exceeded": false
+  }
+ },
+ "verify_after_all_artifacts": true,
+ "regeneration_note": "results_summary regenerated post-run by the patched main() tail: the run's in-process verify ran before summary/meta existed (stale false); the external verify covers all six artifacts and passed; only the verify_* fields changed, all other values preserved from the run."
+}

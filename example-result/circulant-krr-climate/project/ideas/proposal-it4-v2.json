@@ -1,0 +1,72 @@
+{
+  "id": "proposal-it4-v2",
+  "iteration": 4,
+  "iteration_label": "iteration-3 ideation", 
+  "revision_of": "proposal-it4-v1",
+  "status": "proposed",
+  "title": "RE-ABLRC and SSAM-CAM: structured boundary-corrected circulant embedding and spectral-spatial alternating minimization for masked grid kernel ridge regression",
+  "problem": {
+    "statement": "Kernel ridge regression on regular H x W (and H x W x D) grids is a workhorse of spatial ML, but its two structural accelerations are blocked on real tasks: (1) the BCCB/FFT spectral solve assumes periodic (torus) boundary conditions, producing a large free-boundary modeling gap on real fields (relative solve/prediction error ~0.9496 Matérn-3/2, ~0.1159 RBF; P0-pilot from iteration-2 on Kaplan SST v2) — the same wrap-around also recycles both sides of a mask; (2) under missing-data masks the Gram is (P_m K P_m^T + lambda I), whose masked structure breaks BCCB diagonalization, so the standard fallback — preconditioned conjugate gradients on a BTTB matvec — converges slowly (245-281 iterations at residual tol 1e-8) with masked-reconstruction RMSE 0.53-0.54 (T1b-CG-masked-train.json, iteration-2). Both bottlenecks must be resolved without O(N^2) memory or O(N^3) compute.",
+    "gaps_closed": ["G5 exact free-boundary fast grid kernel solves", "G6 masked-input fast solves", "G7 multi-domain regular-grid benchmark with pre-registered efficiency/boundary thresholds", "G8 boundary-controlled GRF simulation tooling"]
+  },
+  "method": {
+    "strategy_S1": {
+      "name": "RE-ABLRC (Whole-Sample Symmetric Embedding + Adaptive Boundary-Banded Low-Rank Correction)",
+      "terminology_note": "The (2H-1)x(2W-1) [resp. 3D] first-column extension is the WHOLE-SAMPLE symmetric (DCT-I-style) embedding of the free-boundary BTTB kernel Gram — NOT half-sample reflective padding (which would yield 2H per axis). The embedded circulant C reproduces the free-boundary kernel exactly in the leading interior block: K = E^T C E holds exactly for the (H x W)-leading block (standard embedding-matvec identity; Martucci DCT/DST convolution, corpus entry 45). The wrap-around discrepancy is confined to a boundary band of width w along the domain edge in the embedded block.",
+      "claim": "Approximate-in-rank, exact-in-structure: with the Woodbury correction computed on the confined edge band, RE-ABLRC solves (K + lambda I) to a truncation tolerance whose residual is explicitly bounded by the band-correction norm (reported per run); the modeling gap vs the dense free-boundary reference is reduced >= 50% relative to standard BCCB wrapping (pre-registered; measured, not assumed).",
+      "band_width_rule": "w = ceil(2.5 * rho) where rho is the kernel range parameter in grid units (Matérn-3/2: rho in units of the 2.5*ell convention); 2D rank r = O(w(H+W)), 3D rank r = O(w(HW+HD+WD)).",
+      "cost": {
+        "2d": "O(N log N) spectral embedding solve + Woodbury correction: O(r^2 (H+W)) time with r = w(H+W), O(N + r^2) memory; full per-RHS readout O(r^2) after factor. N = H*W.",
+        "3d": "embedded solve O(N log N) with N = HWD; correction restricted to edge-band only: r_3d = w(HW+HD+WD). 3D correction runs are capped at 24^3 (r_3d ~ 4.3k at w=3 => r^2 ~ 18M doubles ~ 146 MB, within 7 GB); the 48^3 scaling arm uses embedding-only + PCG cross-check, no 3D Woodbury correction (pre-registered cap).",
+        "memory": "O(N + r^2) with r << N; no O(N^2) dense Gram ever formed."
+      },
+      "correction_step": "Woodbury on the complement block: (K + lambda I)^{-1} = (E^T(C+lambda I)E)^{-1} = embedded-solve - B12 (B22 + correction)^{-1} B21 where B12/B21/B22 are the banded coupling/complement blocks confined to the edge band; B22 is solved with a small preconditioned Krylov solve on the band system (bandwidth w per axis), NOT a dense O(N^3) complement solve; the band-system size ~ (w(H+W))^2 (2D) keeps this O(poly(w) * (H+W)) — reported in A1 cost columns."
+    },
+    "strategy_S2": {
+      "name": "SSAM-CAM (Spectral-Spatial Alternating Minimization with Circulant-Accelerated Anderson Mixing)",
+      "formulation": "Solve min_a ||P_m(K a - y)||^2 + lambda a^T K a exactly via half-quadratic/ADMM splitting: introduce z with constraint z = a; spectral step solves the BCCB-regularized system (exact FFT step, O(N log N)); spatial step is the proximal update of the fidelity term with Lagrange multiplier — a SOFT projection on the observed cells (not a hard clamp; the hard-clamp fixed point is the lambda->0 interpolant, which the formulation explicitly avoids). The alternating scheme's fixed point equals the masked-Gram optimum (standard splitting theory of convex quadratics; asserted as an empirically-tested claim per corpus entry 50 caveat, not a proof).",
+      "acceleration": "Anderson mixing on the spectral residual with window m = 5 (fixed), step-size schedule eta_t = eta0 / (1 + t/T) with eta0 = 0.5, T = 200; iteration ceiling 500; stop at ||P_m r||_inf < 1e-6 (primary) or 1e-8 (matched secondary).",
+      "cost": "per iteration O(N log N + n); memory O(N); total effort reported as wall-clock + iterations + flops estimate.",
+      "claim": "Achieves >= 3x wall-clock speedup over standard PCG at equivalent residual tolerance < 1e-6 on the masked tasks (pre-registered threshold; median over mask rates/tasks)."
+    },
+    "honest_framing": {
+      "disclaimed": ["no new circulant/FFT mathematics", "no new splitting/ADMM/Anderson theory", "no new Nystrom/HSS baseline mathematics", "no SOTA-ENSO skill claim", "no O(N^2)-free claim for arbitrary (unstructured) kernels"],
+      "claimed": ["first integrated whole-sample-symmetric embedding + boundary-banded low-rank correction for free-boundary BCCB-class grid KRR (corpus G5 REMAINS-OPEN: exact free-boundary fast solve absent)", "first spectral-spatial alternating minimization with circulant-accelerated Anderson mixing for masked grid KRR (corpus G6 REMAINS-OPEN)", "first pre-registered multi-domain grid-KRR efficiency/boundary benchmark (G7) with boundary-controlled GRF tooling (G8)"],
+      "baseline_positioning": "dense KRR (exact Cholesky; subsample cap 4000), standard PCG (BTTB matvec, identity+torus-floored preconditioner as iteration-2 T1b), KISS-GP (Wilson & Nickisch; inducing regular grid with local bilinear/trilinear interpolation, BTTB inducing Gram solved via our circulant machinery), RFF (Rahimi & Recht; sklearn Ridge on RFF features), optional HSS (Ambikasaran et al., entry 54) — pre-registered as attempted-if-fits-budget with an honest 'not-completed' report if it exceeds the envelope; plus a DCT/DST symmetric-convolution comparator (Martucci, entry 45) as the boundary-aware classical reference for the >= 50% gap-reduction cross-check."
+    }
+  },
+  "experiment_design": {
+    "arms": {
+      "A1_boundary": "synthetic free-boundary GRFs, Matérn-3/2 & RBF, 2D 64x64 / 128x128 (correction on, band rule w=ceil(2.5 rho)) and 3D 24x24x24 (correction capped): compare dense free-boundary reference (Cholesky; 2D 64x64 + 3D 24^3 only), standard BCCB wrapping, DCT/DST symmetric convolution (Martucci), and RE-ABLRC; metric: relative error vs dense reference; win: >= 50% gap reduction vs BCCB wrapping (median over 20 seeds 2D / 10 seeds 3D).",
+      "A2_masked": "masked reconstruction: synthetic 2D GRF masks (10/30/50% random; block masks) + Kaplan SST v2 masks (polar caps, land, random 10/30/50%): SSAM-CAM vs standard PCG at tol 1e-6/1e-8; metrics: wall-clock, iterations, speedup (>= 3x median), RMSE parity vs PCG reference.",
+      "A3_multidomain": "four domains x five methods: 2D GRF, 3D GRF, MNIST-784 infilling (held-out digits + patch masks, leakage-safe), Kaplan SST v2 (future-blind train 1856-01..2015-12 / test 2016-01..2022-12): RMSE (valid-only), wall-clock, peak RSS, accuracy-per-flop, accuracy-per-byte.",
+      "A4_scaling": "O(N log N)/O(N) timing & memory to N ~ 1e5: 2D 320x320, 3D 48x48x48 (embedding-only + PCG cross-check; no 3D Woodbury at this size); wall-clock and RSS vs est_spectral_fit_flops / est_spectral_bytes.",
+      "A5_ablation": "RE-ABLRC without correction (pure whole-sample embedding), SSAM-CAM without Anderson mixing (plain FISTA), SSAM-CAM without circulant preconditioner (gradient-only): isolates each component's contribution.",
+      "A6_g8_tooling": "boundary-value-constrained GRF generation: conditional simulation on free/Dirichlet-zero/Neumann-zero/mixed boundary value sets (per corpus G8 remainder; Paciorek-Schervish nonstationary covariance, seeds 0-19; generator published in scripts/grf_boundary.py with reproducibility block)."
+    },
+    "win_rules": {
+      "boundary": "PASS iff median relative free-boundary gap reduction (RE-ABLRC vs BCCB wrapping, vs dense reference) >= 50% on A1 (2D+3D pooled; per-domain breakdown reported); else REFUTED (honest negative reported).",
+      "speed": "PASS iff median wall-clock speedup of SSAM-CAM vs standard PCG >= 3x at equivalent residual tolerance < 1e-6 on A2 (pooled across masks); else REFUTED.",
+      "benchmark": "proposal must not be beaten by KISS-GP on >= 2 domains nor by dense KRR on >= 1 domain in RMSE at equal-or-lower cost; honest comparison reported regardless."
+    },
+    "pre_registered": {
+      "residual_tolerance": "1e-6 primary, 1e-8 secondary (matched to PCG reference)",
+      "seeds": "synthetic 2D: 0..19; 3D: 0..9; Kaplan: seed 7 (as iteration-2)",
+      "evaluation": "valid-only denominators (mask-excluded); leakage-safe splits (future-blind for real; held-out digits/patches for MNIST; held-out boundary band for A1)",
+      "budget_envelope": "total <= 90 min wall for the full A1-A6 suite, per-arm: A1 <= 25 min, A2 <= 30 min, A3 <= 20 min, A4 <= 5 min, A5 <= 5 min, A6 <= 5 min; dense Cholesky reference only at 64x64 and 24^3; at 128x128 use PCG/KISS-GP cross-checks (no dense)."
+    },
+    "resources": {
+      "cpu_only": true,
+      "cores": 12,
+      "ram_gb": 7.0,
+      "budget_min": 90,
+      "budget_amortization": "per-arm envelopes listed above; sub-measurements amortized as in iteration-2; HSS attempted with honest not-completed report if over-budget"
+    }
+  },
+  "canonical_artifacts_note": "Where project-internal records disagree (e.g., earlier EXECUTION_NOTES iteration-2 T1b numbers 420-550 iters/RMSE 0.78-0.83 from the pre-fix synthetic decode vs results/iter2 T1b-CG-masked-train.json 245-281 iters/RMSE 0.53-0.54 post-fix), the results/iter2 artifacts are canonical for the paper; the discrepancy is disclosed in EXECUTION_NOTES as superseded.",
+  "corpus_positioning": {
+    "note": "grounded on iteration-3 literature review: 69 entries (56 web-verified / 13 model-knowledge), concept-index rebuilt (888 entities / 393,828 co-occurrences), Gap Coverage (iteration 3) G5-G8 with REMAINS-OPEN statements.",
+    "nearest_prior": ["Yin et al. (entries 9-10): approximate sketch-circulant, non-grid", "Wilson & Nickisch KISS-GP (entry 14): structured inducing, not free-boundary exact", "Wood & Chan / Davies-Harte (41-44): embedding for simulation, not solves", "Martucci DCT/DST convolution (45): boundary-aware convolution, not ridge solve", "HSS Ambikasaran (54): exact fast structured solve, benchmark baseline", "ADMM/FISTA/Anderson (46-53): established accelerators, not applied to masked grid KRR"],
+    "claim": "corpus REMAINS-OPEN statements for G5 and G6 name exactly the two integrations proposed; no corpus entry provides either."
+  }
+}

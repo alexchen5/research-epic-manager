@@ -1,0 +1,79 @@
+{
+ "arm": "B-baselines",
+ "dataset.origin": "synthetic-[simulated]-from-physics",
+ "simulation_marker": "synthetic-from-physics (Kaplan-like), seed=20260831",
+ "task": "pooled-cell spatial reconstruction; test = 2000 cells of 48 held-out months",
+ "results": {
+  "exact_n2000": {
+   "rmse": 1.2693256735572278,
+   "r2": -0.42008424034606784,
+   "wall_clock_s": 0.11,
+   "n_train": 2000,
+   "n_test": 2000
+  },
+  "exact_n5000": {
+   "rmse": 1.259001758242209,
+   "r2": -0.397077995926278,
+   "wall_clock_s": 1.1,
+   "n_train": 5000,
+   "n_test": 2000
+  },
+  "exact_n10000": {
+   "rmse": 1.25251706146045,
+   "r2": -0.3827232969422585,
+   "wall_clock_s": 5.14,
+   "n_train": 10000,
+   "n_test": 2000
+  },
+  "nystrom_500": {
+   "rmse": 1.2722960657602604,
+   "wall_clock_s": 0.13,
+   "est_flops": 2000000,
+   "est_bytes": 16064000.0
+  },
+  "nystrom_2000": {
+   "rmse": 1.2727485937619918,
+   "wall_clock_s": 2.42,
+   "est_flops": 8000000,
+   "est_bytes": 64064000.0
+  },
+  "nystrom_5000": {
+   "rmse": 1.2626479876752525,
+   "wall_clock_s": 16.88,
+   "est_flops": 20000000,
+   "est_bytes": 160064000.0
+  },
+  "nystrom_10000": {
+   "rmse": 1.2547952785631178,
+   "wall_clock_s": 21.92,
+   "est_flops": 40000000,
+   "est_bytes": 320064000.0
+  },
+  "rff_500": {
+   "rmse": 1.250814775573366,
+   "wall_clock_s": 0.11,
+   "est_flops": 4000000,
+   "est_bytes": 16000000.0
+  },
+  "rff_2000": {
+   "rmse": 1.2633773447764094,
+   "wall_clock_s": 0.5,
+   "est_flops": 16000000,
+   "est_bytes": 64000000.0
+  },
+  "rff_5000": {
+   "rmse": 1.2565859445911067,
+   "wall_clock_s": 1.64,
+   "est_flops": 40000000,
+   "est_bytes": 160000000.0
+  },
+  "rff_10000": {
+   "rmse": 1.2544967276301335,
+   "wall_clock_s": 2.58,
+   "est_flops": 80000000,
+   "est_bytes": 320000000.0
+  }
+ },
+ "wall_clock_s": 70.75,
+ "peak_rss_gb": 5.059
+}

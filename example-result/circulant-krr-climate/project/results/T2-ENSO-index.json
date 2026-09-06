@@ -1,0 +1,65 @@
+{
+ "arm": "T2-ENSO-index",
+ "dataset.origin": "synthetic-[simulated]-from-physics",
+ "simulation_marker": "synthetic-from-physics (Kaplan-like), seed=20260831",
+ "box": {
+  "rows": [
+   17,
+   18,
+   19
+  ],
+  "cols": [
+   38,
+   39,
+   40,
+   41,
+   42,
+   43,
+   44,
+   45,
+   46,
+   47
+  ],
+  "note": "Trenberth 1997 Nino3.4: 5N-5S, 170W-120W"
+ },
+ "index_std": 1.009590744972229,
+ "functional_baseline_rmse": 0.9929613459465826,
+ "functional_zero_model_ablation_rmse": 0.06654732704913519,
+ "functional_rmse": 0.06280492072850478,
+ "functional_r2": 0.9961301278521917,
+ "functional_blockcv_report": {
+  "blocks": 14,
+  "block_size_months": 60,
+  "rmse_per_block": [
+   0.0561,
+   0.0673,
+   0.0642,
+   0.0652,
+   0.0579,
+   0.0663,
+   0.0587,
+   0.0652,
+   0.0687,
+   0.0524,
+   0.0693,
+   0.0603,
+   0.0608,
+   0.0653
+  ],
+  "rmse_mean": 0.06269676410429316
+ },
+ "direct_head_5fold": {
+  "folds": 5,
+  "rmse_per_fold": [
+   1.0159,
+   0.9987,
+   1.0512,
+   0.9386,
+   1.0409
+  ],
+  "rmse_mean": 1.00903340038536
+ },
+ "n_fits_functional": 888,
+ "wall_clock_s": 18.21,
+ "peak_rss_gb": 5.059
+}

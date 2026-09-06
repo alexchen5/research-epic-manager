@@ -1,0 +1,25 @@
+{
+ "arm": "A4-tooling",
+ "dataset.origin": "synthetic",
+ "simulation_marker": "grf_boundary.py v1; fft_krr_embed.py dst2_exact_band_nd (iter-4 F1 path)",
+ "budget_min": 2,
+ "clock_elapsed_s": 0.1,
+ "budget_exceeded": false,
+ "stop_note": null,
+ "selfcheck_pass": true,
+ "wall_selfcheck_s": 0.045611375011503696,
+ "wall_mixed_boundary_sample_36x72_s": 0.004351082956418395,
+ "f1_path_sanity_16x16": {
+  "matvec_exactness_err": 2.344712052387834e-16,
+  "full_tail_solve_gap": 0.372507308964934,
+  "res": 0.04143830659996375,
+  "nb": 705,
+  "wall_s": 0.07791787502355874
+ },
+ "tools": [
+  "scripts/grf_boundary.py",
+  "scripts/fft_krr_embed.py (dst2_exact_band_nd, full_support_diag_nd, ssam_nystrom_nd)"
+ ],
+ "generator_description": "boundary-controlled GRF: free/Dirichlet-zero/Neumann-zero/mixed boundary-value sets; stationary kernels via whole-sample-symmetric circulant-embedding exact sampling (CE, O(N log N)); Paciorek-Schervish non-stationary covariance evaluation + small-grid dense sample (O(N^3), tool scope); Neumann set implemented as boundary-layer value conditioning (documented tool limitation)",
+ "iter3_invalidated_history": "iter-3 A6 tooling [honest negative provenance]: selfcheck 0.0453 s / mixed 36x72 sample 0.0043 s"
+}

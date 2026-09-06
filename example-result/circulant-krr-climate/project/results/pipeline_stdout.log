@@ -1,0 +1,18 @@
+[16:29:38] pipeline start (T0=1788193778)
+[t=    0.0s] pipeline start
+[t=    1.9s] fetch_real_data exit=0
+generated (888, 36, 72) fields -> /workspace/research-project-manager/projects/circulant-krr-climate/results/raw
+index stats: mean=-0.021 std=1.010
+[t=    2.2s] data: synthetic-[simulated]-from-physics (fallback fired)
+[t=    2.2s] PHASE FAILED phase_pilot: TypeError('phase_pilot() takes 1 positional argument but 3 were given')
+[t=    2.2s] T1a: exact spectral reconstruction
+[t=    2.2s] PHASE FAILED phase_t1a: IndexError('index 2329 is out of bounds for axis 0 with size 36')
+[t=    2.2s] PHASE FAILED phase_t1b: TypeError('phase_t1b() takes 2 positional arguments but 3 were given')
+[t=    2.2s] T2: Nino3.4 kernel-consistent functional prediction
+[t=    2.2s] PHASE FAILED phase_t2: IndexError('shape mismatch: indexing arrays could not be broadcast together with shapes (3,) (10,) ')
+[t=    2.2s] B: scikit-learn baselines (pooled-cell reconstruction task)
+[t=    2.3s]   exact n=2000 rmse=1.1536 t=0.1s
+[t=    2.3s] PHASE FAILED phase_baselines: ValueError('Cannot take a larger sample than population when replace is False')
+[t=    2.3s] PHASE FAILED phase_scaling: TypeError('phase_scaling() takes 1 positional argument but 3 were given')
+[t=    2.3s] done: total 2.31s, arms []
+[16:29:40] pipeline end; wall=2s

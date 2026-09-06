@@ -1,0 +1,27 @@
+Dataset {
+    Grid {
+     ARRAY:
+        Float32 sst[time = 2][lat = 2][lon = 2];
+     MAPS:
+        Float64 time[time = 2];
+        Float32 lat[lat = 2];
+        Float32 lon[lon = 2];
+    } sst;
+} Datasets/kaplan_sst/sst.mon.anom.nc;
+---------------------------------------------
+sst.sst[2][2][2]
+[0][0], -9.96921E36, -9.96921E36
+[0][1], -9.96921E36, -9.96921E36
+[1][0], -9.96921E36, -9.96921E36
+[1][1], -9.96921E36, -9.96921E36
+
+sst.time[2]
+20453.0, 20484.0
+
+sst.lat[2]
+-87.5, -82.5
+
+sst.lon[2]
+2.5, 7.5
+
+

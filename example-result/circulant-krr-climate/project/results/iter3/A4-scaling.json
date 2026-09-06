@@ -1,0 +1,65 @@
+{
+ "arm": "A4-scaling",
+ "dataset.origin": "synthetic",
+ "simulation_marker": "grf_boundary free v2",
+ "budget_min": 5,
+ "clock_elapsed_s": 2.1,
+ "rows": [
+  {
+   "grid": [
+    320,
+    320
+   ],
+   "kernel": "matern32",
+   "N": 102400,
+   "wall_build_embedding_s": 0.0074106669053435326,
+   "wall_naive_solve_s": 0.03936316701583564,
+   "wall_pcg_60iters_s": 0.9197186259552836,
+   "pcg_iters": 60,
+   "pcg_rel_res": 0.03401863717876794,
+   "naive_rel_res": 97.01067291523046,
+   "est_spectral_flops": 17350508.738329317,
+   "est_spectral_bytes": 4096000.0,
+   "est_flops_per_sec": 370944762.9964969
+  },
+  {
+   "grid": [
+    48,
+    48,
+    48
+   ],
+   "kernel": "matern32",
+   "N": 110592,
+   "wall_build_embedding_s": 0.01152895879931748,
+   "wall_naive_solve_s": 0.07006445899605751,
+   "wall_pcg_60iters_s": null,
+   "pcg_iters": null,
+   "pcg_rel_res": null,
+   "naive_rel_res": 1830.9407333161844,
+   "est_spectral_flops": 18861341.186392624,
+   "est_spectral_bytes": 4423680.0,
+   "est_flops_per_sec": 231162533.64571956
+  },
+  {
+   "grid": [
+    320,
+    320
+   ],
+   "kernel": "rbf",
+   "N": 102400,
+   "wall_build_embedding_s": 0.0072525420691818,
+   "wall_naive_solve_s": 0.038044749991968274,
+   "wall_pcg_60iters_s": 0.9408795421477407,
+   "pcg_iters": 60,
+   "pcg_rel_res": 0.10755693023833511,
+   "naive_rel_res": 450.09736741379453,
+   "est_spectral_flops": 17350508.738329317,
+   "est_spectral_bytes": 4096000.0,
+   "est_flops_per_sec": 383036335.03977716
+  }
+ ],
+ "notes": "embedding-only + naive + PCG cross-check; 48^3 embedding only (plan pre-registered cap: no 3D Woodbury/PCG on 48^3)",
+ "wall_clock_s": 2.1,
+ "peak_rss_gb": 0.9786376953125,
+ "peak_rss_note": "whole-run peak RSS (upper bound); the arm clock is arm-scoped"
+}

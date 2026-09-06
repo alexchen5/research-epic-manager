@@ -1,0 +1,495 @@
+{
+ "iteration": 2,
+ "dataset.origin": "real-kaplan-sst-v2",
+ "simulation_marker": null,
+ "record": "1856-01..2023-01 (2005 months; 2023-01 excluded from both splits)",
+ "windows": {
+  "train": "1856-01..2015-12 (1920 months)",
+  "test": "2016-01..2022-12 (84 months)"
+ },
+ "grid": [
+  36,
+  72
+ ],
+ "P0": {
+  "matern32": {
+   "spectral_vs_dense_torus_rel": 2.6179808940043544e-12,
+   "spectral_vs_dense_torus_inf": 1.7079315739465528e-09,
+   "torus_vs_free_gap_rel": 0.9496184881597887,
+   "torus_vs_free_gap_inf": 554.2726732408568
+  },
+  "rbf": {
+   "spectral_vs_dense_torus_rel": 1.1169587519107226e-12,
+   "spectral_vs_dense_torus_inf": 2.3642883206775878e-09,
+   "torus_vs_free_gap_rel": 0.1159217824943169,
+   "torus_vs_free_gap_inf": 247.60785230389604
+  }
+ },
+ "T1a_headline": {
+  "matern32|random_10%": {
+   "rmse_mean": 0.084345738598076,
+   "coverage": 0.898,
+   "seam": 0.8822314049586777,
+   "decay": 0.8367768595041323
+  },
+  "matern32|random_30%": {
+   "rmse_mean": 0.08560485591730516,
+   "coverage": 0.892,
+   "seam": 0.8669354838709679,
+   "decay": 0.8051075268817205
+  },
+  "matern32|random_50%": {
+   "rmse_mean": 0.08723453228387397,
+   "coverage": 0.886,
+   "seam": 0.8615293185419968,
+   "decay": 0.798864236661384
+  },
+  "matern32|halo_w1": {
+   "rmse_mean": 0.08269622183901146,
+   "coverage": 0.896,
+   "seam": 0.8715277777777777,
+   "decay": 0.7847222222222222
+  },
+  "matern32|halo_w2": {
+   "rmse_mean": 0.0815558421565704,
+   "coverage": 0.897,
+   "seam": 0.8521505376344086,
+   "decay": 0.7473118279569891
+  },
+  "matern32|halo_w4": {
+   "rmse_mean": 0.08795781815050872,
+   "coverage": 0.877,
+   "seam": 0.8359375,
+   "decay": 0.7389322916666666
+  },
+  "rbf|random_10%": {
+   "rmse_mean": 0.25247502573505853,
+   "coverage": 0.873,
+   "seam": 0.8973829201101928,
+   "decay": 0.8822314049586777
+  },
+  "rbf|random_30%": {
+   "rmse_mean": 0.24107361616054448,
+   "coverage": 0.893,
+   "seam": 0.8997535842293907,
+   "decay": 0.8870967741935484
+  },
+  "rbf|random_50%": {
+   "rmse_mean": 0.23557906704578194,
+   "coverage": 0.892,
+   "seam": 0.9010169043845747,
+   "decay": 0.8852350765979925
+  },
+  "rbf|halo_w1": {
+   "rmse_mean": 0.27894655837912957,
+   "coverage": 0.856,
+   "seam": 0.8645833333333334,
+   "decay": 0.8541666666666665
+  },
+  "rbf|halo_w2": {
+   "rmse_mean": 0.283899068811194,
+   "coverage": 0.816,
+   "seam": 0.8373655913978494,
+   "decay": 0.793010752688172
+  },
+  "rbf|halo_w4": {
+   "rmse_mean": 0.31550680069570963,
+   "coverage": 0.824,
+   "seam": 0.8336588541666666,
+   "decay": 0.802734375
+  }
+ },
+ "T1a_acceptance_violations": [
+  {
+   "mask": "matern32|halo_w2",
+   "deviation_global": 0.0029,
+   "deviation_seam": 0.0478,
+   "deviation_decay": 0.1527
+  },
+  {
+   "mask": "matern32|halo_w4",
+   "deviation_global": 0.0233,
+   "deviation_seam": 0.0641,
+   "deviation_decay": 0.1611
+  },
+  {
+   "mask": "rbf|halo_w2",
+   "deviation_global": 0.0843,
+   "deviation_seam": 0.0626,
+   "deviation_decay": 0.107
+  },
+  {
+   "mask": "rbf|halo_w4",
+   "deviation_global": 0.0758,
+   "deviation_seam": 0.0663,
+   "deviation_decay": 0.0973
+  }
+ ],
+ "T1a_optimism_gap": {
+  "random_30pct_rmse_mean": 0.08560485591730516,
+  "halo_w2_rmse_mean": 0.0815558421565704,
+  "gap": 0.004049013760734757
+ },
+ "T1a_lambda_selection": {
+  "matern32": {
+   "lambda": 0.0001,
+   "rmse": 0.0961174738203031
+  },
+  "rbf": {
+   "lambda": 0.0001,
+   "rmse": 0.243129137631856
+  }
+ },
+ "T1a_headline_per_kernel_rmse_range": {
+  "matern32": [
+   0.0816,
+   0.088
+  ],
+  "rbf": [
+   0.2356,
+   0.3155
+  ],
+  "note": "matern32 0.082-0.088; rbf 0.24-0.32 (per-kernel range, never a single number)"
+ },
+ "T1a_field_std": 0.6001,
+ "T1b": {
+  "rate_10%": {
+   "rmse": 0.5411600910146437,
+   "iters_mean": 280.875,
+   "iters_span": [
+    273,
+    289
+   ],
+   "converged": true
+  },
+  "rate_30%": {
+   "rmse": 0.5293230086582621,
+   "iters_mean": 276.125,
+   "iters_span": [
+    259,
+    291
+   ],
+   "converged": true
+  },
+  "rate_50%": {
+   "rmse": 0.5312442642778648,
+   "iters_mean": 245.125,
+   "iters_span": [
+    233,
+    257
+   ],
+   "converged": true
+  }
+ },
+ "T2": {
+  "rmse_functional": 0.08560663058877599,
+  "rmse_zero_model": 0.7954623202967714,
+  "rmse_direct_head": 0.2695884553171268
+ },
+ "T2_corr": 0.9971167747264731,
+ "T2_scope_note": "The functional-vs-direct-head comparison is a 5-fold temporal-block CV over the full 2005 months (2016-2022 participates as CV folds): a leakage-safe METHOD comparison, NOT a future-blind forecast claim.",
+ "T3_headline": {
+  "1": {
+   "transfer_rmse": 0.26790904670784954,
+   "persistence": 0.25087192286036303,
+   "climatology": 0.772871346916523,
+   "ar1": 0.24088931746756279,
+   "skill": 0.8798398824389768,
+   "status": "not_supported",
+   "best_baseline": "ar1",
+   "margin": -0.013747594037920467,
+   "bootstrap_se_vs_persistence": 0.007016489254012166
+  },
+  "3": {
+   "transfer_rmse": 0.5650127453082365,
+   "persistence": 0.5615877921126894,
+   "climatology": 0.772871346916523,
+   "ar1": 0.5076048872527079,
+   "skill": 0.46555616020687196,
+   "status": "not_supported",
+   "best_baseline": "ar1",
+   "margin": -0.06157668079791584,
+   "bootstrap_se_vs_persistence": 0.06049568663780541
+  },
+  "6": {
+   "transfer_rmse": 0.7962502607164244,
+   "persistence": 0.9073028294906635,
+   "climatology": 0.772871346916523,
+   "ar1": 0.765577008136392,
+   "skill": -0.06141387759739425,
+   "status": "not_supported",
+   "best_baseline": "ar1",
+   "margin": -0.04790632230390457,
+   "bootstrap_se_vs_persistence": 0.19697241041376792
+  },
+  "12": {
+   "transfer_rmse": 0.9231592911909076,
+   "persistence": 1.1537602237584899,
+   "climatology": 0.772871346916523,
+   "ar1": 0.8785240759023518,
+   "skill": -0.4267204180219797,
+   "status": "not_supported",
+   "best_baseline": "climatology",
+   "margin": -0.2548929580275384,
+   "bootstrap_se_vs_persistence": 0.3328166509818773
+  }
+ },
+ "T3_start_month_skill": {
+  "1": {
+   "origin-month-0": {
+    "n": 7,
+    "rmse": 0.2509966619568148,
+    "skill": 0.9543074974137048
+   },
+   "origin-month-3": {
+    "n": 7,
+    "rmse": 0.19196801833206184,
+    "skill": 0.9369838743086178
+   },
+   "origin-month-5": {
+    "n": 7,
+    "rmse": 0.20392234009462012,
+    "skill": 0.8164570180305097
+   },
+   "origin-month-9": {
+    "n": 7,
+    "rmse": 0.46921727645799804,
+    "skill": 0.6204698652691117
+   },
+   "all": {
+    "n": 84,
+    "rmse": 0.26790904670784954,
+    "skill": 0.8798398824389768
+   }
+  },
+  "3": {
+   "origin-month-0": {
+    "n": 7,
+    "rmse": 0.5756860178936649,
+    "skill": 0.759629915209647
+   },
+   "origin-month-3": {
+    "n": 7,
+    "rmse": 0.3016469945056991,
+    "skill": 0.8444063243950466
+   },
+   "origin-month-5": {
+    "n": 7,
+    "rmse": 0.5037101120199671,
+    "skill": -0.11987489727258582
+   },
+   "origin-month-9": {
+    "n": 7,
+    "rmse": 0.7620622792312551,
+    "skill": -0.001104022940719318
+   },
+   "all": {
+    "n": 84,
+    "rmse": 0.5650127453082365,
+    "skill": 0.46555616020687196
+   }
+  },
+  "6": {
+   "origin-month-0": {
+    "n": 7,
+    "rmse": 1.0185843852784782,
+    "skill": 0.2475059296944485
+   },
+   "origin-month-3": {
+    "n": 7,
+    "rmse": 0.4208042918498477,
+    "skill": 0.6972011255760049
+   },
+   "origin-month-5": {
+    "n": 7,
+    "rmse": 0.5705137137320243,
+    "skill": -0.43661483684366376
+   },
+   "origin-month-9": {
+    "n": 7,
+    "rmse": 1.0455400580742795,
+    "skill": -0.8844283503411141
+   },
+   "all": {
+    "n": 84,
+    "rmse": 0.7962502607164244,
+    "skill": -0.06141387759739425
+   }
+  },
+  "12": {
+   "origin-month-0": {
+    "n": 7,
+    "rmse": 1.2458308370051148,
+    "skill": -0.12571176849974797
+   },
+   "origin-month-3": {
+    "n": 7,
+    "rmse": 0.741654616094682,
+    "skill": 0.05941652692419774
+   },
+   "origin-month-5": {
+    "n": 7,
+    "rmse": 0.5464859778493467,
+    "skill": -0.31815419714682713
+   },
+   "origin-month-9": {
+    "n": 7,
+    "rmse": 1.0649520816676807,
+    "skill": -0.9550524339192312
+   },
+   "all": {
+    "n": 84,
+    "rmse": 0.9231592911909076,
+    "skill": -0.4267204180219797
+   }
+  }
+ },
+ "T3_truncation_sweep": {
+  "cutoff-2014-12": {
+   "rmse": 0.2681963227602055,
+   "skill": 0.8795820514183761
+  },
+  "cutoff-2013-12": {
+   "rmse": 0.2681590168153087,
+   "skill": 0.8796155492148385
+  },
+  "cutoff-2012-12": {
+   "rmse": 0.26803537428660146,
+   "skill": 0.8797265371397707
+  }
+ },
+ "T3_seam_h1": {
+  "jan_origin_rmse": 0.2509966619568148,
+  "other_origin_rmse": 0.2693938926522144
+ },
+ "T3_aggregate_verdict": {
+  "pre_registered_semantics": "supported iff beats all three baselines in RMSE and skill with a bootstrap-significant margin; refuted if > half of horizons fail",
+  "n_supported": 0,
+  "n_horizons": 4,
+  "verdict": "REFUTED",
+  "note": "0/4 horizons supported -> the transfer superiority claim is REFUTED under the pre-registered semantics; the refutation is driven by zero support across all horizons, not by per-horizon failures (each horizon is tagged not_supported)"
+ },
+ "T3_bootstrap_meta": {
+  "n_blocks": 7,
+  "n_resamples": 2000,
+  "seed": 7,
+  "blocks": "test calendar years 2016-2022",
+  "resampling": "with replacement over year blocks",
+  "statistic": "MSE difference (transfer - baseline); se and CI95 from the draw distribution"
+ },
+ "T3_se_range_all": [
+  0.005587,
+  0.332817
+ ],
+ "B": {
+  "2000": {
+   "exact_subsample_rbf": 0.8243795717883717,
+   "nystrom_5000": 0.8243966393749117,
+   "rff_5000": 0.8246822398056859
+  },
+  "4828": {
+   "exact_subsample_rbf": 0.8203116757129669,
+   "nystrom_5000": 0.8203086721626026,
+   "rff_5000": 0.8215645651985961
+  }
+ },
+ "B_pool_cells": 4828,
+ "S": {
+  "pilot": {
+   "N": 1024,
+   "t": 0.0002,
+   "bytes": 40960.0
+  },
+  "real-36x72": {
+   "N": 2592,
+   "t": 0.0002,
+   "bytes": 103680.0
+  },
+  "scaling-144x72": {
+   "N": 10368,
+   "t": 0.0005,
+   "bytes": 414720.0
+  }
+ },
+ "resolution": {
+  "native_5deg": {
+   "rmse_mean": 0.08526838774868624,
+   "n_fields": 84,
+   "lambda": 0.0001,
+   "grid": [
+    36,
+    72
+   ]
+  },
+  "coarsened_10deg": {
+   "rmse_mean": 0.16667629695658465,
+   "n_fields": 84,
+   "lambda": 0.0001,
+   "grid": [
+    18,
+    36
+   ]
+  }
+ },
+ "functional_resolution": {
+  "native_5deg_box": {
+   "rmse": 0.08560663058877599,
+   "corr": 0.9971167747264731,
+   "n": 2005
+  },
+  "coarsened_10deg_box": {
+   "rmse": 0.38249249577075767,
+   "corr": 0.9497760484979331,
+   "n": 2005
+  }
+ },
+ "ratios": {
+  "spectral_2592": {
+   "rmse": 0.09990954667194846,
+   "flop_ratio": 1.0,
+   "acc_flop_ratio": 1.0,
+   "acc_byte_ratio": 1.0
+  },
+  "ridge_2000": {
+   "rmse": 0.8243795717883717,
+   "flop_ratio": 53031.95062344504,
+   "acc_flop_ratio": 2.285294452461609e-06,
+   "acc_byte_ratio": 0.0003926673371040452
+  },
+  "ridge_4828": {
+   "rmse": 0.8203116757129669,
+   "flop_ratio": 746018.1591217204,
+   "acc_flop_ratio": 1.632595881026318e-07,
+   "acc_byte_ratio": 6.771713477099515e-05
+  },
+  "nystrom_4828": {
+   "rmse": 0.8203086721626026,
+   "flop_ratio": 1628743.7835225558,
+   "acc_flop_ratio": 7.477852843214841e-08,
+   "acc_byte_ratio": 3.2121774942811364e-05
+  },
+  "rff_4828": {
+   "rmse": 0.8215645651985961,
+   "flop_ratio": 480.0717330187362,
+   "acc_flop_ratio": 0.0002533139772607139,
+   "acc_byte_ratio": 6.528794886478868e-05
+  }
+ },
+ "trivial_baselines": {
+  "zero_model_rmse": 0.8011523837772132,
+  "global_mean_rmse": 0.604539618069841,
+  "per_cell_train_climatology_rmse": 0.8125836350786675,
+  "test_cell_anomaly_std": 0.6045394341387587,
+  "note": "baselines predict anomalies from (lat,lon) coordinates only; the pooled-cell task is near-signal-free for coordinate-only regression, so RMSE ~ field std is expected; the ratio control compares solve cost at this fixed task"
+ },
+ "missing_cell_fraction": 0.534336,
+ "missing_geography": "100% polar caps (rows 0-5, 30-35); 73% high-N; 46% high-S; 14.6% tropics (land columns)",
+ "res": {
+  "total_wall_clock_s": 78.74,
+  "peak_rss_gb": 1.573,
+  "budget_note": "12-core / 7 GB / <= 90 min envelope; B arm (Nystrom-5000) dominates",
+  "source": "results/iter2/results_summary.json"
+ },
+ "field_std_test_window": 0.6001,
+ "index_std_full": 0.7937
+}

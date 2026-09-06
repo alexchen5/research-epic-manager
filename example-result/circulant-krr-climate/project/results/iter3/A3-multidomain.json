@@ -1,0 +1,2690 @@
+{
+ "arm": "A3-multidomain",
+ "dataset.origin": "synthetic+mixed",
+ "simulation_marker": null,
+ "lambda_rule": "within-train valid-cell validation over {1e-4,1e-3,1e-2}",
+ "budget_min": 20,
+ "clock_elapsed_s": 360.6,
+ "budget_exceeded": false,
+ "rows": [
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 0,
+   "lambda": 0.0001,
+   "n_observed": 409,
+   "dense": {
+    "rmse_valid": 0.2129622955688971,
+    "wall_s": 0.048041083151474595,
+    "n_sub": 409
+   },
+   "pcg": {
+    "rmse_valid": 0.21296233182957416,
+    "wall_s": 0.5366895000915974,
+    "iters": 344,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.6280993182684639,
+    "wall_s": 0.3210591671522707,
+    "iters": 1413
+   },
+   "rff": {
+    "rmse_valid": 0.34932779413999354,
+    "wall_s": 0.051973915891721845
+   },
+   "re_ssam": {
+    "rmse_valid": 0.21296231464473317,
+    "wall_s": 2.660760291852057,
+    "iters": 445,
+    "conv": true,
+    "naive_rel_res": 271.83495474635424,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1,
+   "lambda": 0.001,
+   "n_observed": 409,
+   "dense": {
+    "rmse_valid": 0.20981772654230949,
+    "wall_s": 0.04111024993471801,
+    "n_sub": 409
+   },
+   "pcg": {
+    "rmse_valid": 0.20981771665732435,
+    "wall_s": 0.41533091687597334,
+    "iters": 262,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.6996307375572361,
+    "wall_s": 0.2298637090716511,
+    "iters": 537
+   },
+   "rff": {
+    "rmse_valid": 0.4198401383806669,
+    "wall_s": 0.053215582855045795
+   },
+   "re_ssam": {
+    "rmse_valid": 0.20981765757615298,
+    "wall_s": 2.3425055008847266,
+    "iters": 394,
+    "conv": true,
+    "naive_rel_res": 222.56200809848235,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 2,
+   "lambda": 0.0001,
+   "n_observed": 409,
+   "dense": {
+    "rmse_valid": 0.22360377637341916,
+    "wall_s": 0.04669466707855463,
+    "n_sub": 409
+   },
+   "pcg": {
+    "rmse_valid": 0.22360380064467184,
+    "wall_s": 0.5222070419695228,
+    "iters": 335,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.9665128653497514,
+    "wall_s": 0.303917707875371,
+    "iters": 1329
+   },
+   "rff": {
+    "rmse_valid": 0.38193369869884536,
+    "wall_s": 0.05189983290620148
+   },
+   "re_ssam": {
+    "rmse_valid": 0.22360367366173192,
+    "wall_s": 2.756520583992824,
+    "iters": 464,
+    "conv": true,
+    "naive_rel_res": 263.4572835214137,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 0,
+   "lambda": 0.0001,
+   "n_observed": 1228,
+   "dense": {
+    "rmse_valid": 0.10455164113839167,
+    "wall_s": 0.18660450004972517,
+    "n_sub": 1228
+   },
+   "pcg": {
+    "rmse_valid": 0.10455163279100586,
+    "wall_s": 1.018330791965127,
+    "iters": 659,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.37915781074273847,
+    "wall_s": 0.31189591716974974,
+    "iters": 1372
+   },
+   "rff": {
+    "rmse_valid": 0.22193002628757125,
+    "wall_s": 0.0688171258661896
+   },
+   "re_ssam": {
+    "rmse_valid": 0.1045507171989805,
+    "wall_s": 2.985213791951537,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 271.83495474635424,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1,
+   "lambda": 0.0001,
+   "n_observed": 1228,
+   "dense": {
+    "rmse_valid": 0.10936371405490723,
+    "wall_s": 0.151526500005275,
+    "n_sub": 1228
+   },
+   "pcg": {
+    "rmse_valid": 0.10936370934176602,
+    "wall_s": 1.0561657918151468,
+    "iters": 690,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.439271651705348,
+    "wall_s": 0.30410099984146655,
+    "iters": 1375
+   },
+   "rff": {
+    "rmse_valid": 0.2402235509675147,
+    "wall_s": 0.07558774994686246
+   },
+   "re_ssam": {
+    "rmse_valid": 0.10936325833100902,
+    "wall_s": 3.006210460094735,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 280.1145290259158,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 2,
+   "lambda": 0.0001,
+   "n_observed": 1228,
+   "dense": {
+    "rmse_valid": 0.1133275268486316,
+    "wall_s": 0.15654983278363943,
+    "n_sub": 1228
+   },
+   "pcg": {
+    "rmse_valid": 0.1133276072654844,
+    "wall_s": 1.027280667098239,
+    "iters": 669,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.6311044534932655,
+    "wall_s": 0.31282366695813835,
+    "iters": 1280
+   },
+   "rff": {
+    "rmse_valid": 0.23201972214588715,
+    "wall_s": 0.06916704191826284
+   },
+   "re_ssam": {
+    "rmse_valid": 0.1132544602941108,
+    "wall_s": 2.9981709180865437,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 263.4572835214137,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.5",
+   "seed": 0,
+   "lambda": 0.0001,
+   "n_observed": 2048,
+   "dense": {
+    "rmse_valid": 0.07348971700074562,
+    "wall_s": 0.47910620900802314,
+    "n_sub": 2048
+   },
+   "pcg": {
+    "rmse_valid": 0.07348975232505998,
+    "wall_s": 1.4305022088810802,
+    "iters": 931,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.7081824250183888,
+    "wall_s": 0.310495583107695,
+    "iters": 1355
+   },
+   "rff": {
+    "rmse_valid": 0.21900789750831892,
+    "wall_s": 0.08840779215097427
+   },
+   "re_ssam": {
+    "rmse_valid": 0.07362934885498672,
+    "wall_s": 2.9952871270943433,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 271.83495474635424,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.5",
+   "seed": 1,
+   "lambda": 0.0001,
+   "n_observed": 2048,
+   "dense": {
+    "rmse_valid": 0.07204458735150017,
+    "wall_s": 2.0390686681494117,
+    "n_sub": 2048
+   },
+   "pcg": {
+    "rmse_valid": 0.07204460378587105,
+    "wall_s": 1.6691854998935014,
+    "iters": 938,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.8003379482639625,
+    "wall_s": 0.31415804103016853,
+    "iters": 1310
+   },
+   "rff": {
+    "rmse_valid": 0.1996250516308676,
+    "wall_s": 0.08265724987722933
+   },
+   "re_ssam": {
+    "rmse_valid": 0.07207064579202055,
+    "wall_s": 3.218041710089892,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 280.1145290259158,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.5",
+   "seed": 2,
+   "lambda": 0.0001,
+   "n_observed": 2048,
+   "dense": {
+    "rmse_valid": 0.07521553831868738,
+    "wall_s": 0.48147812485694885,
+    "n_sub": 2048
+   },
+   "pcg": {
+    "rmse_valid": 0.07521562191680416,
+    "wall_s": 1.413064792053774,
+    "iters": 920,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 1.2259893433061566,
+    "wall_s": 0.30491808289662004,
+    "iters": 1285
+   },
+   "rff": {
+    "rmse_valid": 0.2048611088215013,
+    "wall_s": 0.08773483405821025
+   },
+   "re_ssam": {
+    "rmse_valid": 0.07540421183884922,
+    "wall_s": 2.999664375791326,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 263.4572835214137,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "rbf",
+   "mask": "random_0.1",
+   "seed": 0,
+   "lambda": 0.0001,
+   "n_observed": 409,
+   "dense": {
+    "rmse_valid": 0.10708658734533534,
+    "wall_s": 0.03676666598767042,
+    "n_sub": 409
+   },
+   "pcg": {
+    "rmse_valid": 0.10708651631480415,
+    "wall_s": 1.785755667136982,
+    "iters": 1170,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.6746011093005629,
+    "wall_s": 0.25256016687490046,
+    "iters": 673
+   },
+   "rff": {
+    "rmse_valid": 0.5016591961495674,
+    "wall_s": 0.09538612491451204
+   },
+   "re_ssam": {
+    "rmse_valid": 0.10784034500338505,
+    "wall_s": 2.978722167899832,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 7614.221747490086,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "rbf",
+   "mask": "random_0.1",
+   "seed": 1,
+   "lambda": 0.0001,
+   "n_observed": 409,
+   "dense": {
+    "rmse_valid": 0.08678379410650859,
+    "wall_s": 0.049752167193219066,
+    "n_sub": 409
+   },
+   "pcg": {
+    "rmse_valid": 0.08678378913487876,
+    "wall_s": 1.8074446259997785,
+    "iters": 1190,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.6837174041441604,
+    "wall_s": 0.2371806250885129,
+    "iters": 694
+   },
+   "rff": {
+    "rmse_valid": 0.4032971017448261,
+    "wall_s": 0.052945708157494664
+   },
+   "re_ssam": {
+    "rmse_valid": 0.08735631640799557,
+    "wall_s": 2.9674503770656884,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 9006.068758561498,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "rbf",
+   "mask": "random_0.1",
+   "seed": 2,
+   "lambda": 0.0001,
+   "n_observed": 409,
+   "dense": {
+    "rmse_valid": 0.08691865594469915,
+    "wall_s": 0.040014166152104735,
+    "n_sub": 409
+   },
+   "pcg": {
+    "rmse_valid": 0.08691867833140444,
+    "wall_s": 1.7586780008859932,
+    "iters": 1163,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.7547708375640894,
+    "wall_s": 0.2395862911362201,
+    "iters": 680
+   },
+   "rff": {
+    "rmse_valid": 0.30675171336397583,
+    "wall_s": 0.055003666784614325
+   },
+   "re_ssam": {
+    "rmse_valid": 0.08774654773675843,
+    "wall_s": 2.9702432930935174,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 9106.901736889797,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "rbf",
+   "mask": "random_0.3",
+   "seed": 0,
+   "lambda": 0.0001,
+   "n_observed": 1228,
+   "dense": {
+    "rmse_valid": 0.007053597263277125,
+    "wall_s": 0.14987399987876415,
+    "n_sub": 1228
+   },
+   "pcg": {
+    "rmse_valid": 0.007053590841962217,
+    "wall_s": 2.815001667942852,
+    "iters": 1852,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.3690532536956175,
+    "wall_s": 0.24327445798553526,
+    "iters": 685
+   },
+   "rff": {
+    "rmse_valid": 0.17986606460935445,
+    "wall_s": 0.07004229095764458
+   },
+   "re_ssam": {
+    "rmse_valid": 0.007653823298481096,
+    "wall_s": 3.0022489179391414,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 7614.221747490086,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "rbf",
+   "mask": "random_0.3",
+   "seed": 1,
+   "lambda": 0.0001,
+   "n_observed": 1228,
+   "dense": {
+    "rmse_valid": 0.006071815406508181,
+    "wall_s": 0.14693816704675555,
+    "n_sub": 1228
+   },
+   "pcg": {
+    "rmse_valid": 0.006071790776256088,
+    "wall_s": 2.77483079303056,
+    "iters": 1832,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.33990246835212695,
+    "wall_s": 0.24296337505802512,
+    "iters": 721
+   },
+   "rff": {
+    "rmse_valid": 0.16359839182724212,
+    "wall_s": 0.07323383307084441
+   },
+   "re_ssam": {
+    "rmse_valid": 0.006027672024363542,
+    "wall_s": 2.983601793181151,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 9006.068758561498,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "rbf",
+   "mask": "random_0.3",
+   "seed": 2,
+   "lambda": 0.0001,
+   "n_observed": 1228,
+   "dense": {
+    "rmse_valid": 0.006108196514625073,
+    "wall_s": 0.8003573340829462,
+    "n_sub": 1228
+   },
+   "pcg": {
+    "rmse_valid": 0.006108197659681093,
+    "wall_s": 2.772994793020189,
+    "iters": 1793,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.4295899699073341,
+    "wall_s": 0.24730245815590024,
+    "iters": 675
+   },
+   "rff": {
+    "rmse_valid": 0.2086124393291842,
+    "wall_s": 0.07299337489530444
+   },
+   "re_ssam": {
+    "rmse_valid": 0.006459442284250678,
+    "wall_s": 2.985937793040648,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 9106.901736889797,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "rbf",
+   "mask": "random_0.5",
+   "seed": 0,
+   "lambda": 0.0001,
+   "n_observed": 2048,
+   "dense": {
+    "rmse_valid": 0.002792946348643452,
+    "wall_s": 0.49194608302786946,
+    "n_sub": 2048
+   },
+   "pcg": {
+    "rmse_valid": 0.002792951855943976,
+    "wall_s": 3.043913085013628,
+    "iters": 1990,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.84852822806237,
+    "wall_s": 0.24108199984766543,
+    "iters": 680
+   },
+   "rff": {
+    "rmse_valid": 0.15309276786639717,
+    "wall_s": 0.08488841610960662
+   },
+   "re_ssam": {
+    "rmse_valid": 0.013742506019438478,
+    "wall_s": 3.0086018349975348,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 7614.221747490086,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "rbf",
+   "mask": "random_0.5",
+   "seed": 1,
+   "lambda": 0.0001,
+   "n_observed": 2048,
+   "dense": {
+    "rmse_valid": 0.0030516488395597318,
+    "wall_s": 0.49695866694673896,
+    "n_sub": 2048
+   },
+   "pcg": {
+    "rmse_valid": 0.0030515871748116406,
+    "wall_s": 3.023281960049644,
+    "iters": 1972,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.8638220321359902,
+    "wall_s": 0.24501529103145003,
+    "iters": 681
+   },
+   "rff": {
+    "rmse_valid": 0.14801807671487316,
+    "wall_s": 0.0908930420409888
+   },
+   "re_ssam": {
+    "rmse_valid": 0.006143345400090714,
+    "wall_s": 3.010695375967771,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 9006.068758561498,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-2d",
+   "grid": [
+    64,
+    64
+   ],
+   "kernel": "rbf",
+   "mask": "random_0.5",
+   "seed": 2,
+   "lambda": 0.0001,
+   "n_observed": 2048,
+   "dense": {
+    "rmse_valid": 0.0026957965042522995,
+    "wall_s": 4.091967585030943,
+    "n_sub": 2048
+   },
+   "pcg": {
+    "rmse_valid": 0.0026957580345066765,
+    "wall_s": 3.2246103761717677,
+    "iters": 1998,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 1.03739869106228,
+    "wall_s": 0.2575427091214806,
+    "iters": 672
+   },
+   "rff": {
+    "rmse_valid": 0.15392179929283187,
+    "wall_s": 0.11593395890668035
+   },
+   "re_ssam": {
+    "rmse_valid": 0.01724974557630606,
+    "wall_s": 3.09847808489576,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 9106.901736889797,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-3d",
+   "grid": [
+    24,
+    24,
+    24
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 0,
+   "lambda": 0.001,
+   "n_observed": 4147,
+   "dense": {
+    "rmse_valid": 1.1938143430677022,
+    "wall_s": 2.4530818350613117,
+    "n_sub": 4000
+   },
+   "pcg": {
+    "rmse_valid": 0.0771817981100965,
+    "wall_s": 12.446647338801995,
+    "iters": 840,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 1.2941005519717423,
+    "wall_s": 1.4393232921138406,
+    "iters": 194
+   },
+   "rff": {
+    "rmse_valid": 0.2002885814187986,
+    "wall_s": 0.22632995806634426
+   },
+   "re_ssam": {
+    "rmse_valid": 0.07778879085155718,
+    "wall_s": 15.264349256874993,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 24175.341273881353,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "grf-3d",
+   "grid": [
+    24,
+    24,
+    24
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1,
+   "lambda": 0.0001,
+   "n_observed": 4147,
+   "dense": {
+    "rmse_valid": 0.9911105563258438,
+    "wall_s": 2.491391541901976,
+    "n_sub": 4000
+   },
+   "pcg": {
+    "rmse_valid": 0.07812402457164272,
+    "wall_s": 16.9951598001644,
+    "iters": 1125,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 1.7681598588229526,
+    "wall_s": 1.6765709179453552,
+    "iters": 433
+   },
+   "rff": {
+    "rmse_valid": 0.19013457121432142,
+    "wall_s": 0.21801924984902143
+   },
+   "re_ssam": {
+    "rmse_valid": 0.10254437036974852,
+    "wall_s": 15.47429742407985,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 173750.69265627413,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "mnist-784",
+   "grid": [
+    28,
+    28
+   ],
+   "kernel": "matern32",
+   "mask": "patch70",
+   "seed": 0,
+   "lambda": 0.001,
+   "n_observed": 548,
+   "dense": {
+    "rmse_valid": 0.10141645474707853,
+    "wall_s": 0.0316405410412699,
+    "n_sub": 548
+   },
+   "pcg": {
+    "rmse_valid": 0.10141641281103302,
+    "wall_s": 0.07672058301977813,
+    "iters": 669,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.5099665366865729,
+    "wall_s": 0.05708749988116324,
+    "iters": 349
+   },
+   "rff": {
+    "rmse_valid": 0.17250348644088062,
+    "wall_s": 0.02890066709369421
+   },
+   "re_ssam": {
+    "rmse_valid": 0.16219606403124803,
+    "wall_s": 0.1830498748458922,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 133.57274666963283,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "mnist-784",
+   "grid": [
+    28,
+    28
+   ],
+   "kernel": "matern32",
+   "mask": "patch70",
+   "seed": 1,
+   "lambda": 0.001,
+   "n_observed": 548,
+   "dense": {
+    "rmse_valid": 0.08776562050139998,
+    "wall_s": 0.07678054203279316,
+    "n_sub": 548
+   },
+   "pcg": {
+    "rmse_valid": 0.08776559428104906,
+    "wall_s": 0.07593229203484952,
+    "iters": 670,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.46170820269035595,
+    "wall_s": 0.04693570896051824,
+    "iters": 355
+   },
+   "rff": {
+    "rmse_valid": 0.1919899727232697,
+    "wall_s": 0.029458999866619706
+   },
+   "re_ssam": {
+    "rmse_valid": 0.0939638180938346,
+    "wall_s": 0.17681516706943512,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 63.049127499481514,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "mnist-784",
+   "grid": [
+    28,
+    28
+   ],
+   "kernel": "matern32",
+   "mask": "patch70",
+   "seed": 2,
+   "lambda": 0.001,
+   "n_observed": 548,
+   "dense": {
+    "rmse_valid": 0.08272747769941068,
+    "wall_s": 0.026504124980419874,
+    "n_sub": 548
+   },
+   "pcg": {
+    "rmse_valid": 0.0827274794983049,
+    "wall_s": 0.08128595887683332,
+    "iters": 678,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.3340505428595404,
+    "wall_s": 0.04707679199054837,
+    "iters": 341
+   },
+   "rff": {
+    "rmse_valid": 0.18097365150684808,
+    "wall_s": 0.038170875050127506
+   },
+   "re_ssam": {
+    "rmse_valid": 0.12764062408414117,
+    "wall_s": 0.1787385840434581,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 132.96358548119292,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "mnist-784",
+   "grid": [
+    28,
+    28
+   ],
+   "kernel": "matern32",
+   "mask": "patch70",
+   "seed": 3,
+   "lambda": 0.001,
+   "n_observed": 548,
+   "dense": {
+    "rmse_valid": 0.07567726638000943,
+    "wall_s": 0.031811665976420045,
+    "n_sub": 548
+   },
+   "pcg": {
+    "rmse_valid": 0.07567728154469464,
+    "wall_s": 0.07668962492607534,
+    "iters": 714,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.3637502285823781,
+    "wall_s": 0.06746970908716321,
+    "iters": 374
+   },
+   "rff": {
+    "rmse_valid": 0.13658884822095468,
+    "wall_s": 0.031059332890436053
+   },
+   "re_ssam": {
+    "rmse_valid": 0.07454780466925455,
+    "wall_s": 0.17692866711877286,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 77.80007479284676,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "mnist-784",
+   "grid": [
+    28,
+    28
+   ],
+   "kernel": "matern32",
+   "mask": "patch70",
+   "seed": 4,
+   "lambda": 0.001,
+   "n_observed": 548,
+   "dense": {
+    "rmse_valid": 0.10452609277171002,
+    "wall_s": 0.03639749996364117,
+    "n_sub": 548
+   },
+   "pcg": {
+    "rmse_valid": 0.1045260978236322,
+    "wall_s": 0.0815712921321392,
+    "iters": 672,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.43697178036168827,
+    "wall_s": 0.05866420897655189,
+    "iters": 343
+   },
+   "rff": {
+    "rmse_valid": 0.19700260663618002,
+    "wall_s": 0.026848874986171722
+   },
+   "re_ssam": {
+    "rmse_valid": 0.16619476542813896,
+    "wall_s": 0.17618491710163653,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 54.5658869390549,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "mnist-784",
+   "grid": [
+    28,
+    28
+   ],
+   "kernel": "matern32",
+   "mask": "patch70",
+   "seed": 5,
+   "lambda": 0.001,
+   "n_observed": 548,
+   "dense": {
+    "rmse_valid": 0.0945686607733164,
+    "wall_s": 0.03083666693419218,
+    "n_sub": 548
+   },
+   "pcg": {
+    "rmse_valid": 0.09456867242462419,
+    "wall_s": 0.06613033311441541,
+    "iters": 634,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.5137575527079765,
+    "wall_s": 0.05397979193367064,
+    "iters": 354
+   },
+   "rff": {
+    "rmse_valid": 0.2341215444826161,
+    "wall_s": 0.03881141706369817
+   },
+   "re_ssam": {
+    "rmse_valid": 0.10354609956404574,
+    "wall_s": 0.17510529211722314,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 74.40668478686663,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "mnist-784",
+   "grid": [
+    28,
+    28
+   ],
+   "kernel": "matern32",
+   "mask": "patch70",
+   "seed": 6,
+   "lambda": 0.001,
+   "n_observed": 548,
+   "dense": {
+    "rmse_valid": 0.06947118412574,
+    "wall_s": 0.026617709081619978,
+    "n_sub": 548
+   },
+   "pcg": {
+    "rmse_valid": 0.06947118939971088,
+    "wall_s": 0.07901512505486608,
+    "iters": 701,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.3447178376485689,
+    "wall_s": 0.05131179094314575,
+    "iters": 373
+   },
+   "rff": {
+    "rmse_valid": 0.12336763153076111,
+    "wall_s": 0.03676675003953278
+   },
+   "re_ssam": {
+    "rmse_valid": 0.06967872347443846,
+    "wall_s": 0.18543566693551838,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 33.69498077623553,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "mnist-784",
+   "grid": [
+    28,
+    28
+   ],
+   "kernel": "matern32",
+   "mask": "patch70",
+   "seed": 7,
+   "lambda": 0.001,
+   "n_observed": 548,
+   "dense": {
+    "rmse_valid": 0.08440574370477714,
+    "wall_s": 0.11771062505431473,
+    "n_sub": 548
+   },
+   "pcg": {
+    "rmse_valid": 0.08440573896311866,
+    "wall_s": 0.07696670899167657,
+    "iters": 694,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.5790565527613423,
+    "wall_s": 0.05350158386863768,
+    "iters": 349
+   },
+   "rff": {
+    "rmse_valid": 0.17656519854475555,
+    "wall_s": 0.035448916954919696
+   },
+   "re_ssam": {
+    "rmse_valid": 0.0881912458542738,
+    "wall_s": 0.16996208298951387,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 96.86178205811346,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "mnist-784",
+   "grid": [
+    28,
+    28
+   ],
+   "kernel": "matern32",
+   "mask": "patch70",
+   "seed": 8,
+   "lambda": 0.001,
+   "n_observed": 548,
+   "dense": {
+    "rmse_valid": 0.08025129558893263,
+    "wall_s": 0.031853332882747054,
+    "n_sub": 548
+   },
+   "pcg": {
+    "rmse_valid": 0.08025128606249801,
+    "wall_s": 0.10238575004041195,
+    "iters": 689,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.257873938295633,
+    "wall_s": 0.07968770898878574,
+    "iters": 354
+   },
+   "rff": {
+    "rmse_valid": 0.15160284614695127,
+    "wall_s": 0.04498491692356765
+   },
+   "re_ssam": {
+    "rmse_valid": 0.0803198902279433,
+    "wall_s": 0.1819679590407759,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 135.9671445319165,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "mnist-784",
+   "grid": [
+    28,
+    28
+   ],
+   "kernel": "matern32",
+   "mask": "patch70",
+   "seed": 9,
+   "lambda": 0.001,
+   "n_observed": 548,
+   "dense": {
+    "rmse_valid": 0.08293923868584448,
+    "wall_s": 0.04098641686141491,
+    "n_sub": 548
+   },
+   "pcg": {
+    "rmse_valid": 0.0829392429547321,
+    "wall_s": 0.07048849994316697,
+    "iters": 626,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.4359488727145323,
+    "wall_s": 0.06593991699628532,
+    "iters": 353
+   },
+   "rff": {
+    "rmse_valid": 0.181153685237157,
+    "wall_s": 0.03324520820751786
+   },
+   "re_ssam": {
+    "rmse_valid": 0.09711256874425252,
+    "wall_s": 0.17603958281688392,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 40.284957512997266,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1920,
+   "lambda": 0.001,
+   "n_observed": 259,
+   "dense": {
+    "rmse_valid": 0.42638456916852363,
+    "wall_s": 0.017611375078558922,
+    "n_sub": 259
+   },
+   "pcg": {
+    "rmse_valid": 0.4263846597387434,
+    "wall_s": 0.13785754214040935,
+    "iters": 227,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.6480146202715156,
+    "wall_s": 0.25863300007767975,
+    "iters": 868
+   },
+   "rff": {
+    "rmse_valid": 0.5534836162236088,
+    "wall_s": 0.04254987486638129
+   },
+   "re_ssam": {
+    "rmse_valid": 0.4263846464746126,
+    "wall_s": 0.8777442087884992,
+    "iters": 428,
+    "conv": true,
+    "naive_rel_res": 310.18892662086745,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1921,
+   "lambda": 0.001,
+   "n_observed": 259,
+   "dense": {
+    "rmse_valid": 0.407702943017664,
+    "wall_s": 0.015799166169017553,
+    "n_sub": 259
+   },
+   "pcg": {
+    "rmse_valid": 0.4077029218453935,
+    "wall_s": 0.14657633402384818,
+    "iters": 231,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.6064129568341224,
+    "wall_s": 0.25776245910674334,
+    "iters": 878
+   },
+   "rff": {
+    "rmse_valid": 0.6271780890723309,
+    "wall_s": 0.0368951668497175
+   },
+   "re_ssam": {
+    "rmse_valid": 0.4077030147712102,
+    "wall_s": 0.8831232511438429,
+    "iters": 429,
+    "conv": true,
+    "naive_rel_res": 311.68612208090843,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1922,
+   "lambda": 0.001,
+   "n_observed": 259,
+   "dense": {
+    "rmse_valid": 0.3836765705122809,
+    "wall_s": 0.015483625000342727,
+    "n_sub": 259
+   },
+   "pcg": {
+    "rmse_valid": 0.3836765830402659,
+    "wall_s": 0.1452607500832528,
+    "iters": 228,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.6056166135917163,
+    "wall_s": 0.26235420792363584,
+    "iters": 878
+   },
+   "rff": {
+    "rmse_valid": 0.43698099497416215,
+    "wall_s": 0.04395029088482261
+   },
+   "re_ssam": {
+    "rmse_valid": 0.38367658355720496,
+    "wall_s": 0.8978357498999685,
+    "iters": 438,
+    "conv": true,
+    "naive_rel_res": 291.3841456108506,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1923,
+   "lambda": 0.001,
+   "n_observed": 259,
+   "dense": {
+    "rmse_valid": 0.36420481364505025,
+    "wall_s": 0.015154500026255846,
+    "n_sub": 259
+   },
+   "pcg": {
+    "rmse_valid": 0.3642048127017448,
+    "wall_s": 0.1377050830051303,
+    "iters": 231,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.5844245620750577,
+    "wall_s": 0.2633898751810193,
+    "iters": 874
+   },
+   "rff": {
+    "rmse_valid": 0.5043545001161354,
+    "wall_s": 0.0363754159770906
+   },
+   "re_ssam": {
+    "rmse_valid": 0.36420514667384446,
+    "wall_s": 1.0335007510147989,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 291.04968412711355,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1924,
+   "lambda": 0.001,
+   "n_observed": 259,
+   "dense": {
+    "rmse_valid": 0.3916344621762058,
+    "wall_s": 0.015500792069360614,
+    "n_sub": 259
+   },
+   "pcg": {
+    "rmse_valid": 0.39163447008360036,
+    "wall_s": 0.14200612506829202,
+    "iters": 235,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.5626763205994352,
+    "wall_s": 0.27353891683742404,
+    "iters": 884
+   },
+   "rff": {
+    "rmse_valid": 0.57237105956247,
+    "wall_s": 0.042473332956433296
+   },
+   "re_ssam": {
+    "rmse_valid": 0.39163444099361894,
+    "wall_s": 0.8656497919000685,
+    "iters": 424,
+    "conv": true,
+    "naive_rel_res": 278.77485317165133,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1925,
+   "lambda": 0.001,
+   "n_observed": 259,
+   "dense": {
+    "rmse_valid": 0.42148032357801296,
+    "wall_s": 0.017229209188371897,
+    "n_sub": 259
+   },
+   "pcg": {
+    "rmse_valid": 0.4214803122498104,
+    "wall_s": 0.1420932919718325,
+    "iters": 235,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.5623094195893021,
+    "wall_s": 0.257374833105132,
+    "iters": 876
+   },
+   "rff": {
+    "rmse_valid": 0.6091582218671687,
+    "wall_s": 0.03500316687859595
+   },
+   "re_ssam": {
+    "rmse_valid": 0.42148033774642724,
+    "wall_s": 0.8584594170097262,
+    "iters": 414,
+    "conv": true,
+    "naive_rel_res": 302.63464121788854,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1926,
+   "lambda": 0.001,
+   "n_observed": 259,
+   "dense": {
+    "rmse_valid": 0.44543756028424325,
+    "wall_s": 0.015628166031092405,
+    "n_sub": 259
+   },
+   "pcg": {
+    "rmse_valid": 0.44543758260462224,
+    "wall_s": 0.14330441690981388,
+    "iters": 239,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.5592908200391159,
+    "wall_s": 0.25814862619154155,
+    "iters": 878
+   },
+   "rff": {
+    "rmse_valid": 0.5786844049435919,
+    "wall_s": 0.040802457835525274
+   },
+   "re_ssam": {
+    "rmse_valid": 0.4454377705657997,
+    "wall_s": 0.8717040419578552,
+    "iters": 417,
+    "conv": true,
+    "naive_rel_res": 320.0765121554022,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1927,
+   "lambda": 0.001,
+   "n_observed": 259,
+   "dense": {
+    "rmse_valid": 0.4617903259484375,
+    "wall_s": 0.016208207933232188,
+    "n_sub": 259
+   },
+   "pcg": {
+    "rmse_valid": 0.46179037868914574,
+    "wall_s": 0.14378812513314188,
+    "iters": 237,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.534324114491978,
+    "wall_s": 0.2636431250721216,
+    "iters": 871
+   },
+   "rff": {
+    "rmse_valid": 0.4890441273674861,
+    "wall_s": 0.08557370794005692
+   },
+   "re_ssam": {
+    "rmse_valid": 0.46179032483695864,
+    "wall_s": 0.9242784169036895,
+    "iters": 446,
+    "conv": true,
+    "naive_rel_res": 318.8424303924983,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1928,
+   "lambda": 0.001,
+   "n_observed": 259,
+   "dense": {
+    "rmse_valid": 0.4257727441383877,
+    "wall_s": 0.016678249929100275,
+    "n_sub": 259
+   },
+   "pcg": {
+    "rmse_valid": 0.42577278555415715,
+    "wall_s": 0.13935770792886615,
+    "iters": 239,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.5513229068891807,
+    "wall_s": 0.2613125841598958,
+    "iters": 878
+   },
+   "rff": {
+    "rmse_valid": 0.5037550390594709,
+    "wall_s": 0.034841249929741025
+   },
+   "re_ssam": {
+    "rmse_valid": 0.4257727900624445,
+    "wall_s": 0.8546855840831995,
+    "iters": 414,
+    "conv": true,
+    "naive_rel_res": 330.19066642346337,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1929,
+   "lambda": 0.001,
+   "n_observed": 259,
+   "dense": {
+    "rmse_valid": 0.3717539636319327,
+    "wall_s": 0.018558917101472616,
+    "n_sub": 259
+   },
+   "pcg": {
+    "rmse_valid": 0.3717539743721142,
+    "wall_s": 0.13372512510977685,
+    "iters": 232,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.5117959432433213,
+    "wall_s": 0.29280029190704226,
+    "iters": 958
+   },
+   "rff": {
+    "rmse_valid": 0.4655578658857849,
+    "wall_s": 0.03962770802900195
+   },
+   "re_ssam": {
+    "rmse_valid": 0.37175396128592103,
+    "wall_s": 0.9323454168625176,
+    "iters": 449,
+    "conv": true,
+    "naive_rel_res": 332.644589714667,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1930,
+   "lambda": 0.001,
+   "n_observed": 259,
+   "dense": {
+    "rmse_valid": 0.3605642419876742,
+    "wall_s": 0.027682417072355747,
+    "n_sub": 259
+   },
+   "pcg": {
+    "rmse_valid": 0.3605642237922539,
+    "wall_s": 0.15489012491889298,
+    "iters": 242,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.4635134484957679,
+    "wall_s": 0.27909762505441904,
+    "iters": 953
+   },
+   "rff": {
+    "rmse_valid": 0.5377180788175617,
+    "wall_s": 0.05715766688808799
+   },
+   "re_ssam": {
+    "rmse_valid": 0.3605643595749645,
+    "wall_s": 0.890692374901846,
+    "iters": 429,
+    "conv": true,
+    "naive_rel_res": 302.2422452142262,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.1",
+   "seed": 1931,
+   "lambda": 0.001,
+   "n_observed": 259,
+   "dense": {
+    "rmse_valid": 0.3262762066346438,
+    "wall_s": 0.01571375015191734,
+    "n_sub": 259
+   },
+   "pcg": {
+    "rmse_valid": 0.32627623643087433,
+    "wall_s": 0.13520183297805488,
+    "iters": 226,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.43013063852916505,
+    "wall_s": 0.2750542499125004,
+    "iters": 956
+   },
+   "rff": {
+    "rmse_valid": 0.5306810213569232,
+    "wall_s": 0.041432833997532725
+   },
+   "re_ssam": {
+    "rmse_valid": 0.3262762490454212,
+    "wall_s": 0.8730573761276901,
+    "iters": 427,
+    "conv": true,
+    "naive_rel_res": 347.50718412505495,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1920,
+   "lambda": 0.001,
+   "n_observed": 777,
+   "dense": {
+    "rmse_valid": 0.293189453839837,
+    "wall_s": 0.06324395816773176,
+    "n_sub": 777
+   },
+   "pcg": {
+    "rmse_valid": 0.29318945993449763,
+    "wall_s": 0.2657157499343157,
+    "iters": 445,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.452373245773023,
+    "wall_s": 0.2585743328090757,
+    "iters": 835
+   },
+   "rff": {
+    "rmse_valid": 0.3568427976023582,
+    "wall_s": 0.0634870829526335
+   },
+   "re_ssam": {
+    "rmse_valid": 0.2932587366980372,
+    "wall_s": 1.0453200838528574,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 310.18892662086745,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1921,
+   "lambda": 0.001,
+   "n_observed": 777,
+   "dense": {
+    "rmse_valid": 0.28127687317726646,
+    "wall_s": 0.08178429212421179,
+    "n_sub": 777
+   },
+   "pcg": {
+    "rmse_valid": 0.281276861662983,
+    "wall_s": 0.2582045409362763,
+    "iters": 441,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.4193916445931093,
+    "wall_s": 0.2503316670190543,
+    "iters": 839
+   },
+   "rff": {
+    "rmse_valid": 0.3758016708126264,
+    "wall_s": 0.051280375104397535
+   },
+   "re_ssam": {
+    "rmse_valid": 0.28127518399760887,
+    "wall_s": 1.042508834041655,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 311.68612208090843,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1922,
+   "lambda": 0.001,
+   "n_observed": 777,
+   "dense": {
+    "rmse_valid": 0.27183427102829105,
+    "wall_s": 0.08096804213710129,
+    "n_sub": 777
+   },
+   "pcg": {
+    "rmse_valid": 0.27183427621181655,
+    "wall_s": 0.2627935002092272,
+    "iters": 435,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.42522950446272484,
+    "wall_s": 0.2716057919897139,
+    "iters": 827
+   },
+   "rff": {
+    "rmse_valid": 0.35436653685265596,
+    "wall_s": 0.05862004216760397
+   },
+   "re_ssam": {
+    "rmse_valid": 0.27183538299797194,
+    "wall_s": 1.0544184998143464,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 291.3841456108506,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1923,
+   "lambda": 0.001,
+   "n_observed": 777,
+   "dense": {
+    "rmse_valid": 0.2625393055512833,
+    "wall_s": 0.09576420905068517,
+    "n_sub": 777
+   },
+   "pcg": {
+    "rmse_valid": 0.26253932860949847,
+    "wall_s": 0.2642243760637939,
+    "iters": 442,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.40844014740334067,
+    "wall_s": 0.27574062487110496,
+    "iters": 849
+   },
+   "rff": {
+    "rmse_valid": 0.34333909290654746,
+    "wall_s": 0.06511329207569361
+   },
+   "re_ssam": {
+    "rmse_valid": 0.26253742140888164,
+    "wall_s": 1.0700395009480417,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 291.04968412711355,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1924,
+   "lambda": 0.001,
+   "n_observed": 777,
+   "dense": {
+    "rmse_valid": 0.29302908748087353,
+    "wall_s": 0.08744887518696487,
+    "n_sub": 777
+   },
+   "pcg": {
+    "rmse_valid": 0.29302909439691727,
+    "wall_s": 0.35605420893989503,
+    "iters": 459,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.4159796478324832,
+    "wall_s": 0.26655962504446507,
+    "iters": 861
+   },
+   "rff": {
+    "rmse_valid": 0.37248000611375703,
+    "wall_s": 0.07813029200769961
+   },
+   "re_ssam": {
+    "rmse_valid": 0.29302743579441826,
+    "wall_s": 1.0385407090652734,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 278.77485317165133,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1925,
+   "lambda": 0.001,
+   "n_observed": 777,
+   "dense": {
+    "rmse_valid": 0.30770810119211145,
+    "wall_s": 0.06949970894493163,
+    "n_sub": 777
+   },
+   "pcg": {
+    "rmse_valid": 0.307708064658595,
+    "wall_s": 0.2501820418983698,
+    "iters": 452,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.43065359403513825,
+    "wall_s": 0.2681507091037929,
+    "iters": 835
+   },
+   "rff": {
+    "rmse_valid": 0.379177731473579,
+    "wall_s": 0.05856683314777911
+   },
+   "re_ssam": {
+    "rmse_valid": 0.30771691854490135,
+    "wall_s": 1.0168719170615077,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 302.63464121788854,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1926,
+   "lambda": 0.001,
+   "n_observed": 777,
+   "dense": {
+    "rmse_valid": 0.27438007373961154,
+    "wall_s": 0.06701137498021126,
+    "n_sub": 777
+   },
+   "pcg": {
+    "rmse_valid": 0.27438008864285973,
+    "wall_s": 0.2696633751038462,
+    "iters": 452,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.4077366280641893,
+    "wall_s": 0.245720376027748,
+    "iters": 819
+   },
+   "rff": {
+    "rmse_valid": 0.35994163971351395,
+    "wall_s": 0.051297750091180205
+   },
+   "re_ssam": {
+    "rmse_valid": 0.2743901198995391,
+    "wall_s": 1.0318741668015718,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 320.0765121554022,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1927,
+   "lambda": 0.001,
+   "n_observed": 777,
+   "dense": {
+    "rmse_valid": 0.2531002036589906,
+    "wall_s": 0.0763637088239193,
+    "n_sub": 777
+   },
+   "pcg": {
+    "rmse_valid": 0.2531002136159517,
+    "wall_s": 0.2440890008583665,
+    "iters": 443,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.3916337992177282,
+    "wall_s": 0.27543716598302126,
+    "iters": 905
+   },
+   "rff": {
+    "rmse_valid": 0.3555531535244802,
+    "wall_s": 0.04947399999946356
+   },
+   "re_ssam": {
+    "rmse_valid": 0.2531002728158577,
+    "wall_s": 1.0391405429691076,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 318.8424303924983,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1928,
+   "lambda": 0.001,
+   "n_observed": 777,
+   "dense": {
+    "rmse_valid": 0.2586813528055616,
+    "wall_s": 0.07525829202495515,
+    "n_sub": 777
+   },
+   "pcg": {
+    "rmse_valid": 0.2586813375483996,
+    "wall_s": 0.2638247499708086,
+    "iters": 449,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.3969814293031724,
+    "wall_s": 0.26523041701875627,
+    "iters": 875
+   },
+   "rff": {
+    "rmse_valid": 0.3581937529000191,
+    "wall_s": 0.05156962503679097
+   },
+   "re_ssam": {
+    "rmse_valid": 0.2586836205821326,
+    "wall_s": 1.0330492919310927,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 330.19066642346337,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1929,
+   "lambda": 0.001,
+   "n_observed": 777,
+   "dense": {
+    "rmse_valid": 0.24783164219429124,
+    "wall_s": 0.07105000014416873,
+    "n_sub": 777
+   },
+   "pcg": {
+    "rmse_valid": 0.24783166660837083,
+    "wall_s": 0.25265999999828637,
+    "iters": 457,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.37669853890857086,
+    "wall_s": 0.2664977500680834,
+    "iters": 906
+   },
+   "rff": {
+    "rmse_valid": 0.3224059411697281,
+    "wall_s": 0.049356999807059765
+   },
+   "re_ssam": {
+    "rmse_valid": 0.2478261784300919,
+    "wall_s": 1.0184967499226332,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 332.644589714667,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1930,
+   "lambda": 0.001,
+   "n_observed": 777,
+   "dense": {
+    "rmse_valid": 0.2680364435953043,
+    "wall_s": 0.06442775018513203,
+    "n_sub": 777
+   },
+   "pcg": {
+    "rmse_valid": 0.26803645801527015,
+    "wall_s": 0.2538447920233011,
+    "iters": 452,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.35079353788377754,
+    "wall_s": 0.25322941690683365,
+    "iters": 869
+   },
+   "rff": {
+    "rmse_valid": 0.351512814440804,
+    "wall_s": 0.0522709998767823
+   },
+   "re_ssam": {
+    "rmse_valid": 0.2680355606527444,
+    "wall_s": 1.045769833959639,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 302.2422452142262,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "random_0.3",
+   "seed": 1931,
+   "lambda": 0.001,
+   "n_observed": 777,
+   "dense": {
+    "rmse_valid": 0.24864837870070544,
+    "wall_s": 0.07461620913818479,
+    "n_sub": 777
+   },
+   "pcg": {
+    "rmse_valid": 0.24864839294088067,
+    "wall_s": 0.25849758298136294,
+    "iters": 454,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.3267111845842387,
+    "wall_s": 0.25665245903655887,
+    "iters": 871
+   },
+   "rff": {
+    "rmse_valid": 0.29491617374933,
+    "wall_s": 0.0591601668857038
+   },
+   "re_ssam": {
+    "rmse_valid": 0.2486426257754836,
+    "wall_s": 1.013601542217657,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 347.50718412505495,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "polar",
+   "seed": 1920,
+   "lambda": 0.001,
+   "n_observed": 8,
+   "dense": {
+    "rmse_valid": 0.852265897876393,
+    "wall_s": 0.0007493330631405115,
+    "n_sub": 8
+   },
+   "pcg": {
+    "rmse_valid": 0.8522658978618612,
+    "wall_s": 0.003817667020484805,
+    "iters": 4,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.8985293608100244,
+    "wall_s": 0.2964799590408802,
+    "iters": 1045
+   },
+   "rff": {
+    "rmse_valid": 0.5408190497990646,
+    "wall_s": 0.03463399992324412
+   },
+   "re_ssam": {
+    "rmse_valid": 0.8522669296681777,
+    "wall_s": 1.0128908341284841,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 310.18892662086745,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "polar",
+   "seed": 1921,
+   "lambda": 0.001,
+   "n_observed": 8,
+   "dense": {
+    "rmse_valid": 0.7611908303965335,
+    "wall_s": 0.0018682919908314943,
+    "n_sub": 8
+   },
+   "pcg": {
+    "rmse_valid": 0.7611908303818107,
+    "wall_s": 0.003817416960373521,
+    "iters": 4,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.804237792323524,
+    "wall_s": 0.3220971671398729,
+    "iters": 1060
+   },
+   "rff": {
+    "rmse_valid": 0.49700655077718475,
+    "wall_s": 0.05612283293157816
+   },
+   "re_ssam": {
+    "rmse_valid": 0.7611917337790258,
+    "wall_s": 1.130339166847989,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 311.68612208090843,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "polar",
+   "seed": 1922,
+   "lambda": 0.001,
+   "n_observed": 8,
+   "dense": {
+    "rmse_valid": 0.7942347714814891,
+    "wall_s": 0.0007617080118507147,
+    "n_sub": 8
+   },
+   "pcg": {
+    "rmse_valid": 0.7942347714592403,
+    "wall_s": 0.003837083000689745,
+    "iters": 4,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.8417059156696531,
+    "wall_s": 0.2875477918423712,
+    "iters": 1024
+   },
+   "rff": {
+    "rmse_valid": 0.5028078414045031,
+    "wall_s": 0.032105332938954234
+   },
+   "re_ssam": {
+    "rmse_valid": 0.7942357946569257,
+    "wall_s": 1.232735042925924,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 291.3841456108506,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "polar",
+   "seed": 1923,
+   "lambda": 0.001,
+   "n_observed": 8,
+   "dense": {
+    "rmse_valid": 0.7659874597924473,
+    "wall_s": 0.0047462498769164085,
+    "n_sub": 8
+   },
+   "pcg": {
+    "rmse_valid": 0.7659874597714653,
+    "wall_s": 0.004751000087708235,
+    "iters": 4,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.8120505281437986,
+    "wall_s": 0.3709821670781821,
+    "iters": 1057
+   },
+   "rff": {
+    "rmse_valid": 0.48678501429129833,
+    "wall_s": 0.10668474994599819
+   },
+   "re_ssam": {
+    "rmse_valid": 0.7659884033296225,
+    "wall_s": 1.1426473741885275,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 291.04968412711355,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "polar",
+   "seed": 1924,
+   "lambda": 0.001,
+   "n_observed": 8,
+   "dense": {
+    "rmse_valid": 0.7248515893933315,
+    "wall_s": 0.002651291899383068,
+    "n_sub": 8
+   },
+   "pcg": {
+    "rmse_valid": 0.7248515893603735,
+    "wall_s": 0.0037947078235447407,
+    "iters": 4,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.7676521690641681,
+    "wall_s": 0.2947660000063479,
+    "iters": 1038
+   },
+   "rff": {
+    "rmse_valid": 0.4521930253173013,
+    "wall_s": 0.03885037498548627
+   },
+   "re_ssam": {
+    "rmse_valid": 0.7248524399715158,
+    "wall_s": 1.0584831258747727,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 278.77485317165133,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "polar",
+   "seed": 1925,
+   "lambda": 0.001,
+   "n_observed": 8,
+   "dense": {
+    "rmse_valid": 0.7197107430377547,
+    "wall_s": 0.015176207991316915,
+    "n_sub": 8
+   },
+   "pcg": {
+    "rmse_valid": 0.7197107430235993,
+    "wall_s": 0.01778337499126792,
+    "iters": 4,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.7627649071467527,
+    "wall_s": 0.3565852919127792,
+    "iters": 1039
+   },
+   "rff": {
+    "rmse_valid": 0.4274114929355991,
+    "wall_s": 0.03565554087981582
+   },
+   "re_ssam": {
+    "rmse_valid": 0.7197115961229991,
+    "wall_s": 1.0506369171198457,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 302.63464121788854,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "polar",
+   "seed": 1926,
+   "lambda": 0.001,
+   "n_observed": 8,
+   "dense": {
+    "rmse_valid": 0.7130175212899657,
+    "wall_s": 0.0007429590914398432,
+    "n_sub": 8
+   },
+   "pcg": {
+    "rmse_valid": 0.7130175212559837,
+    "wall_s": 0.003796124830842018,
+    "iters": 4,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.7578853971665768,
+    "wall_s": 0.2643805001862347,
+    "iters": 1032
+   },
+   "rff": {
+    "rmse_valid": 0.40329164906608794,
+    "wall_s": 0.026757791871204972
+   },
+   "re_ssam": {
+    "rmse_valid": 0.7130184104127858,
+    "wall_s": 1.0108020009938627,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 320.0765121554022,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "polar",
+   "seed": 1927,
+   "lambda": 0.001,
+   "n_observed": 8,
+   "dense": {
+    "rmse_valid": 0.6815002123944005,
+    "wall_s": 0.0007905000820755959,
+    "n_sub": 8
+   },
+   "pcg": {
+    "rmse_valid": 0.6815002123804399,
+    "wall_s": 0.0037937089800834656,
+    "iters": 4,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.7237122985276654,
+    "wall_s": 0.2681154168676585,
+    "iters": 1028
+   },
+   "rff": {
+    "rmse_valid": 0.37655050231994425,
+    "wall_s": 0.026425667107105255
+   },
+   "re_ssam": {
+    "rmse_valid": 0.6815010789336161,
+    "wall_s": 0.9902021680027246,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 318.8424303924983,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "polar",
+   "seed": 1928,
+   "lambda": 0.001,
+   "n_observed": 8,
+   "dense": {
+    "rmse_valid": 0.6975855517281236,
+    "wall_s": 0.008575959131121635,
+    "n_sub": 8
+   },
+   "pcg": {
+    "rmse_valid": 0.6975855516988314,
+    "wall_s": 0.003819792065769434,
+    "iters": 4,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.7384376003742794,
+    "wall_s": 0.2921548751182854,
+    "iters": 1041
+   },
+   "rff": {
+    "rmse_valid": 0.40152243071191274,
+    "wall_s": 0.026253749849274755
+   },
+   "re_ssam": {
+    "rmse_valid": 0.6975863556352925,
+    "wall_s": 1.0002622089814395,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 330.19066642346337,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "polar",
+   "seed": 1929,
+   "lambda": 0.001,
+   "n_observed": 8,
+   "dense": {
+    "rmse_valid": 0.6536357844041232,
+    "wall_s": 0.0007626251317560673,
+    "n_sub": 8
+   },
+   "pcg": {
+    "rmse_valid": 0.6536357843790713,
+    "wall_s": 0.0038235841784626245,
+    "iters": 4,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.6918295137796987,
+    "wall_s": 0.28318879194557667,
+    "iters": 1053
+   },
+   "rff": {
+    "rmse_valid": 0.378294182195362,
+    "wall_s": 0.032609833870083094
+   },
+   "re_ssam": {
+    "rmse_valid": 0.6536365433665245,
+    "wall_s": 1.0116275420878083,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 332.644589714667,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "polar",
+   "seed": 1930,
+   "lambda": 0.001,
+   "n_observed": 8,
+   "dense": {
+    "rmse_valid": 0.5880223815418278,
+    "wall_s": 0.0007615839131176472,
+    "n_sub": 8
+   },
+   "pcg": {
+    "rmse_valid": 0.5880223815270066,
+    "wall_s": 0.003813541028648615,
+    "iters": 4,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.616690254995504,
+    "wall_s": 0.26982950000092387,
+    "iters": 1034
+   },
+   "rff": {
+    "rmse_valid": 0.38883348063776685,
+    "wall_s": 0.032223999965935946
+   },
+   "re_ssam": {
+    "rmse_valid": 0.5880229438400227,
+    "wall_s": 1.0090794172137976,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 302.2422452142262,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  },
+  {
+   "domain": "kaplan-sst-v2",
+   "grid": [
+    36,
+    72
+   ],
+   "kernel": "matern32",
+   "mask": "polar",
+   "seed": 1931,
+   "lambda": 0.001,
+   "n_observed": 8,
+   "dense": {
+    "rmse_valid": 0.5502046402198149,
+    "wall_s": 0.002753957873210311,
+    "n_sub": 8
+   },
+   "pcg": {
+    "rmse_valid": 0.5502046402201602,
+    "wall_s": 0.004028416005894542,
+    "iters": 4,
+    "conv": true
+   },
+   "kiss": {
+    "rmse_valid": 0.5780854388483958,
+    "wall_s": 0.28148950007744133,
+    "iters": 1036
+   },
+   "rff": {
+    "rmse_valid": 0.3581219628565096,
+    "wall_s": 0.033941208850592375
+   },
+   "re_ssam": {
+    "rmse_valid": 0.5502052609306455,
+    "wall_s": 1.0151222499553114,
+    "iters": 500,
+    "conv": false,
+    "naive_rel_res": 347.50718412505495,
+    "naive_gap_note": "RE naive solve; SSAM-CAM masked solve"
+   }
+  }
+ ],
+ "n": 66,
+ "per_domain": {
+  "grf-2d": {
+   "dense_median_rmse": 0.08099966621259799,
+   "pcg_median_rmse": 0.08099970552584146,
+   "kiss_median_rmse": 0.6916740708506983,
+   "rff_median_rmse": 0.22046896189794507,
+   "re_ssam_median_rmse": 0.08138026412342239
+  },
+  "grf-3d": {
+   "dense_median_rmse": 1.092462449696773,
+   "pcg_median_rmse": 0.0776529113408696,
+   "kiss_median_rmse": 1.5311302053973475,
+   "rff_median_rmse": 0.19521157631656,
+   "re_ssam_median_rmse": 0.09016658061065286
+  },
+  "mnist-784": {
+   "dense_median_rmse": 0.08367249119531081,
+   "pcg_median_rmse": 0.08367249095892537,
+   "kiss_median_rmse": 0.4364603265381103,
+   "rff_median_rmse": 0.17876942502580181,
+   "re_ssam_median_rmse": 0.09553819341904356
+  },
+  "kaplan-sst-v2": {
+   "dense_median_rmse": 0.3996687025969349,
+   "pcg_median_rmse": 0.39966869596449695,
+   "kiss_median_rmse": 0.560800119814209,
+   "rff_median_rmse": 0.4153515710008435,
+   "re_ssam_median_rmse": 0.3996687278824146
+  }
+ },
+ "benchmark_verdict": "not-refuted",
+ "kiss_wins": 0,
+ "dense_wins": 0,
+ "wall_clock_s": 360.6,
+ "peak_rss_gb": 0.9786376953125,
+ "peak_rss_note": "whole-run peak RSS (upper bound); the arm clock is arm-scoped"
+}

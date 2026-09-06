@@ -1,0 +1,208 @@
+{
+ "id": "experiment-plan-iter3",
+ "status": "approved-for-execution",
+ "proposal_ref": "ideas/proposal-final.json",
+ "objective": "Pre-registered iteration-3 plan: (S1) RE-ABLRC whole-sample symmetric (2H-1)x(2W-1) [resp. 3D] DCT-I-class embedding + boundary-banded Woodbury correction to cut the free-vs-torus modeling gap by >= 50% (median, 2D+3D pooled) at median reported residual bound <= 1e-6 with w <= min(H,W)/8, and (S2) SSAM-CAM (spectral-spatial alternating minimization with circulant-accelerated Anderson mixing) to solve the masked system (P_m K P_m^T + lambda I) w = y_m at >= 3x median wall-clock speedup vs standard PCG at equivalent KKT residual < 1e-6 with RMSE parity, plus a 4-domain x 6-method benchmark (dense KRR subsample<=4000, PCG, KISS-GP, RFF, RE-ABLRC+SSAM-CAM, optional HSS), O(N log N)/O(N) scaling to N ~ 1e5, ablations, and boundary-controlled GRF tooling (scripts/grf_boundary.py). Envelope: CPU-only, 12 cores, 7 GB, <= 90 min total (A1<=25, A2<=30, A3<=20, A4<=5, A5<=5, A6<=5); results written to results/iter3/*.json. Source of truth for execution: ideas/proposal-final.json + results/iter2 canonical artifacts (T1b-CG-masked-train.json rate means 245.1/276.1/280.9 iters at tol 1e-8, per-field span 233-291, final relative residual per-field 4.69e-9..9.81e-9, RMSE means 0.529-0.541; EXECUTION_NOTES pre-fix figures 420-550 iters / RMSE 0.78-0.83 are SUPERSEDED and never cited).",
+ "arms": {
+  "A1_boundary": {
+   "name": "A1 boundary (free-boundary gap reduction)",
+   "budget_min": 25,
+   "grids": {
+    "2d": ["64x64", "128x128"],
+    "3d": ["24^3"]
+   },
+   "kernels": ["matern32", "matern52", "rbf"],
+   "task": "synthetic free-boundary GRF solve (K + lambda I) alpha = y on controlled-free-boundary fields; methods compared on the SAME kernel and interpolation/evaluation protocol",
+   "methods": {
+    "dense_free_ref": "dense free-boundary reference: exact Cholesky solve of the free BTTB Gram at 64x64 and 24^3 ONLY; at 128x128 the reference is a PCG solve of the free-boundary BTTB system at tol 1e-8 (dense-equivalent), same residual convention as T1b, with iterations + final relative residual reported",
+    "bccb_wrap": "standard BCCB torus wrapping (periodized-distance Gram, spectral solve) - the baseline whose gap is being reduced",
+    "re_ablrc": "RE-ABLRC: whole-sample symmetric (2H-1)x(2W-1) [3D: (2H-1)(2W-1)(2D-1)] first-column embedding (DCT-I class, Martucci entry 45; NOT half-sample 2H reflective padding), exact circulant spectral solve, Woodbury correction confined to the edge band of width w = ceil(2.5*rho) (rho = kernel range in grid units; single 2.5 factor), rank r_2d = O(w(H+W)); 3D correction restricted to edge bands with r_3d = w(HW+HD+WD); 3D solve runs capped at 24^3 (at w=3: r_3d = 5184, r^2 ~ 26.9e6 doubles ~ 215 MB < 7 GB); 48^3 arm uses embedding-only + PCG cross-check (pre-registered cap), never 3D Woodbury",
+    "dct_dst_comp": "DCT/DST symmetric-convolution comparator (Martucci entry 45) applied to the same free-boundary solve: strongest boundary-aware classical baseline against which S1 must capture >= 50% of the gap reduction"
+   },
+   "w_sweep": {
+    "values": [1, 2, 3, 4],
+    "fail_fast_rule": "if the relative residual does not decay monotonically across the w-sweep, the arm fail-fasts on that configuration (guards the naive embed-solve plateau: measured ~0.18 relative at 32x32 matern32 ell=4, independent of padding)",
+    "claimable_guard": "S1 win claimed ONLY for w <= min(H,W)/8 (w = ceil(2.5*rho); as rho approaches the grid dimension, w ~ O(H) drives the correction rank ~ O(N), silently exiting the O(N log N) + low-rank regime)",
+    "interior_vs_band": "report relative interior-vs-band residual norm across the w-sweep; if the correction rank needed for median residual <= 1e-6 exceeds the w(H+W) budget, RE-ABLRC is reported NOT validated (hypothesis-gate G1 item 2)"
+   },
+   "metric": "median relative free-boundary gap reduction g = ||f_approx - f_free|| / ||f_free||, % reduction vs the BCCB-wrapping gap, pooled across 2D (64x64, 128x128) and 3D (24^3) and kernels/seeds",
+   "win": "median gap reduction >= 50% (2D+3D pooled) AND median reported residual bound <= 1e-6 AND w <= min(H,W)/8 (else NOT-validated if the rank budget is exceeded, REFUTED if the DCT/DST 50%-capture consequence fails)",
+   "seeds": "synthetic 2D 0-19, synthetic 3D 0-9",
+   "artifact": "results/iter3/A1-boundary.json"
+  },
+  "A2_masked": {
+   "name": "A2 masked (SSAM-CAM vs PCG on the shared masked-Gram system)",
+   "budget_min": 30,
+   "shared_system": "(P_m K P_m^T + lambda I) w = y_m - the SAME masked-Gram system the standard PCG reference solves (results/iter2/T1b convention); coefficients restricted to observed-cell support a = P_m^T w; spelled identically in S2 and here (F2 Res 3 / E item 2)",
+   "tasks": {
+    "synthetic": "synthetic 2D GRF, grids 64x64 and 128x128, random masks 10/30/50% + block masks, kernels matern32/matern52/rbf, seeds 0-19",
+    "kaplan": "REAL Kaplan SST v2 36x72 fields via h5py 3.7.0 exactly as iteration-2 (results/raw/real: fields.npy 2005x36x72, sentinel |x|>1e30 cells missing, 53.4% missing), masks: polar caps, land, random 10/30/50%; future-blind split train 1856-01..2015-12 (idxs 0..1919) / test 2016-01..2022-12 (idxs 1920..2003); 2023-01 (idx 2004) EXCLUDED",
+    "fallback": "pre-stated data-route fallback: if h5py is unavailable under the allowed stack, use the simulated-from-physics stand-in (as iteration-2 data_gen) with simulation_marker disclosure - NEVER silently"
+   },
+   "solvers": {
+    "ssam_cam": "SSAM-CAM: spectral step = FISTA-momentum gradient step on r_t = P_m(K a - y) with circulant BCCB preconditioner (floored spectrum) applied to the FREE-BOUNDARY operator (never torus wrapping in masked arms); spatial step = soft projection on observed cells (Lagrange-multiplier proximal update; hard-clamp = lambda->0 interpolant fixed point, explicitly avoided); Anderson mixing on the residual sequence, window m = 5 (fixed); step schedule eta_k = 0.5/(1 + k/200); iteration ceiling 500",
+    "pcg_ref": "standard PCG on the masked Gram (P_m K P_m^T + lambda I), BTTB matvec + identity/floored-torus preconditioner (iter-2 T1b convention)",
+    "termination": "KKT residual r_t := (P_m K P_m^T + lambda I) w - y_m relative to ||y_m||, IDENTICAL convention for both solvers (PCG final relative residual per-field 4.69e-9..9.81e-9 at tol 1e-8 in iteration-2; primary comparison at < 1e-6, matched secondary at 1e-8)"
+   },
+   "win": "median wall-clock speedup vs PCG >= 3x pooled across synthetic + Kaplan (gate pools both; per-domain breakdown reported separately) at equivalent KKT residual < 1e-6 + RMSE parity on the SAME valid-cell evaluation domain as T1b (mask-excluded valid cells; A2 RMSE-parity judged on that domain per hypothesis-gate G1 item 5)",
+   "target_iterations": "SSAM-CAM < 60-90 equivalent iterations (PCG needs 245-291 at tol 1e-8); per-iteration cost O(N log N + n), memory O(N); Anderson window m=5 rationale: contractive circulant-linear-part fixed-point map",
+   "artifact": "results/iter3/A2-masked.json"
+  },
+  "A3_multidomain": {
+   "name": "A3 multidomain benchmark",
+   "budget_min": 20,
+   "domains": [
+    "2D GRF (synthetic, free-boundary controlled, masks 10/30/50%, seeds 0-19)",
+    "3D GRF (synthetic, 24^3, seeds 0-9)",
+    "MNIST-784 infilling: kernel = RBF on pixel coordinates; grid KRR on 28x28 = stationary BCCB on flattened raster (per-image solves); held-out-digit classes + patch masks; NO post-hoc kernel/split selection (hypothesis-gate G1 item 4)",
+    "Kaplan SST v2 (real): future-blind train 1856-01..2015-12 / test 2016-01..2022-12; 2023-01 excluded"
+   ],
+   "methods": [
+    "dense_krr (exact Cholesky on subsample <= 4000 rows)",
+    "standard_pcg (T1b convention)",
+    "kiss_gp (inducing regular grid + local bi/tri-linear interpolation; Toeplitz-BTTB inducing Gram solved via circulant machinery)",
+    "rff (sklearn Ridge on RFF features, iteration-2 B-arm convention)",
+    "re_ablrc_plus_ssam_cam (S1 embedding + S2 masked solver)",
+    "hss_optional (Ambikasaran entry 54): attempted-if-budget; honest not-completed report if over-envelope"
+   ],
+   "metrics": "RMSE valid-only (mask-excluded cells), wall-clock, peak RSS, accuracy-per-flop, accuracy-per-byte (est_spectral_fit_flops / est_spectral_bytes conventions), iterations-to-tol, speedup-vs-PCG, boundary gap reduction %; per-domain + pooled medians",
+   "win": "benchmark REFUTED iff KISS-GP wins >= 2 domains or dense KRR wins >= 1 domain in RMSE at equal-or-lower cost envelope; ties reported, no cherry-picked exclusions",
+   "artifact": "results/iter3/A3-multidomain.json"
+  },
+  "A4_scaling": {
+   "name": "A4 scaling (O(N log N)/O(N) verification)",
+   "budget_min": 5,
+   "task": "embedding-only + PCG cross-check at N ~ 1e5: 2D 320x320, 3D 48^3 (embedding-only; NO 3D Woodbury); wall-clock/bytes/peak RSS vs est_spectral_fit_flops / est_spectral_bytes extrapolation curves as iteration-2 S-scaling",
+   "artifact": "results/iter3/A4-scaling.json"
+  },
+  "A5_ablation": {
+   "name": "A5 ablation (marginal contributions)",
+   "budget_min": 5,
+   "grid": "2D 128x128, kernels matern32/rbf",
+   "variants": [
+    "RE-ABLRC without correction (pure whole-sample symmetric embedding solve)",
+    "SSAM-CAM without Anderson mixing (plain FISTA)",
+    "SSAM-CAM without circulant preconditioner",
+    "SSAM-CAM on torus BCCB operator vs free-boundary operator (isolates the S1 marginal contribution in masked solves; hypothesis-gate G1 item 3 / E item 3)"
+   ],
+   "artifact": "results/iter3/A5-ablation.json"
+  },
+  "A6_g8_tooling": {
+   "name": "A6 G8 tooling (boundary-controlled GRF generator)",
+   "budget_min": 5,
+   "deliverable": "scripts/grf_boundary.py: boundary-controlled GRF generator with free / Dirichlet-zero / Neumann-zero / mixed boundary-value sets, Paciorek-Schervish non-stationary covariance (entry 57), seeds 0-19; full generator description published for reproducibility (corpus G8 REMAINS-OPEN scoped)",
+   "artifact": "scripts/grf_boundary.py + results/iter3/A6-tooling.json (generator self-check)"
+  },
+  "joint_S1xS2": {
+   "name": "joint S1xS2 claim arm",
+   "budget_min": 0,
+   "budget_note": "synthesis arm reusing A1 + A2 measurements only (no additional solves; the 90-min total is unchanged and per-arm caps sum exactly to 90)",
+   "claims": [
+    "S1 boundary win (A1 outputs): median free-boundary gap reduction >= 50% pooled 2D+3D, residual bound <= 1e-6, w <= min(H,W)/8",
+    "S2 masked win (A2 outputs): median speedup >= 3x vs PCG at KKT residual < 1e-6 with RMSE parity",
+    "joint statement: RE-ABLRC (boundary) + SSAM-CAM (masked) together remove both iteration-2 bottlenecks without O(N^2)/O(N^3), per the win-rule label table"
+   ],
+   "artifact": "results/iter3/joint-S1xS2.json"
+  }
+ },
+ "baselines": {
+  "dense_krr": "exact Cholesky solve of the dense Gram, subsample cap <= 4000 rows (CPU-only; O(N^2) memory / O(N^3) solve class that the proposal replaces); iteration-2 B-arm convention",
+  "pcg": "standard PCG on the masked Gram (P_m K P_m^T + lam I) with BTTB matvec + identity/floored-torus preconditioner, relative-residual stopping (Templates entry 69), tol 1e-8 (iter-2 T1b convention: rate means 245.1/276.1/280.9, span 233-291, final rel residual 4.69e-9..9.81e-9)",
+  "kiss_gp": "inducing regular grid + local (bi/tri)linear interpolation (Wilson & Nickisch 2015), Toeplitz-BTTB inducing Gram solved via circulant machinery",
+  "rff": "sklearn Ridge on Random Fourier Features (Rahimi & Recht 2007), iteration-2 B-arm convention",
+  "hss_optional": "HSS (Ambikasaran et al., review entry 54): optional sixth method, attempted-if-budget, honest not-completed report if over-envelope"
+ },
+ "data": {
+  "synthetic_2d": "free-boundary GRFs on 64x64 and 128x128, kernels matern32/matern52/rbf (ell=4.0 grid units, rho = kernel range), controlled boundary conditions (free/Dirichlet-zero/Neumann-zero/mixed per A6 generator), seeds 0-19; labeled synthetic with full generator description",
+  "synthetic_3d": "24^3 GRF blocks (3D analog of the 2D protocol; boundary-seeded, stationary within block, non-stationary variance per Paciorek-Schervish in A6), seeds 0-9; 48^3 embedding-only in A4",
+  "mnist784": "MNIST-784 (28x28) infilling: kernel = RBF on pixel coordinates; grid KRR on flattened raster = stationary BCCB per-image solves; held-out-digit classes + patch-mask splits locked BEFORE runs; no post-hoc kernel/split selection",
+  "kaplan_real": "REAL Kaplan SST v2 (results/raw/real: fields.npy 2005x36x72, index.npy, sst.mon.anom.nc; meta.json dataset.origin=real-kaplan-sst-v2); sentinel |x|>1e30 cells missing (53.4%); Nino3.4 box rows 17-18 / cols 38-47; ocean-only cells; masks polar caps / land / random 10/30/50%; future-blind train 1856-01..2015-12 (idxs 0..1919) / test 2016-01..2022-12 (idxs 1920..2003); 2023-01 EXCLUDED; read via h5py 3.7.0 exactly as iteration-2",
+  "kaplan_fallback": "pre-stated fallback: simulated-from-physics SST-anomaly stand-in (generated as iteration-2 data_gen.py, Kaplan-like covariance, iid noise std 0.35) with simulation_marker disclosure in EVERY artifact - never silent substitution"
+ },
+ "cv_leakage_rules": {
+  "future_blind_kaplan": "train strictly 1856-01..2015-12 (idxs 0..1919), test 2016-01..2022-12 (idxs 1920..2003), 2023-01 (idx 2004) excluded from BOTH splits; valid-only denominators (masked cells excluded from training and from RMSE/coverage evaluation)",
+  "mask_regime": "masks defined ONCE (seed 7 for Kaplan random-mask draws; fixed mirror construction as iteration-2); same mask schedule in CV folds and test; masked cells never in training nor in error/coverage denominators",
+  "mnist": "held-out digit classes + held-out patch masks with NO overlap; both locked before fitting; no post-hoc selection",
+  "valid_cell_domain": "A2 RMSE parity and all A3 RMSE judged on the SAME valid-cell evaluation domain as T1b (mask-excluded valid cells), so parity is interpretable",
+  "synthetic": "train interior / test boundary band + masked cells (iteration-3 benchmark convention, review G7); seeds fixed 0-19 (2D) / 0-9 (3D)",
+  "reporting": "per-domain breakdowns reported separately; pooled medians reported with per-field/per-seed detail; ties reported; no cherry-picked exclusions; EXECUTION_NOTES pre-fix T1b figures never cited (canonical iter2 artifacts only)"
+ },
+ "metrics": [
+  {"name": "rmse_valid_only", "definition": "RMSE on valid (mask-excluded) cells; valid-only denominator everywhere", "unit": "std field units"},
+  {"name": "rmse_on_masked", "definition": "RMSE on masked/held-out cells (reconstruction quality on missing cells)", "unit": "std field units"},
+  {"name": "r2", "definition": "coefficient of determination on valid cells (metrics.py r2)", "unit": "dimensionless"},
+  {"name": "mae", "definition": "mean absolute error on valid cells", "unit": "std field units"},
+  {"name": "wall_clock_s", "definition": "median wall-clock over repeats (warm-up excluded), consistent with iteration-2 accounting", "unit": "s"},
+  {"name": "peak_rss_gb", "definition": "peak resident set size (resource.getrusage, metrics.py ResourceRecorder)", "unit": "GB"},
+  {"name": "iterations_to_tol", "definition": "iterations to relative KKT/system residual tolerance (PCG and SSAM-CAM, same convention)", "unit": "count"},
+  {"name": "relative_residual", "definition": "final relative residual r_t / ||y_m||; PCG ref per-field 4.69e-9..9.81e-9 at tol 1e-8 (T1b canonical)", "unit": "dimensionless"},
+  {"name": "speedup_vs_pcg", "definition": "median wall-clock PCG / wall-clock SSAM-CAM at equivalent KKT residual < 1e-6 (primary) / 1e-8 (matched)", "unit": "x"},
+  {"name": "gap_reduction_pct", "definition": "relative free-boundary gap reduction vs standard BCCB wrapping: 100*(1 - g_approx/g_bccb), g = ||f_approx - f_free||/||f_free||", "unit": "%"},
+  {"name": "est_spectral_fit_flops", "definition": "rfft2+irfft2 flop estimate (metrics.py est_spectral_fit_flops)", "unit": "flops"},
+  {"name": "est_spectral_bytes", "definition": "spectrum + field + alpha byte estimate (metrics.py est_spectral_bytes ~ 40*N)", "unit": "bytes"},
+  {"name": "accuracy_per_flop", "definition": "valid-only RMSE quality per estimated flop (solve-cost control framing)", "unit": "1/flop"},
+  {"name": "accuracy_per_byte", "definition": "valid-only RMSE quality per estimated byte (memory-control framing)", "unit": "1/byte"},
+  {"name": "conformal_coverage_diagnostic", "definition": "0.90-coverage diagnostic per mask with explicit tolerance bands (global +-0.06, seam +-0.06, decay +-0.12), diagnostic only, never a guaranteed-calibration claim", "unit": "dimensionless"}
+ ],
+ "win_rules": {
+  "label_table": "SINGLE pre-registration location (hypothesis-gate G2 item 8): S1 win iff median gap reduction >= 50% (2D+3D pooled) AND median reported residual bound <= 1e-6 AND w <= min(H,W)/8; else NOT-validated (rank budget exceeded) or REFUTED (DCT/DST capture consequence fails). S2 win iff median wall-clock speedup vs PCG >= 3x at equivalent KKT residual < 1e-6 (A2 pooled, RMSE parity); REFUTED iff < 1.5x. Benchmark REFUTED iff KISS-GP wins >= 2 domains or dense KRR wins >= 1 domain; ties reported, no cherry-picked exclusions. DCT/DST comparator: S1 must capture >= 50% of DCT/DST's own gap reduction else the boundary claim is reported NOT validated against the strongest classical boundary-aware baseline.",
+  "s1": "win iff median relative free-boundary gap reduction >= 50% (2D+3D pooled) AND median reported residual bound <= 1e-6 AND w <= min(H,W)/8; NOT-validated if the correction rank budget w(H+W) is exceeded for median residual <= 1e-6; REFUTED if the DCT/DST 50%-capture consequence fails",
+  "s2": "win iff median wall-clock speedup vs standard PCG >= 3x at equivalent KKT residual < 1e-6 (A2 pooled across synthetic + Kaplan; per-domain breakdown separate) with RMSE parity on the T1b valid-cell domain; REFUTED iff median speedup < 1.5x (honest negative reported)",
+  "benchmark": "REFUTED iff KISS-GP wins >= 2 of 4 domains or dense KRR wins >= 1 of 4 domains in RMSE at equal-or-lower cost envelope; ties reported; no cherry-picked exclusions",
+  "dct_dst": "S1 must capture >= 50% of the DCT/DST symmetric-convolution comparator's own gap reduction, else the boundary claim is NOT validated against the strongest classical boundary-aware baseline"
+ },
+ "kernel_lambda_schedule": {
+  "kernels": [
+   {"name": "matern32", "ell": 4.0},
+   {"name": "matern52", "ell": 4.0},
+   {"name": "rbf", "ell": 4.0}
+  ],
+  "rho_note": "rho = kernel range in grid units; w = ceil(2.5 * rho) (single 2.5 factor); w-sweep {1,2,3,4} checks monotonic residual decay (fail-fast guard against the ~0.18 naive embed-solve plateau)",
+  "lambda": {
+   "A1": "lam = 1e-3 fixed (same for dense reference, BCCB wrap, RE-ABLRC, DCT/DST comparator)",
+   "A2": "lam = 1e-2 fixed (iteration-2 T1b masked convention)",
+   "A3": "lam fixed per task from pre-registered set {1e-4, 1e-3, 1e-2} chosen by within-train valid-cell validation BEFORE seeing test cells; recorded in artifact; no post-hoc selection",
+   "A4": "lam = 1e-3",
+   "A5": "lam = 1e-2 (masked arms)"
+  },
+  "spectral_floor": "torus/RBF spectra floored at 0 (PSD projection) before ridge is added, with n_negative_eigenvalues recorded per kernel (iteration-2 convention; Matern kernels PD on the grids used)"
+ },
+ "dense_reference": {
+  "cholesky_grids": ["64x64", "24^3"],
+  "pcg_dense_equivalent_128x128": "PCG solve of the free-boundary BTTB system at tol 1e-8 used as the dense-equivalent reference at 128x128 (Cholesky O(N^3) is out of envelope there); identical relative-residual convention to T1b; iterations + final relative residual reported alongside the gap numbers"
+ },
+ "budget": {
+  "total_min": 90,
+  "per_arm_min": {"A1": 25, "A2": 30, "A3": 20, "A4": 5, "A5": 5, "A6": 5},
+  "sum_note": "per-arm caps sum exactly to 90; joint_S1xS2 arm carries 0 additional minutes (reuses A1+A2 measurements)",
+  "cpu_only": true,
+  "cores": 12,
+  "ram_gb": 7.0,
+  "measurement_note": "measurements amortized as iteration-2 (median-of-3 after warm-up for wall-clock); results written to results/iter3/*.json",
+  "resource_tail": "at N ~ 1e5 (320x320, 48^3 embedding-only) peak RSS stays far below 7 GB per iteration-2 S-scaling extrapolation (0.04 GB single field at 0.25-deg equivalent); one field kept in memory at a time"
+ },
+ "seeds": {
+  "synthetic_2d": "0-19",
+  "synthetic_3d": "0-9",
+  "kaplan_mask": 7,
+  "note": "Kaplan mask sampling and bootstrap use seed 7 (same as iteration-2 Kaplan runs); per-domain random-mask draws seeded from it; seeds recorded in every results/iter3 artifact"
+ },
+ "honest_framing": {
+  "novelty_scoping": "no claim that Woodbury / Anderson mixing / FISTA / DCT embedding are new: these are classical components (review entries 42-45, 46-51, 53-54); the claim is the grid-KRR-targeted INTEGRATION: whole-sample symmetric embedding + boundary-banded low-rank correction for free-boundary BCCB solves (G5), and spectral-spatial AM with circulant-accelerated Anderson mixing for masked grids (G6), positioned against the iteration-3 gap coverage G5-G8",
+  "artifact_traceability": "every number in the paper traces to results/iter3/*.json; no [simulated]-framing for real fields (dataset.origin=real-kaplan-sst-v2); synthetic GRF domains labeled synthetic with full generator description and seeds",
+  "t1b_citation_lock": "T1b cited ONLY from results/iter2/T1b-CG-masked-train.json (rate means 245.1/276.1/280.9 iters at tol 1e-8; per-field span 233-291; final rel residual per-field 4.69e-9..9.81e-9; RMSE means 0.529-0.541); EXECUTION_NOTES pre-fix values (420-550 iters / RMSE 0.78-0.83) SUPERSEDED, never cited",
+  "acronym_unification": "RE-ABLRC everywhere (no RE-ABLRC/RE-ABRLC variants); glossary line: corpus G5 'RE (Reflective Embedding)' = whole-sample symmetric (2H-1)x(2W-1)  [resp. 3D] DCT-I-class extension (Martucci entry 45), NOT half-sample 2H reflective padding",
+  "fallback_disclosure": "Kaplan fallback (simulated-from-physics stand-in) carries simulation_marker in EVERY artifact if h5py is unavailable; never silent",
+  "no_sota_claims": "no SOTA-ENSO-skill claim; no exactness claim beyond the stated classes (torus spectral solve exact for the embedded-torus kernel; free-boundary solves to reported residual tolerance)",
+  "ties_and_negatives": "ties reported; failing arms reported honestly (NOT-validated / REFUTED labels from the win-rule table); no cherry-picked exclusions"
+ },
+ "code_responsibilities": {
+  "scripts/fft_krr.py": "extend: whole-sample symmetric (2H-1)x(2W-1) [3D analog] DCT-I-class first-column embedding (embed_wss); RE-ABLRC solve (embedded circulant spectral solve + boundary-banded Woodbury correction, w-sweep {1,2,3,4}, interior-vs-band residual reporting); SSAM-CAM solver (FISTA momentum step, floored-spectrum BCCB preconditioner on the free-boundary operator, soft Lagrange-prox projection on observed cells, Anderson mixing m=5, KKT-residual termination r_t := (P_m K P_m^T + lam I) w - y_m / ||y_m||, step schedule eta_k = 0.5/(1+k/200), ceiling 500); existing torus_spectrum / fit_torus / cg_masked_solve / predict_* reused",
+  "scripts/baselines.py": "extend: KISS-GP (inducing regular grid + local bi/tri-linear interpolation; Toeplitz-BTTB inducing Gram via circulant machinery), RFF (sklearn Ridge on RFF features, iteration-2 B-arm convention); dense KRR exact Cholesky subsample <= 4000",
+  "scripts/grf_boundary.py": "NEW: boundary-controlled GRF generator (free / Dirichlet-zero / Neumann-zero / mixed boundary-value sets; Paciorek-Schervish non-stationary covariance; seeds 0-19; full generator description published) - A6 deliverable",
+  "scripts/data_gen.py": "reuse for synthetic GRF fields and the Kaplan simulated-from-physics fallback stand-in (with simulation_marker)",
+  "scripts/metrics.py": "reuse rmse/r2/ResourceRecorder + est_spectral_fit_flops / est_spectral_bytes for accuracy-per-flop / accuracy-per-byte",
+  "scripts/run_iters3.py": "NEW orchestrator: runs arms A1-A6 within per-arm budgets, enforces seed/mask/split locks, writes results/iter3/*.json with dataset.origin, simulation_marker, seeds, w, rho, per-domain breakdowns, win-rule labels",
+  "artifact_schema": "every results/iter3/*.json records: arm, dataset.origin, simulation_marker (or null), kernels, lambda, w/rho, seeds, per-domain + pooled medians, wall_clock_s, peak_rss_gb, residual/tolerance, win-rule verdict (win / NOT-validated / REFUTED / tie)"
+ }
+}

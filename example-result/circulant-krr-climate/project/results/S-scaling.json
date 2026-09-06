@@ -1,0 +1,37 @@
+{
+ "arm": "S-scaling",
+ "dataset.origin": "synthetic-[simulated]-from-physics",
+ "simulation_marker": "synthetic-from-physics (Kaplan-like), seed=20260831",
+ "grids": {
+  "pilot": {
+   "N": 1024,
+   "wall_clock_s": 0.0005,
+   "fit_flops": 105472.0,
+   "bytes": 40960.0,
+   "pred_check_rmse": 0.05969919510880296
+  },
+  "scaling_72x36": {
+   "N": 2592,
+   "wall_clock_s": 0.0003,
+   "fit_flops": 301704.91207476944,
+   "bytes": 103680.0,
+   "pred_check_rmse": 0.04357004970911874
+  },
+  "scaling_144x72": {
+   "N": 10368,
+   "wall_clock_s": 0.0012,
+   "fit_flops": 1414179.6482990778,
+   "bytes": 414720.0,
+   "pred_check_rmse": 0.031232033001666246
+  }
+ },
+ "extrapolation": {
+  "grid_025deg_N": 1036800,
+  "est_fit_flops": 210301465.8054921,
+  "est_bytes": 41472000.0,
+  "peak_rss_gb_at_025deg_est": 0.038623809814453125,
+  "note": "O(N log N) / O(N); 7 GB cap is exceeded by 0.25-deg float64 spectra (~40*N bytes) -> threshold reported"
+ },
+ "wall_clock_s": 70.82,
+ "peak_rss_gb": 5.059
+}

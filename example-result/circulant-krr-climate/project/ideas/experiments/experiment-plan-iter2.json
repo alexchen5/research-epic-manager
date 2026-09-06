@@ -1,0 +1,118 @@
+{
+ "iteration": 2,
+ "status": "approved",
+ "data": {
+  "name": "NOAA PSL Kaplan SST v2 monthly anomaly",
+  "file": "results/raw/real/sst.mon.anom.nc (orig) -> results/raw/real/fields.npy + index.npy + meta.json",
+  "shape": [
+   2005,
+   36,
+   72
+  ],
+  "grid": "lat -87.5..87.5 step 5 (36), lon 2.5..357.5 step 5 (72)",
+  "time": "1856-01 .. 2023-01, 2005 months ('days since 1800-1-1' -> 1800 + t/365.25)",
+  "nino34_box": {
+   "rows": [
+    17,
+    18
+   ],
+   "cols": "38..47 (192.5..237.5E)"
+  },
+  "dataset.origin": "real-kaplan-sst-v2",
+  "simulation_marker": null,
+  "validation": "Nino3.4 probe: 1982.9~2.63, 1988.9~-1.93, 1997.9~2.60, 2015.9~2.69, 2016.2~1.71; std 0.794"
+ },
+ "splits": {
+  "train": "months with 1856-01 .. 2015-12 (1920 months); the final month 2023-01 is EXCLUDED from both splits (incomplete trailing year; 1920+84=2004=2005-1)",
+  "test": "2016-01 .. 2022-12 (84 months)",
+  "selection": "temporal-block CV inside train only",
+  "mask_regime": "ratio FIXED and mirrored across folds and test; ocean-only; defined ONCE for whole run; same schedule in CV; masked cells never in training or error/coverage evaluation (verified by construction)"
+ },
+ "arms": [
+  {
+   "id": "P0",
+   "desc": "pilot exactness gate: torus spectral solve vs dense floored reference ON REAL fields (prerequisite gate, not retrospective)",
+   "budget_s": 0.5
+  },
+  {
+   "id": "T1a",
+   "desc": "masked-cell reconstruction: random 10/30/50% + halo w in {1,2,4} (cells); LOFO (= leave-one-fold-out) held-out months; mirrored-mask construction = spatial mirror of a base mask over the torus grid, ocean cells only; RMSE + skill vs train-only monthly climatology on held-out cells only; conformal diagnostic intervals (score = abs residual per held-out cell; calibration = 5 temporal blocks immediately preceding test window; threshold REFIT at each rolling origin; calibration blocks strictly AFTER and NON-OVERLAPPING with H_h training blocks; coverage DIAGNOSTIC per mask spatially + per fold temporally, mean width)",
+   "budget_s": 2
+  },
+  {
+   "id": "T1b",
+   "desc": "masked-input EXACT FREE-BOUNDARY PCG MATVEC (iteration-1 terminology; 10/30/50% inputs); RMSE on masked cells; exactness criterion = relative residual vs stated reference tolerance; reuses the T1a mirrored-mask schedule",
+   "budget_s": 10
+  },
+  {
+   "id": "T2",
+   "desc": "functional index regression: spectral box functional (zero-model = train box mean; direct RBF head), temporal-block CV",
+   "budget_s": 3
+  },
+  {
+   "id": "T3",
+   "desc": "forecast h in {1,3,6,12} ONLY (no interpolation): frequency-domain transfer (per-mode ridge H_h, train-only modes) vs persistence / train-only monthly climatology / train-only AR(1); per-h RMSE/MAE/corr + climatology skill; significance: year-block bootstrap PRIMARY, Diebold-Mariano secondary; rolling-origin evaluation",
+   "budget_s": 1
+  },
+  {
+   "id": "B",
+   "desc": "sklearn exact-subsample (2k/5k/10k), Nystrom and RFF (500/2k/5k/10k) on real pooled cells (see baselines.py pooled framing)",
+   "budget_s": 60
+  },
+  {
+   "id": "S",
+   "desc": "scaling: wall-clock/memory vs N 32x32/72x36/144x72 + extrapolation vs 7 GB cap",
+   "budget_s": 1
+  }
+ ],
+ "sensitivity": {
+  "seam": "h=1 skill with train cutoff 2014-12 (2015 EXCLUDED) vs 2015-12 (2015 RETAINED); test window FIXED at 2016-2022 in both arms (gap year 2015 neither in train); stable skill = leak-free seam",
+  "decay": "2016 test months DROPPED from evaluation (test 2017-2022 only) vs full 2016-2022; first test year removed, window not shifted"
+ },
+ "coverage_reading_rule": "Diagnostic only; report coverage/width per mask and fold; target 0.90 with an explicit tolerance band; undercoverage persistence per mask/fold is REPORTED and discussed (no guaranteed-calibration claim; non-exchangeable conformal acknowledged)",
+ "metrics": {
+  "reconstruction": [
+   "RMSE",
+   "skill vs train-only climatology"
+  ],
+  "forecast": [
+   "RMSE",
+   "MAE",
+   "corr",
+   "climatology skill"
+  ],
+  "significance": [
+   "year-block bootstrap (primary)",
+   "Diebold-Mariano (secondary)"
+  ]
+ },
+ "resource_axes": [
+  "wall_clock_s (median of 3 after warm-up)",
+  "peak_rss_gb",
+  "estimated_flops",
+  "estimated_bytes"
+ ],
+ "budget": {
+  "total_worst_case_s": 90,
+  "notes": "P0 0.5 + T1a 2 + T1b 10 + T2 3 + T3 1 + B 60 + S 1 + load 2; well under 90-min cap; peak RSS << 7 GB; budget claim uses max estimates, per-arm reports median"
+ },
+ "honest_framing": "no SOTA-ENSO-skill claim; no FFT-kernel/spectral-regression newness claim; ceiling stated in proposal; all artifacts carry dataset.origin=real-kaplan-sst-v2 and simulation_marker null",
+ "mask_regime_note": "masked cells are EXCLUDED from training fits (covariates only on observed cells) and serve as EVALUATION TARGETS only; no contradiction with held-out-cell evaluation",
+ "calibration_geometry": "the 5 conformal calibration blocks are the terminal in-train blocks immediately preceding 2016-01; H_h fits end strictly BEFORE the first calibration block; calibration blocks are excluded from ALL H_h fitting",
+ "gate_r2_residuals": {
+  "conformal_calendar_month": "conformity scores = absolute residual per held-out cell, GROUPED BY CALENDAR MONTH across the 5 terminal in-train years (60 scores per calendar month); per-month quantile q_m at the target alpha; a test month m uses q_m (seasonal residual alignment; no exchangeability assumption). Coverage tolerance bands: global masked-interval 0.90 +- 0.06; seam subset (2016-2017, origin-adjacent months) 0.90 +- 0.06; decay-phase subset (2016 only, n=12) 0.90 +- 0.12 (wide band acknowledged for small n). Reporting: coverage + mean width per mask (spatial) and per fold (temporal).",
+  "real_data_threats": "Kaplan v2 is reconstruction-smoothed: report forecast/reconstruction skill with a smoothing-robustness note (1982+ post-in-situ era has more observational input; results scoped to the full record with era-stratified reporting if material). Land/coast: the Kaplan sst field has no land mask (all ocean cells); ocean-only masks are therefore vacuous for this dataset and masks are cell-space only -- stated in artifacts. PCG failure-mode: if CG residual stalls above 10x tolerance, log the non-convergence rate, switch that arm to a Cholesky sub-block solve and report BOTH, with the resource-envelope implication recorded (never silent drop).",
+  "pinning": "grid 36x72 5-degree (lat -87.5..87.5, lon 2.5..357.5); dataset Kaplan SST v2 (sst.mon.anom.nc; netCDF-3-origin converted Sep 2014 per file history attr); anomaly construction: file stores MONTHLY ANOMALIES relative to the v2 climatology by construction (no re-anomalization in pipeline); seeds recorded per arm; manifest meta.json carries dataset.origin=real-kaplan-sst-v2.",
+  "bootstrap_spec": "year-block bootstrap: block length = ONE CALENDAR YEAR of test months (12), resample test years with replacement (2000 draws, seed 7), statistic = skill/RMSE difference; win rule uses the 95% CI of that difference (margin > CI half-width)."
+ },
+ "iteration_3_reconciliation": {
+  "evidence": "results/iter2/*.json (executed on real Kaplan SST v2; future-blind 2016-2022 test window)",
+  "bootstrap_spec_fixed": "year_block_bootstrap: TRUE calendar years (1856 + i//12), 7 test blocks (2016-2022), 2000 draws with replacement, seed 7, se/CI from the draw distribution, n_blocks and n_resamples reported; the earlier vacuity (all months mapped to one year) is fixed and re-executed (se 0.007-0.333)",
+  "coverage_acceptance_per_mask": "per-mask |coverage-0.90| <= 0.06 global, <= 0.06 seam (2016-2017), <= 0.12 decay (2016); violations listed in the artifact, never averaged (mean-deviation rule rejected)",
+  "start_month_x_lead_tables": "T3 now reports skill/RMSE by origin month {0,3,5,9} x h in {1,3,6,12}; spring-barrier evidence from the tables (origin-9 h=12 skill -0.96; origin-5 h=6 -0.44; origin-3 h=3 +0.84)",
+  "resolution_sensitivity_R": "native 5-deg vs 2x2 coarsened 10-deg on the SAME anomaly fields: recon RMSE 0.0853 vs 0.1667; functional RMSE 0.0856 corr 0.997 vs 0.3825 corr 0.950",
+  "flop_byte_ratio_control": "apples-to-apples on the SAME 2000 valid test cells: spectral pooled RMSE 0.0828 vs ridge 1.25-1.34 / Nystrom 1.24 / RFF 1.73; 5e4-1.6e6x fewer flops; accuracy-per-flop ~5 orders of magnitude higher (deterministic point ratios; fold-level CI noted)",
+  "budget_amortization": "B arm amortized: Nystrom-5000 ~46 s dominates; executed once; full benchmark 77.8 s wall / 1.55 GB peak on the 12-core/7GB/90-min envelope",
+  "exactness_scoping": "EXACT = torus-embedded kernel only; torus-vs-free gap disclosed per kernel (0.95 matern32 / 0.12 rbf on the real test field); boundary-corrected solves are the PCG arm with residual/convergence reporting"
+ }
+}

@@ -1,0 +1,250 @@
+{
+ "arm": "T1b-CG-masked-train",
+ "dataset.origin": "real-kaplan-sst-v2",
+ "simulation_marker": null,
+ "rate_10%": {
+  "rmse_on_masked_mean": 0.5411600910146437,
+  "iterations_mean": 280.875,
+  "converged_all": true,
+  "tolerance": 1e-08,
+  "final_relative_residual_mean": 8.981170015953732e-09,
+  "details": [
+   {
+    "masked_input_rate": 0.1,
+    "field": 0,
+    "rmse_on_masked": 0.5885042734812416,
+    "iterations": 288,
+    "converged": true,
+    "relative_residual": 5.125985836804769e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.1,
+    "field": 1,
+    "rmse_on_masked": 0.7587188262571439,
+    "iterations": 275,
+    "converged": true,
+    "relative_residual": 9.50523186333684e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.1,
+    "field": 2,
+    "rmse_on_masked": 0.5780044166528862,
+    "iterations": 281,
+    "converged": true,
+    "relative_residual": 9.340004845772204e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.1,
+    "field": 3,
+    "rmse_on_masked": 0.4507703849389141,
+    "iterations": 277,
+    "converged": true,
+    "relative_residual": 9.465627741952664e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.1,
+    "field": 4,
+    "rmse_on_masked": 0.4683142916337801,
+    "iterations": 273,
+    "converged": true,
+    "relative_residual": 9.724473650325154e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.1,
+    "field": 5,
+    "rmse_on_masked": 0.42325507142065644,
+    "iterations": 289,
+    "converged": true,
+    "relative_residual": 9.602320420182653e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.1,
+    "field": 6,
+    "rmse_on_masked": 0.46829265418845845,
+    "iterations": 283,
+    "converged": true,
+    "relative_residual": 9.303462328718257e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.1,
+    "field": 7,
+    "rmse_on_masked": 0.5934208095440682,
+    "iterations": 281,
+    "converged": true,
+    "relative_residual": 9.782253440537324e-09,
+    "failure_mode": null
+   }
+  ]
+ },
+ "rate_30%": {
+  "rmse_on_masked_mean": 0.5293230086582621,
+  "iterations_mean": 276.125,
+  "converged_all": true,
+  "tolerance": 1e-08,
+  "final_relative_residual_mean": 7.567467322645792e-09,
+  "details": [
+   {
+    "masked_input_rate": 0.3,
+    "field": 0,
+    "rmse_on_masked": 0.6393041718918172,
+    "iterations": 291,
+    "converged": true,
+    "relative_residual": 4.693513779172392e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.3,
+    "field": 1,
+    "rmse_on_masked": 0.6994616907669178,
+    "iterations": 272,
+    "converged": true,
+    "relative_residual": 7.438545479530078e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.3,
+    "field": 2,
+    "rmse_on_masked": 0.6751196884293864,
+    "iterations": 280,
+    "converged": true,
+    "relative_residual": 7.898999667667977e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.3,
+    "field": 3,
+    "rmse_on_masked": 0.4536670143217529,
+    "iterations": 281,
+    "converged": true,
+    "relative_residual": 6.166247945169483e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.3,
+    "field": 4,
+    "rmse_on_masked": 0.3850668352771472,
+    "iterations": 259,
+    "converged": true,
+    "relative_residual": 7.061101521678792e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.3,
+    "field": 5,
+    "rmse_on_masked": 0.4132435342044269,
+    "iterations": 281,
+    "converged": true,
+    "relative_residual": 8.040601002546481e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.3,
+    "field": 6,
+    "rmse_on_masked": 0.4695153294979193,
+    "iterations": 263,
+    "converged": true,
+    "relative_residual": 9.433680630270613e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.3,
+    "field": 7,
+    "rmse_on_masked": 0.49920580487672933,
+    "iterations": 282,
+    "converged": true,
+    "relative_residual": 9.807048555130524e-09,
+    "failure_mode": null
+   }
+  ]
+ },
+ "rate_50%": {
+  "rmse_on_masked_mean": 0.5312442642778648,
+  "iterations_mean": 245.125,
+  "converged_all": true,
+  "tolerance": 1e-08,
+  "final_relative_residual_mean": 7.887559779384134e-09,
+  "details": [
+   {
+    "masked_input_rate": 0.5,
+    "field": 0,
+    "rmse_on_masked": 0.6274512348778047,
+    "iterations": 233,
+    "converged": true,
+    "relative_residual": 9.126541954114262e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.5,
+    "field": 1,
+    "rmse_on_masked": 0.777505118645911,
+    "iterations": 245,
+    "converged": true,
+    "relative_residual": 5.337453786382901e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.5,
+    "field": 2,
+    "rmse_on_masked": 0.5224392077612465,
+    "iterations": 245,
+    "converged": true,
+    "relative_residual": 8.931621403469882e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.5,
+    "field": 3,
+    "rmse_on_masked": 0.4747584200475285,
+    "iterations": 257,
+    "converged": true,
+    "relative_residual": 6.0520781346565866e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.5,
+    "field": 4,
+    "rmse_on_masked": 0.44354094460448373,
+    "iterations": 240,
+    "converged": true,
+    "relative_residual": 9.216402141521155e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.5,
+    "field": 5,
+    "rmse_on_masked": 0.4088153919414132,
+    "iterations": 243,
+    "converged": true,
+    "relative_residual": 7.2762899111827795e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.5,
+    "field": 6,
+    "rmse_on_masked": 0.5343740027599186,
+    "iterations": 254,
+    "converged": true,
+    "relative_residual": 8.916472956732677e-09,
+    "failure_mode": null
+   },
+   {
+    "masked_input_rate": 0.5,
+    "field": 7,
+    "rmse_on_masked": 0.4610697935846114,
+    "iterations": 244,
+    "converged": true,
+    "relative_residual": 8.243617947012831e-09,
+    "failure_mode": null
+   }
+  ]
+ },
+ "wall_clock_s": 4.63,
+ "peak_rss_gb": 0.907
+}

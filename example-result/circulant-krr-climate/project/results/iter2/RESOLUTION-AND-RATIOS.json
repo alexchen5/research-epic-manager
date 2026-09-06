@@ -1,0 +1,109 @@
+{
+ "arm": "RESOLUTION-AND-RATIOS",
+ "dataset.origin": "real-kaplan-sst-v2",
+ "simulation_marker": null,
+ "data": "Kaplan SST v2 anomalies; train 1856-01..2015-12, test 2016-01..2022-12",
+ "resolution_sensitivity": {
+  "native_5deg": {
+   "rmse_mean": 0.08526838774868624,
+   "n_fields": 84,
+   "lambda": 0.0001,
+   "grid": [
+    36,
+    72
+   ]
+  },
+  "coarsened_10deg": {
+   "rmse_mean": 0.16667629695658465,
+   "n_fields": 84,
+   "lambda": 0.0001,
+   "grid": [
+    18,
+    36
+   ]
+  }
+ },
+ "resolution_functional": {
+  "native_5deg_box": {
+   "rmse": 0.08560663058877599,
+   "corr": 0.9971167747264731,
+   "n": 2005
+  },
+  "coarsened_10deg_box": {
+   "rmse": 0.38249249577075767,
+   "corr": 0.9497760484979331,
+   "n": 2005
+  }
+ },
+ "flop_byte_ratio_control": {
+  "spectral_2592": {
+   "rmse": 0.09990954667194846,
+   "flops": 301704.91207476944,
+   "bytes": 103680.0,
+   "rmse_metric": "pooled-cell RMSE on the SAME 2000 valid test cells (seed 11)",
+   "accuracy_per_flop": 3.317497701043943e-05,
+   "accuracy_per_byte": 9.653793906266517e-05,
+   "flop_ratio_vs_spectral": 1.0,
+   "byte_ratio_vs_spectral": 1.0,
+   "accuracy_per_flop_ratio_vs_spectral": 1.0,
+   "accuracy_per_byte_ratio_vs_spectral": 1.0
+  },
+  "ridge_2000": {
+   "rmse": 0.8243795717883717,
+   "flops": 16000000000.0,
+   "bytes": 32000000.0,
+   "rmse_metric": "pooled-cell RMSE on the SAME 2000 valid test cells (seed 11)",
+   "accuracy_per_flop": 7.581459092249863e-11,
+   "accuracy_per_byte": 3.790729546124932e-08,
+   "flop_ratio_vs_spectral": 53031.95062344504,
+   "byte_ratio_vs_spectral": 308.641975308642,
+   "accuracy_per_flop_ratio_vs_spectral": 2.285294452461609e-06,
+   "accuracy_per_byte_ratio_vs_spectral": 0.0003926673371040452
+  },
+  "ridge_4828": {
+   "rmse": 0.8203116757129669,
+   "flops": 225077343104.0,
+   "bytes": 186476672.0,
+   "rmse_metric": "pooled-cell RMSE on the SAME 2000 valid test cells (seed 11)",
+   "accuracy_per_flop": 5.41613308203862e-12,
+   "accuracy_per_byte": 6.537272630020615e-09,
+   "flop_ratio_vs_spectral": 746018.1591217204,
+   "byte_ratio_vs_spectral": 1798.579012345679,
+   "accuracy_per_flop_ratio_vs_spectral": 1.632595881026318e-07,
+   "accuracy_per_byte_ratio_vs_spectral": 6.771713477099515e-05
+  },
+  "nystrom_4828": {
+   "rmse": 0.8203086721626026,
+   "flops": 491400000000.0,
+   "bytes": 393120000.0,
+   "rmse_metric": "pooled-cell RMSE on the SAME 2000 valid test cells (seed 11)",
+   "accuracy_per_flop": 2.4807759616110146e-12,
+   "accuracy_per_byte": 3.1009699520137686e-09,
+   "flop_ratio_vs_spectral": 1628743.7835225558,
+   "byte_ratio_vs_spectral": 3791.6666666666665,
+   "accuracy_per_flop_ratio_vs_spectral": 7.477852843214841e-08,
+   "accuracy_per_byte_ratio_vs_spectral": 3.2121774942811364e-05
+  },
+  "rff_4828": {
+   "rmse": 0.8215645651985961,
+   "flops": 144840000.0,
+   "bytes": 193120000.0,
+   "rmse_metric": "pooled-cell RMSE on the SAME 2000 valid test cells (seed 11)",
+   "accuracy_per_flop": 8.40368537204716e-09,
+   "accuracy_per_byte": 6.302764029035369e-09,
+   "flop_ratio_vs_spectral": 480.0717330187362,
+   "byte_ratio_vs_spectral": 1862.6543209876543,
+   "accuracy_per_flop_ratio_vs_spectral": 0.0002533139772607139,
+   "accuracy_per_byte_ratio_vs_spectral": 6.528794886478868e-05
+  }
+ },
+ "trivial_baselines": {
+  "zero_model_rmse": 0.8011523837772132,
+  "global_mean_rmse": 0.604539618069841,
+  "per_cell_train_climatology_rmse": 0.8125836350786675,
+  "test_cell_anomaly_std": 0.6045394341387587,
+  "note": "baselines predict anomalies from (lat,lon) coordinates only; the pooled-cell task is near-signal-free for coordinate-only regression, so RMSE ~ field std is expected; the ratio control compares solve cost at this fixed task"
+ },
+ "wall_clock_s": 1.15,
+ "peak_rss_gb": 0.112
+}

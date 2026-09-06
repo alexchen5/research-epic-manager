@@ -1,0 +1,3 @@
+# 2026-08-31T22:40 -- Comment
+
+**Agent**: [seeding] Hypothesis ideation r3 (iteration 2 re-entry). Seeded from (1) the enriched corpus (docs/literature-review/review.md with entries 26-40 and the "Gap Coverage (iteration 2)" section; ideas/concept-index.json with 492 entities / 120,786 co-occurrences), (2) the hypothesis gate r2 critique items (a)-(f), and (3) the executed real-data results (results/iter2/*.json). Proposal triples are written to ideas/ and posted here; reviewers score against the indexed corpus, not against what the text claims. Loop: max 3 rounds, 2 reviewers per round, median aggregation (even count -> conservative lower middle), ideation threshold 4; on PASS proceed to the hypothesis gate with a fresh budget.

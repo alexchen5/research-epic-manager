@@ -1,0 +1,41 @@
+{
+ "arm": "B-baselines",
+ "dataset.origin": "real-kaplan-sst-v2",
+ "simulation_marker": null,
+ "task": "pooled-cell spatial reconstruction; test = 2000 VALID cells of 84 test months",
+ "pool_n_train_cells": 4828,
+ "results": {
+  "2000": {
+   "exact_subsample_rbf": {
+    "rmse": 0.8243795717883717,
+    "wall_clock_s": 0.12,
+    "n_train": 2000
+   },
+   "nystrom_5000": {
+    "rmse": 0.8243966393749117,
+    "wall_clock_s": 5.75
+   },
+   "rff_5000": {
+    "rmse": 0.8246822398056859,
+    "wall_clock_s": 0.77
+   }
+  },
+  "4828": {
+   "exact_subsample_rbf": {
+    "rmse": 0.8203116757129669,
+    "wall_clock_s": 1.06,
+    "n_train": 4828
+   },
+   "nystrom_5000": {
+    "rmse": 0.8203086721626026,
+    "wall_clock_s": 29.8
+   },
+   "rff_5000": {
+    "rmse": 0.8215645651985961,
+    "wall_clock_s": 2.4
+   }
+  }
+ },
+ "wall_clock_s": 78.73,
+ "peak_rss_gb": 1.573
+}

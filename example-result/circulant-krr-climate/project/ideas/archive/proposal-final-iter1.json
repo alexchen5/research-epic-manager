@@ -1,0 +1,49 @@
+ideas/proposal-final.json written
+extbook kernel ridge regression is intractable on regular-grid climate fields under consumer hardware: an explicit N-by-N Gram matrix costs O(N^2) memory and a dense solve O(N^3), forcing practitioners onto randomized approximations (RFF, Nystrom, KISS-GP) without quantifying accuracy loss, while climate-ML studies (deep ENSO forecasting, WeatherBench) are GPU/cluster-scale with no CPU budget, memory, or flop/byte accounting. Corpus gaps G1-G4: (G1) no CPU-only exact KRR recipe for regular-grid climate fields; (G2) resource accounting absent as a first-class axis; (G3) random-split leakage in field-reconstruction evaluation; (G4) off-grid ENSO-index prediction from grid fields.",
+  "method": "Circulant-block KRR (FFT-KRR), with exactness made operational and conditioning handled explicitly. A stationary kernel k(x-x') on a regular rectangular grid yields a block-Toeplitz-with-Toeplitz-blocks (BTTB) Gram matrix; circulant embedding (Dietrich-Newsam style) embeds it in a zero-padded block-circulant matrix diagonalized by the 2D FFT; the ridge solve becomes pointwise spectral shrinkage (K_hat + lambda) x alpha_hat = y_hat, costing O(N log N) train/predict with O(N) memory and no explicit N-by-N matrix. Structural honesty: the embedding introduces boundary/aliasing error, which we QUANTIFY by a padding-size sweep against an exact dense solve on subsampled grids, and we ABLATE Toeplitz-embedding vs circulant-embedding (per reviewer D) to justify the choice. Conditioning: ridge lambda log-sweep (8 values) plus explicit condition-number estimates of the embedded diagonal (spectrum of the stationary kernel) reported per experiment; no exactness claims beyond what the sweeps verify. Masked training (T1b) uses FFT-preconditioned conjugate gradient on the observed-subset system, with iteration counts, wall-clock, and memory reported (no one-shot exactness claim in the masked regime). Off-grid prediction (G4) is done by EXACT kernel-consistent inference: the predictive mean at any off-grid location (or a linear functional of the field such as the area-weighted Nino3.4 mean over 5N-5S, 120-170W) is computed from the fitted dual coefficients via kernel cross-covariances evaluated by trigonometric interpolation of the stationary kernel, in O(N log N) - no grid resampling shortcut (per reviewer D), and interpolation error is separated from KRR error by a zero-model ablation. Implementation: NumPy/SciPy FFT only; kernels Matern(3/2), Matern(5/2), squared-exponential, plus periodic-time x spatial product for ENSO.",
+  "experiment_design": "Substrate: NOAA-family SST anomaly fields - Kaplan SST v2 (5-degree grid, 72x36 = 2592 cells/field, monthly) from NOAA PSL if fetchable; otherwise bundled synthetic-from-physics fields with explicit simulation markers in all artifacts and the paper. HARD total budget: all experiment arms <= 90 minutes wall-clock on 12 cores / 7 GB RAM; every results table reports the resource axis (G2): peak RSS (GB), wall-clock (s), estimated flops and bytes per fit, accuracy-per-flop and accuracy-per-byte. PILOT GATE first: 32x32-grid pilot on synthetic fields validates the FFT-KRR solver against an exact dense solve (alpha and predictions identical within tolerance; boundary-error curve vs padding) BEFORE full-scale runs. Task T1 (reconstruction): masks as PREDICTION TARGETS ONLY (training on complete fields); 10/30/50% random-pixel masks and spatial-halo/block masks with halo width w in {1,2,4} (test pixels separated from training support - closes G3 leakage); CV: leave-one-field-out (48 held-out months) + spatial-block CV. Task T1b: FFT-preconditioned CG with masked training inputs (10/30/50%), reporting iterations/wall-clock/memory. Task T2 (regression): Nino3.4 monthly index from full and reconstructed fields under 5-fold TEMPORAL-block CV (closes temporal leakage), with zero-model interpolation ablation. Baselines (scikit-learn), commensurable via cost sweeps: exact KernelRidge on subsamples n in {2k, 5k, 10k}; Nystrom landmarks in {500, 2k, 5k, 10k}; RFF features in {500, 2k, 5k, 10k}; accuracy-vs-cost frontier as the comparison axis. Metrics: RMSE, R2, split-conformal predictive-interval coverage + mean width, plus the resource axes above. Ablations: padding-size vs boundary error, Toeplitz-vs-circulant embedding, kernel choice, ridge lambda log-sweep (8 values), random-split vs block-CV optimism gap (G3 measurement). Per-arm budget (12 cores): spectral fit N=2592 ~ 2x2D-FFT(2592) ~ 1 ms + spectral shrinkage; 48 LOFO fits + CV ~ seconds; T1b CG ~ 1000 iterations x 3 FFTs x 2592 x log2(2592) flops ~ 1e9 flops ~ seconds; exact KRR n=10k ~ 1e12 flops (BLAS) ~ 3-5 min; Nystrom/RFF sweeps (4 sizes) ~ 2-4 min total; total well under 90 min.",
+  "risks_fallbacks": "R1 conditioning at large N: mitigated by ridge lambda log-sweep + reported condition estimates + pilot gate; R2 dense-covariance memory blow-up in baselines (n=10k => 800 MB float64 Gram): monitored via peak RSS with 7 GB cap, subsample sizes chosen to fit; R3 network fetch failure for Kaplan SST: bundled synthetic-from-physics fallback with explicit simulation markers; R4 reviewer/scoring stalls: dispatcher-side manager-notice fallback with honest single-reviewer aggregation and stale-agent marking."
+ },
+ "revision_history": [
+  {
+   "round": 1,
+   "stop_condition": null,
+   "aggregate_scores": {
+    "Clarity": 4,
+    "Relevance": 5,
+    "Originality": 3,
+    "Feasibility": 3,
+    "Significance": 4
+   }
+  },
+  {
+   "round": 2,
+   "stop_condition": null,
+   "aggregate_scores": {
+    "Clarity": 3,
+    "Relevance": 5,
+    "Originality": 3,
+    "Feasibility": 3,
+    "Significance": 3
+   }
+  }
+ ],
+ "stop_condition": "pass",
+ "flagged": false,
+ "aggregate_scores": {
+  "Clarity": 4,
+  "Relevance": 4,
+  "Originality": 4,
+  "Feasibility": 4,
+  "Significance": 4
+ },
+ "rounds_run": 3,
+ "forwarded_to_planning": [
+  "Sample unit made explicit: one training example = one grid cell; Gram is circulant-block per field; ENSO index = kernel-consistent linear functional of the fitted field (predictive mean over Nino3.4 box)",
+  "T1 protocol fixed: train on complete fields, mask held-out fields at test time (G3-honoring); T1b = FFT-preconditioned CG masked-solve with explicit iteration/resource reporting",
+  "Boundary handling named: non-periodic lat/lon grid -> circulant embedding (Dietrich-Newsam / Wood-Chan 2N); FFT sizes and memory stated for chosen grid",
+  "Hyperparameter/CV schedule enumerated with per-fold costs, fixed baseline component sizes (n in {2k,5k,10k}, Nystrom {500,2k,5k,10k}, RFF {500,2k,5k,10k}), training-sample caps < 1-2 GB feature matrices",
+  "Synthetic-from-physics fallback generator specified (circulant-embedded Matern with Kaplan-like EOF structure) with explicit simulation markers",
+  "Small-grid correctness sanity test vs dense N x N KRR pre-committed (pilot gate 32x32)"
+ ]
+}

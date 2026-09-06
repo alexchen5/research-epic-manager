@@ -1,0 +1,169 @@
+{
+ "dataset.origin": "synthetic-[simulated]-from-physics",
+ "simulation_marker": "synthetic-from-physics (Kaplan-like), seed=20260831",
+ "total_wall_clock_s": 70.82,
+ "peak_rss_gb": 5.059,
+ "arms_run": [
+  "B-baselines",
+  "P0-pilot-gate",
+  "S-scaling",
+  "T1a-spectral-reconstruction",
+  "T1b-CG-masked-train",
+  "T2-ENSO-index"
+ ],
+ "errors": [],
+ "phase_log": [
+  [
+   0.0,
+   "pipeline start"
+  ],
+  [
+   0.0,
+   "data: synthetic-[simulated]-from-physics (fallback fired)"
+  ],
+  [
+   0.0,
+   "P0: pilot gate 32x32"
+  ],
+  [
+   0.3,
+   "  matern32: torus-exactness rel=2.31e-12 free-gap rel=1.74e+00"
+  ],
+  [
+   0.5,
+   "  rbf: torus-exactness rel=1.80e-12 free-gap rel=4.30e-01"
+  ],
+  [
+   11.3,
+   "saved results/P0-pilot-gate.json"
+  ],
+  [
+   11.3,
+   "T1a: exact spectral reconstruction"
+  ],
+  [
+   11.3,
+   "  lambda selection done: {'matern32': {'lambda': 0.0001, 'rmse': 0.07157131418878367, 'sweep': [0.07157131418878367, 0.10907869427179326, 0.2135091259624573, 0.2908585903297415, 0.3463938405310515, 0.46908470662926793, 0.6626260510340585, 0.8588273316228936]}, 'rbf': {'lambda': 0.0001, 'rmse': 0.3209381074398897, 'sweep': [0.3209381074398897, 0.33182731734480364, 0.34164505294612724, 0.34973903391693484, 0.3686604928413981, 0.44900154625415417, 0.6004975055316082, 0.8450023194832421]}}"
+  ],
+  [
+   11.5,
+   "  done; optimism gap=-0.0032"
+  ],
+  [
+   11.5,
+   "saved results/T1a-spectral-reconstruction.json"
+  ],
+  [
+   11.5,
+   "T1b: FFT-preconditioned CG masked training"
+  ],
+  [
+   17.9,
+   "  done"
+  ],
+  [
+   17.9,
+   "saved results/T1b-CG-masked-train.json"
+  ],
+  [
+   17.9,
+   "T2: Nino3.4 kernel-consistent functional prediction"
+  ],
+  [
+   17.9,
+   "  functional fits 222/888 done"
+  ],
+  [
+   18.0,
+   "  functional fits 444/888 done"
+  ],
+  [
+   18.0,
+   "  functional fits 666/888 done"
+  ],
+  [
+   18.2,
+   "  done: functional RMSE=0.0628 ablation=0.0665 direct=1.0090"
+  ],
+  [
+   18.2,
+   "saved results/T2-ENSO-index.json"
+  ],
+  [
+   18.2,
+   "B: scikit-learn baselines (pooled-cell reconstruction task)"
+  ],
+  [
+   18.3,
+   "  exact n=2000 rmse=1.2693 t=0.1s"
+  ],
+  [
+   19.4,
+   "  exact n=5000 rmse=1.2590 t=1.1s"
+  ],
+  [
+   24.6,
+   "  exact n=10000 rmse=1.2525 t=5.1s"
+  ],
+  [
+   24.7,
+   "  nystrom 500 rmse=1.2723 t=0.1s"
+  ],
+  [
+   27.1,
+   "  nystrom 2000 rmse=1.2727 t=2.4s"
+  ],
+  [
+   44.0,
+   "  nystrom 5000 rmse=1.2626 t=16.9s"
+  ],
+  [
+   65.9,
+   "  nystrom 10000 rmse=1.2548 t=21.9s"
+  ],
+  [
+   66.0,
+   "  rff 500 rmse=1.2508 t=0.1s"
+  ],
+  [
+   66.5,
+   "  rff 2000 rmse=1.2634 t=0.5s"
+  ],
+  [
+   68.2,
+   "  rff 5000 rmse=1.2566 t=1.6s"
+  ],
+  [
+   70.7,
+   "  rff 10000 rmse=1.2545 t=2.6s"
+  ],
+  [
+   70.7,
+   "  done"
+  ],
+  [
+   70.8,
+   "saved results/B-baselines.json"
+  ],
+  [
+   70.8,
+   "S: scaling arm"
+  ],
+  [
+   70.8,
+   "  pilot N=1024 t=0.000s"
+  ],
+  [
+   70.8,
+   "  scaling_72x36 N=2592 t=0.000s"
+  ],
+  [
+   70.8,
+   "  scaling_144x72 N=10368 t=0.001s"
+  ],
+  [
+   70.8,
+   "saved results/S-scaling.json"
+  ]
+ ]
+}

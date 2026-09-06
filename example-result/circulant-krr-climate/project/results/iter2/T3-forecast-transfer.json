@@ -1,0 +1,472 @@
+{
+ "arm": "T3-forecast-transfer",
+ "dataset.origin": "real-kaplan-sst-v2",
+ "simulation_marker": null,
+ "train": "1856-01..2015-12 (1920 months)",
+ "test": "2016-01..2022-12 (84 months)",
+ "win_rule": "supported at h iff transfer beats persistence AND climatology AND AR(1) in RMSE AND skill score AND the RMSE margin vs the best baseline exceeds the year-block bootstrap 95% CI half-width; refuted if > half of horizons fail; else indeterminate",
+ "horizons": {
+  "1": {
+   "transfer": {
+    "n": 84,
+    "rmse": 0.26790904670784954,
+    "mae": 0.21866925624208836,
+    "corr": 0.9529631693925148
+   },
+   "persistence": {
+    "n": 84,
+    "rmse": 0.25087192286036303,
+    "mae": 0.20163420436992532,
+    "corr": 0.9536613696410908
+   },
+   "climatology": {
+    "n": 84,
+    "rmse": 0.772871346916523,
+    "mae": 0.6425730890210422,
+    "corr": 0.09742363890483864
+   },
+   "ar1": {
+    "n": 84,
+    "rmse": 0.24088931746756279,
+    "mae": 0.19153397944838477,
+    "corr": 0.9536613696410916
+   },
+   "start_month_skill": {
+    "origin-month-0": {
+     "n": 7,
+     "rmse": 0.2509966619568148,
+     "skill": 0.9543074974137048
+    },
+    "origin-month-3": {
+     "n": 7,
+     "rmse": 0.19196801833206184,
+     "skill": 0.9369838743086178
+    },
+    "origin-month-5": {
+     "n": 7,
+     "rmse": 0.20392234009462012,
+     "skill": 0.8164570180305097
+    },
+    "origin-month-9": {
+     "n": 7,
+     "rmse": 0.46921727645799804,
+     "skill": 0.6204698652691117
+    },
+    "all": {
+     "n": 84,
+     "rmse": 0.26790904670784954,
+     "skill": 0.8798398824389768
+    }
+   },
+   "skill_vs_climatology_transfer": 0.8798398824389768,
+   "skill_vs_climatology_persistence": 0.8946366176927719,
+   "skill_vs_climatology_ar1": 0.9028549516666803,
+   "best_baseline": "ar1",
+   "margin_vs_best": -0.013747594037920467,
+   "bootstrap": {
+    "vs_persistence": {
+     "se": 0.007016489254012166,
+     "ci95": [
+      -0.0032637736131803296,
+      0.022274226817529587
+     ],
+     "p": 0.107,
+     "obs_diff": 0.008838535628252792
+    },
+    "vs_climatology": {
+     "se": 0.11421698451142304,
+     "ci95": [
+      -0.7215252488787499,
+      -0.2977836692942533
+     ],
+     "p": 0.0,
+     "obs_diff": -0.5255548615766518
+    },
+    "vs_ar1": {
+     "se": 0.005587080746699788,
+     "ci95": [
+      0.0033767971523195215,
+      0.0256489621373061
+     ],
+     "p": 0.0125,
+     "obs_diff": 0.013747594037920467
+    }
+   },
+   "margin_ci_half_width": 0.01113608249249329,
+   "beats_all": false,
+   "win": {
+    "supported": false,
+    "refuted": false,
+    "indeterminate": true,
+    "note": "not_supported: fails the pre-registered support conditions vs ['persistence', 'ar1']; margin (MSE diff, transfer - best baseline) -0.0137",
+    "status": "not_supported",
+    "fail_vs_baselines": [
+     "persistence",
+     "ar1"
+    ]
+   },
+   "seam_h1": {
+    "jan_origin_rmse": 0.2509966619568148,
+    "other_origin_rmse": 0.2693938926522144
+   }
+  },
+  "3": {
+   "transfer": {
+    "n": 84,
+    "rmse": 0.5650127453082365,
+    "mae": 0.4841019412584205,
+    "corr": 0.7914448114339514
+   },
+   "persistence": {
+    "n": 84,
+    "rmse": 0.5615877921126894,
+    "mae": 0.45165876769238994,
+    "corr": 0.7968248286704843
+   },
+   "climatology": {
+    "n": 84,
+    "rmse": 0.772871346916523,
+    "mae": 0.6425730890210422,
+    "corr": 0.09742363890483864
+   },
+   "ar1": {
+    "n": 84,
+    "rmse": 0.5076048872527079,
+    "mae": 0.4235470642239603,
+    "corr": 0.7968248286704842
+   },
+   "start_month_skill": {
+    "origin-month-0": {
+     "n": 7,
+     "rmse": 0.5756860178936649,
+     "skill": 0.759629915209647
+    },
+    "origin-month-3": {
+     "n": 7,
+     "rmse": 0.3016469945056991,
+     "skill": 0.8444063243950466
+    },
+    "origin-month-5": {
+     "n": 7,
+     "rmse": 0.5037101120199671,
+     "skill": -0.11987489727258582
+    },
+    "origin-month-9": {
+     "n": 7,
+     "rmse": 0.7620622792312551,
+     "skill": -0.001104022940719318
+    },
+    "all": {
+     "n": 84,
+     "rmse": 0.5650127453082365,
+     "skill": 0.46555616020687196
+    }
+   },
+   "skill_vs_climatology_transfer": 0.46555616020687196,
+   "skill_vs_climatology_persistence": 0.4720158279663853,
+   "skill_vs_climatology_ar1": 0.568642676106828,
+   "best_baseline": "ar1",
+   "margin_vs_best": -0.06157668079791584,
+   "bootstrap": {
+    "vs_persistence": {
+     "se": 0.06049568663780541,
+     "ci95": [
+      -0.10813315923895411,
+      0.13106035479100106
+     ],
+     "p": 0.4825,
+     "obs_diff": 0.0038585541107448718
+    },
+    "vs_climatology": {
+     "se": 0.10256101669184527,
+     "ci95": [
+      -0.48243756901471385,
+      -0.08500380111551475
+     ],
+     "p": 0.0005,
+     "obs_diff": -0.2780907165238103
+    },
+    "vs_ar1": {
+     "se": 0.04141444503576409,
+     "ci95": [
+      -0.016508943659197646,
+      0.14637386532134286
+     ],
+     "p": 0.068,
+     "obs_diff": 0.06157668079791584
+    }
+   },
+   "margin_ci_half_width": 0.08144140449027025,
+   "beats_all": false,
+   "win": {
+    "supported": false,
+    "refuted": false,
+    "indeterminate": true,
+    "note": "not_supported: fails the pre-registered support conditions vs ['persistence', 'ar1']; margin (MSE diff, transfer - best baseline) -0.0616",
+    "status": "not_supported",
+    "fail_vs_baselines": [
+     "persistence",
+     "ar1"
+    ]
+   },
+   "seam_h1": null
+  },
+  "6": {
+   "transfer": {
+    "n": 84,
+    "rmse": 0.7962502607164244,
+    "mae": 0.6568097058026146,
+    "corr": 0.4799993717564616
+   },
+   "persistence": {
+    "n": 84,
+    "rmse": 0.9073028294906635,
+    "mae": 0.6963641209793943,
+    "corr": 0.5009702025585357
+   },
+   "climatology": {
+    "n": 84,
+    "rmse": 0.772871346916523,
+    "mae": 0.6425730890210422,
+    "corr": 0.09742363890483864
+   },
+   "ar1": {
+    "n": 84,
+    "rmse": 0.765577008136392,
+    "mae": 0.6125408101225072,
+    "corr": 0.500970202558536
+   },
+   "start_month_skill": {
+    "origin-month-0": {
+     "n": 7,
+     "rmse": 1.0185843852784782,
+     "skill": 0.2475059296944485
+    },
+    "origin-month-3": {
+     "n": 7,
+     "rmse": 0.4208042918498477,
+     "skill": 0.6972011255760049
+    },
+    "origin-month-5": {
+     "n": 7,
+     "rmse": 0.5705137137320243,
+     "skill": -0.43661483684366376
+    },
+    "origin-month-9": {
+     "n": 7,
+     "rmse": 1.0455400580742795,
+     "skill": -0.8844283503411141
+    },
+    "all": {
+     "n": 84,
+     "rmse": 0.7962502607164244,
+     "skill": -0.06141387759739425
+    }
+   },
+   "skill_vs_climatology_transfer": -0.06141387759739425,
+   "skill_vs_climatology_persistence": -0.3781297784531352,
+   "skill_vs_climatology_ar1": 0.018786870346412243,
+   "best_baseline": "ar1",
+   "margin_vs_best": -0.04790632230390457,
+   "bootstrap": {
+    "vs_persistence": {
+     "se": 0.19697241041376792,
+     "ci95": [
+      -0.5284631723596765,
+      0.16763996240430323
+     ],
+     "p": 0.2335,
+     "obs_diff": -0.18918394671079042
+    },
+    "vs_climatology": {
+     "se": 0.08678388866224139,
+     "ci95": [
+      -0.13091378693250166,
+      0.21754491287113537
+     ],
+     "p": 0.2995,
+     "obs_diff": 0.0366843588064133
+    },
+    "vs_ar1": {
+     "se": 0.09923658673517197,
+     "ci95": [
+      -0.12386407831738853,
+      0.2543074331659377
+     ],
+     "p": 0.3215,
+     "obs_diff": 0.04790632230390457
+    }
+   },
+   "margin_ci_half_width": 0.18908575574166311,
+   "beats_all": false,
+   "win": {
+    "supported": false,
+    "refuted": false,
+    "indeterminate": true,
+    "note": "not_supported: fails the pre-registered support conditions vs ['climatology', 'ar1']; margin (MSE diff, transfer - best baseline) -0.0479",
+    "status": "not_supported",
+    "fail_vs_baselines": [
+     "climatology",
+     "ar1"
+    ]
+   },
+   "seam_h1": null
+  },
+  "12": {
+   "transfer": {
+    "n": 84,
+    "rmse": 0.9231592911909076,
+    "mae": 0.7858899999297817,
+    "corr": 0.08905645006713613
+   },
+   "persistence": {
+    "n": 84,
+    "rmse": 1.1537602237584899,
+    "mae": 0.8527422424051023,
+    "corr": 0.17166324196419075
+   },
+   "climatology": {
+    "n": 84,
+    "rmse": 0.772871346916523,
+    "mae": 0.6425730890210422,
+    "corr": 0.09742363890483864
+   },
+   "ar1": {
+    "n": 84,
+    "rmse": 0.8785240759023518,
+    "mae": 0.6988287095290201,
+    "corr": 0.17166324196419078
+   },
+   "start_month_skill": {
+    "origin-month-0": {
+     "n": 7,
+     "rmse": 1.2458308370051148,
+     "skill": -0.12571176849974797
+    },
+    "origin-month-3": {
+     "n": 7,
+     "rmse": 0.741654616094682,
+     "skill": 0.05941652692419774
+    },
+    "origin-month-5": {
+     "n": 7,
+     "rmse": 0.5464859778493467,
+     "skill": -0.31815419714682713
+    },
+    "origin-month-9": {
+     "n": 7,
+     "rmse": 1.0649520816676807,
+     "skill": -0.9550524339192312
+    },
+    "all": {
+     "n": 84,
+     "rmse": 0.9231592911909076,
+     "skill": -0.4267204180219797
+    }
+   },
+   "skill_vs_climatology_transfer": -0.4267204180219797,
+   "skill_vs_climatology_persistence": -1.2285208996543164,
+   "skill_vs_climatology_ar1": -0.2920904664598698,
+   "best_baseline": "climatology",
+   "margin_vs_best": -0.2548929580275384,
+   "bootstrap": {
+    "vs_persistence": {
+     "se": 0.3328166509818773,
+     "ci95": [
+      -1.1223260749474449,
+      0.13456091251872282
+     ],
+     "p": 0.0855,
+     "obs_diff": -0.47893957701514167
+    },
+    "vs_climatology": {
+     "se": 0.0824556953881034,
+     "ci95": [
+      0.10608850834615857,
+      0.41266325983819896
+     ],
+     "p": 0.0,
+     "obs_diff": 0.2548929580275384
+    },
+    "vs_ar1": {
+     "se": 0.14087707939450228,
+     "ci95": [
+      -0.1978640809848743,
+      0.38251014452769827
+     ],
+     "p": 0.2565,
+     "obs_diff": 0.08041852497201774
+    }
+   },
+   "margin_ci_half_width": 0.1532873757460202,
+   "beats_all": false,
+   "win": {
+    "supported": false,
+    "refuted": false,
+    "indeterminate": true,
+    "note": "not_supported: fails the pre-registered support conditions vs ['climatology', 'ar1']; margin (MSE diff, transfer - best baseline) -0.2549",
+    "status": "not_supported",
+    "fail_vs_baselines": [
+     "climatology",
+     "ar1"
+    ]
+   },
+   "seam_h1": null
+  }
+ },
+ "truncation_sweep_h1": {
+  "cutoff-2014-12": {
+   "rmse": 0.2681963227602055,
+   "skill": 0.8795820514183761
+  },
+  "cutoff-2013-12": {
+   "rmse": 0.2681590168153087,
+   "skill": 0.8796155492148385
+  },
+  "cutoff-2012-12": {
+   "rmse": 0.26803537428660146,
+   "skill": 0.8797265371397707
+  }
+ },
+ "wall_clock_s": 6.97,
+ "peak_rss_gb": 0.907,
+ "bootstrap_meta": {
+  "n_blocks": 7,
+  "n_resamples": 2000,
+  "seed": 7,
+  "blocks": "test calendar years 2016-2022",
+  "resampling": "with replacement over year blocks",
+  "statistic": "MSE difference (transfer - baseline); se and CI95 from the draw distribution"
+ },
+ "win_rule_name": "bootstrap-CI win rule (year-block bootstrap 95% CI on the MSE difference); no DM statistic computed",
+ "aggregate_verdict": {
+  "pre_registered_semantics": "supported iff beats all three baselines in RMSE and skill with a bootstrap-significant margin; refuted if > half of horizons fail",
+  "n_supported": 0,
+  "n_horizons": 4,
+  "verdict": "REFUTED",
+  "note": "0/4 horizons supported -> the transfer superiority claim is REFUTED under the pre-registered semantics; the refutation is driven by zero support across all horizons, not by per-horizon failures (each horizon is tagged not_supported)"
+ },
+ "seam_h1_top_level": {
+  "jan_origin_rmse": 0.2509966619568148,
+  "other_origin_rmse": 0.2693938926522144
+ },
+ "truncation_sweep_top_level": {
+  "cutoff-2014-12": {
+   "rmse": 0.2681963227602055,
+   "skill": 0.8795820514183761
+  },
+  "cutoff-2013-12": {
+   "rmse": 0.2681590168153087,
+   "skill": 0.8796155492148385
+  },
+  "cutoff-2012-12": {
+   "rmse": 0.26803537428660146,
+   "skill": 0.8797265371397707
+  }
+ },
+ "bootstrap_se_range_all_comparisons": [
+  0.005587,
+  0.332817
+ ],
+ "margin_metric": "MSE difference (transfer - best baseline); bootstrap statistic = same MSE difference; 'margin' wording is MSE, not RMSE"
+}

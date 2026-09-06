@@ -1,0 +1,3 @@
+# 2026-08-31T15:12 -- Comment
+
+**Agent**: [seeding] Anchor seeded: stage goal (turn proposal-final.json into a CPU-only experiment plan; primary question = circulant-block/FFT exact KRR on regular-grid climate fields; climate substrate = SST anomaly fields + Nino3.4), inputs (ideas/proposal-final.json + forwarded planning notes; corpus docs/literature-review/review.md), acceptance criteria (experiment-plan.json with arms/datasets/metrics/CV design/baseline sizes/kernel+lambda schedule/32x32 pilot gate/budget table; resource accounting in every table; simulation-marker disclosure; Makefile target scripts/run_pipeline.sh), artifact contract: ideas/experiments/experiment-plan.json on branch experiment-planning-anchor-r1.

@@ -1,0 +1,350 @@
+{
+ "id": "experiment-plan-iter4",
+ "iteration": 4,
+ "iteration_label": "iteration-4 plan (gated hypothesis re-entry after analysis-gate FAIL routed to literature rework r2; hypothesis gate r2 PASS on Significance+Originality, both 4)",
+ "proposal_ref": "ideas/proposal-iter4-v4.json",
+ "status": "approved-for-execution",
+ "status_note": "approved-for-execution AS A PROPOSAL: this plan is the pre-registration for iteration-4 execution; the tracker issue records the final approval. This file carries NO verdict/routing fields (no execution verdicts, no routing decisions) - it is the plan only.",
+ "supersedes": "ideas/experiments/experiment-plan-iter3.json (iteration-3 plan; its executed artifacts results/iter3/*.json are INVALIDATED HISTORY - cited here ONLY as honest negatives under the G9+ attribution and never as qualifying claims; its measurement conventions carry forward where locked).",
+ "objective": "Pre-registered iteration-4 plan, built exclusively on the rework-r2 strategy families (F1 primary / F2 contingent / F3 fallback): (F1, primary arm A1-F1) DST2-embedding exact/mixed boundary solver - whole-sample-symmetric (2H-1)x(2W-1) [3D: (2H-1)x(2W-1)x(2D-1)] DST2-class embedding of K_free with an EXACT Woodbury-center boundary solve WTT u_T = z0[T], WTT = M^{-1}[T,T] on the band index set T (dense center; no rank truncation; the banded O(N_b w^2) claim is RETRACTED; O(nb^3) time / O(nb^2) memory with nb = |T| support-rank-measured), targeting S1': median free-boundary gap reduction >= 50% (2D CLAIM POOL - M5-pinned: all 64x64 and 128x128 w_design rows under the structural clamp w_design = min(ceil(2.5*rho), min(H,W)/8)) AND median relative system residual <= 1e-6 (pinned KKT-style convention, identical to the PCG reference) AND w <= min(H,W)/8 AND >= 50% DST2-capture; (F2, contingent arm A2-F2) masked-Gram acceleration via preconditioned Anderson mixing (Anderson retained per A5-essential; randomized-Nystrom preconditioner primary, DST2/block + deflation attempted-if-budget), targeting S2': >= 3x median wall-clock speedup vs standard PCG at equivalent KKT residual < 1e-6 with RMSE parity on the T1b valid-cell domain (REFUTED iff < 1.5x; 1.5-3x tie-band NOT-validated); plus arm A3 (4-domain x 5-method benchmark with the reviewer-fixed tieband/cost-clause conventions) and arm A4 (tooling selfcheck). Envelope: CPU-only, 12 cores, ~2 GB cgroup (actual cap; project envelope claim <= 7 GB superseded by the container reality), <= 45 min total (A1 <= 20, A2 <= 18, A3 <= 7, A4 <= 2, with the inter-arm sum note below); results written to results/iter4/*.json. Source of truth for execution: ideas/proposal-iter4-v4.json + canonical iteration-2 artifacts (T1b-CG-masked-train.json: rate means 245.1/276.1/280.9 iterations at tol 1e-8, per-field span 233-291, final relative residual per-field 4.69e-9..9.81e-9, RMSE means 0.529-0.541; P0-pilot-gate-real.json torus-vs-free gap 0.9496 matern32 / 0.1159 rbf; results_summary.json 78.74 s / 1.573 GB) + iteration-3 artifacts cited ONLY as invalidated-history honest negatives (never as qualifying claims).",
+ "strategy": {
+  "primary": "F1 - DST2-embedding exact/mixed boundary solver (arm A1-F1): replace the approximate rank-limited Woodbury boundary correction (which plateaued the corrected residual at ~1e2-1e3) with EXACT band/Toeplitz solves on the DST2 whole-sample-symmetric embedding form; the w <= min(H,W)/8 regime becomes structural (no rank budget to exhaust) via the pre-committed clamp w_design = min(ceil(2.5*rho), min(H,W)/8).",
+  "contingent": "F2 - masked-Gram acceleration via preconditioned Anderson mixing (arm A2-F2): keep Anderson (A5-essential), replace the identity/floored-torus preconditioner class with a randomized-Nystrom / DST2-block / deflation preconditioner of the masked Gram (P_m K P_m^T + lam I). Not the primary hypothesis; A2 verdicts do not gate F1's verdict.",
+  "fallback": "F3 - fallback repositioning: if F1 (and the A2/A3 lines) fail their gates again, the iteration-4 deliverable is explicitly a negative-result + tooling study. Acceptance = completeness of the honest-negative reporting (20-item honest-negatives list reported verbatim per results/analysis/analysis-iter3.json template; pools disclosed with per-domain breakdowns; tieband convention written down incl. the literal no-tieband sensitivity row; container-forced reference deviations disclosed) + tooling deliverables passing self-checks. No positive win gate."
+ },
+ "arms": {
+  "A1_F1": {
+   "name": "A1-F1 boundary (primary: DST2-embedding exact/mixed boundary solver - refined S1)",
+   "artifact": "results/iter4/A1-F1.json",
+   "budget_min": 20,
+   "grids": {
+    "2d": ["64x64", "128x128"],
+    "3d": ["24^3"]
+   },
+   "kernels": ["matern32", "matern52", "rbf"],
+   "task": "synthetic free-boundary GRF solve (K_free + lam I) alpha = y on GRF-free-boundary targets with controlled boundaries (scripts/grf_boundary.py: free / Dirichlet-zero / Neumann-zero / mixed boundary-value sets; stationary kernels; seeds fixed); every method compared on the SAME kernel and interpolation/evaluation protocol as iteration-2/3.",
+   "claim_pool_PINNED": {
+    "composition": "the 2D CLAIM POOL = all 64x64 and 128x128 w_design rows under the structural clamp w_design = min(ceil(2.5*rho), min(H,W)/8): rho = 4.0 grid units -> ceil(2.5*4) = 10 -> w_design = min(10, min(H,W)/8) = 8 at 64x64 (min(64,64)/8 = 8) and 10 at 128x128 (128/8 = 16). w <= min(H,W)/8 therefore holds by construction on every 2D claim grid (fixes the iteration-3 guard failure {64_8: null, 128_16: true, 24_3: false} [honest negative]).",
+    "seeds": "64x64 seeds 0-19 (3 kernels x 20 seeds = 60 rows); 128x128 seeds 0-9 (3 kernels x 10 seeds = 30 rows); claim pool total 90 rows. Seeds per proposal-iter4-v4.",
+    "pool_semantics": "S1' gap and residual gates apply to the 2D claim pool ONLY (M5-pinned; reviewer-r2 A1). 24^3 rows are reported per-domain ONLY under the 3D floor caveat and NEVER enter the pooled medians; REFUTED can be triggered ONLY by a 2D claim-pool failure."
+   },
+   "methods": {
+    "dense_free_ref": "dense free-boundary reference: exact Cholesky solve of the free BTTB Gram at 64x64 ONLY; at 128x128 the reference is a PCG solve of the free-boundary BTTB system at tol 1e-8 (dense-equivalent), identical relative-residual convention to T1b, with iterations + final relative residual reported; 24^3 per the container-forced deviation (see dense_reference).",
+    "bccb_wrap": "standard BCCB torus wrapping (periodized-distance Gram, spectral solve) - the baseline whose gap is being reduced.",
+    "dst2_exact_band": "F1 (the primary): whole-sample-symmetric (2H-1)x(2W-1) [3D analog] DST2-class first-column embedding of K_free; spectral solve of the embedded system; EXACT boundary solve of the Woodbury-center reduced system WTT u_T = z0[T] on the band index set T (WTT = M^{-1}[T,T]; M = K_emb + lam I; dense symmetric center factor, SPD post-floor+ridge; no rank truncation); map-back alpha = a0 - M^{-1}u via the spectral domain (O(N log N)); residuals measured on the EXACT free operator only. Structured speed paths attempted-if-budget: per-chain 1D Toeplitz/Hankel solves (Trench 66 / Gohberg-Semencul 67, exact O(n^2)); Stewart 73 stabilized superfast Toeplitz solve (O(n log^3 n)); HSS re-seeding (Ambikasaran 54) - each with an honest not-completed report if over-envelope; exactness is measured at the 1e-6 gate regardless of backend.",
+    "dst2_comparator": "DST2-class symmetric-convolution embedding solve (naive DST2 spectral solve without the exact band correction) - the rework-r2 comparator for the capture clause (M1): S1' must capture >= 50% of the DST2 comparator's own gap reduction.",
+    "naive_wss": "naive whole-sample-symmetric embedding solve (the iteration-3 RE-ABLRC embedding-only path; the embed-solve plateau is INVALIDATED-HISTORY evidence, not a candidate solver).",
+    "dct1_comparator": "DCT1-class symmetric-convolution comparator - reported per grid as part of the boundary-class comparison (iterate-3 honest negative: DCT1 pooled median gap reduction -1872.63%, 11/141 rows improve; DST2 is the empirically superior classical class: 61.62%, 129/141 [honest negative])."
+   },
+   "w_sweep": {
+    "values": "w in {1,2,3,4} plus the w_design point (iteration-3 convention)",
+    "fail_fast": "non-monotone relative-residual decay across the w-sweep fails the row fast and is recorded per grid (iteration-3: 9 of 141 rows fail-fast, all at 64x64 [honest negative]).",
+    "claimable_guard": "w_guard = w <= min(H,W)/8 holds on every 2D claim grid BY CONSTRUCTION (clamped w_design); support coverage is MEASURED per grid/kernel (B3) and reported (w_s, s, coverage) so the guard does not hide the support question.",
+    "note": "With the clamp, w_design at 64x64 is 8 (NOT the iteration-3 unclamped 10 - the iteration-3 guard failure {64_8: null} came from running w=10 at a grid whose min(H,W)/8 = 8 [honest negative]; the clamp pre-commits the fix and the residual clause independently falsifies, so the clamp cannot hide failure)."
+   },
+   "support_rank_measurement": {
+    "pin": "support set S = {cells: |H_r| > 1e-6 * max|H_r|} (threshold tied to the residual gate); support rank s = |S|; support distance w_s; coverage ratio s/|T_w| - all measured and reported PER GRID AND PER KERNEL (B3 pin; proposal-iter4-v4 F1_support_coverage_diagnostic).",
+    "nb_labels": "claim-grid nb at 128x128 = MEASURED deterministic T_size 2385 at w_design=10 (reused as honest-negative provenance from results/iter3/A1-boundary.json; NOT 4352 - 4352 is the w=16 full-support ceiling relevant only to the 3 128x128 full-support diagnostic rows); 64x64 nb ~ 1088 = FORMULA ESTIMATE at the w=8 clamp, pending B3 support measurement (not comparable to the iteration-3 measured 1233, which was recorded at the UNCLAMPED w=10); 24^3 nb ~ 2500-5200 = FORMULA ESTIMATE, UNMEASURED (0 of 21 iteration-3 24^3 rows carried a w_design T_size), pending support measurement.",
+    "complexity_reading": "dense center: O(nb^3) time / O(N + nb^2) memory, nb = |T| = O(w(H+W)) 2D / O(w(HW+HD+WD)) 3D; the banded 'O(N_b w^2)' reading of v1-v3 is RETRACTED (reviewer-r2 B1)."
+   },
+   "conditioning": {
+    "pin": "M = K_emb + lam I is SPD post-floor+ridge (spectrum floored at 0, lam = 1e-3 > 0) -> M^{-1} exists and is SPD -> WTT = M^{-1}[T,T] is SPD (principal submatrix) -> the center factor is a Cholesky-class symmetric factor; per-grid condition estimate cond(WTT) is MEASURED and reported (never assumed). The free operator (K_free + lam I) is SPD for matern32/matern52; rbf rows carry n_neg disclosure (2D rbf: 11 at 64x64, 3 at 128x128 [honest-negative provenance; A1 n_negative_eigenvalues_by_grid]).",
+    "floor_tiering": "reviewer-r2 wording item (3) APPLIED: the ~1e-12 selfcheck-level expectation is TIERED - matern rows (PSD) target the selfcheck-level residual (~1e-12); 2D rbf rows are NON-PSD (n_neg 11 at 64x64 / 3 at 128x128) and report the MEASURED a-posteriori floor error (Graham 70 convention; no DCT/DST-class PSD floor theorem in the corpus), NEVER assumed at 1e-12, so REFUTED-residual cannot fire on the rbf floor artifact."
+   },
+   "map_back": "alpha = a0 - M^{-1}u with u = u_T on T and zero elsewhere; M^{-1}u computed in the spectral domain (divide by spec_used in transform space, O(N log N)); alpha is the approximate solution of the FREE system; every residual is measured against the EXACT free operator (amatvec_nd convention), never against the embedded system alone.",
+   "residual_convention": "relative system residual ||(K_free + lam I) alpha_hat - y|| / ||y|| - KKT-style, identical in style and meaning to the PCG KKT < 1e-6 relative convention (canonical reference: T1b pcg relative residual per-field 4.69e-9..9.81e-9 at tol 1e-8, results/iter2/T1b-CG-masked-train.json). The iteration-3 residual figures (532.2245, 546.2021, 415.7885, naive 896.4332) were recorded under iteration-3's own norm and are INVALIDATED HISTORY - cited ONLY as motivation, NEVER as the iteration-4 residual metric.",
+   "3d_rows": {
+    "grid": "24^3, seeds 0-9 (per-domain, 3 kernels x 10 seeds = 30 rows; budgeted seed subset pre-committed - see budgeted_subset)",
+    "floor_caveat": "the 3D whole-sample symmetric embedding is empirically NON-PSD on the tested kernels: n_neg 24^3 {matern32: 289, matern52: 4578, rbf: 7662} (48^3 {0, 1468, 4222}; Nexus note / A1 n_negative_eigenvalues_by_grid [honest negative]). 3D rows carry n_neg disclosure, floored-spectrum handling, and a per-row MEASURED a-posteriori floor error (B5); floored solve != free solve. 3D rows report the SAME per-clause fields per-domain under the floor caveat and feed NO pooled verdict (M5).",
+    "reference": "24^3 dense Cholesky is NOT pre-registered (OOM under the ~2 GB cgroup - iteration-3 precedent: 3 OOM-killed attempts, executed reference = container-forced PCG-1e-8 deviation, ref_attempts_log/ref_convention_notes disclosure template [honest negative]); the 3D reference = PCG tol 1e-8 per the container-forced convention, re-attempted only if the cgroup permits (with disclosure)."
+   },
+   "diagnostic_rows": {
+    "composition": "budgeted full-support exact reference rows on 2D: 6x at 64x64 (3 kernels x 2 seeds) + 3x at 128x128 (3 kernels x 1 seed), solving the center with T = FULL SUPPORT (no truncation; support capped at the cgroup-permitted center size, else honest not-completed wording; nb at the 128x128 full-support ceiling = 4352 - the w=16 cap, NOT the claim-grid label 2385).",
+    "role": "the discriminating diagnostic separating truncation from floor/model error: 2D PSD rows reaching the selfcheck-level residual (~1e-12, matern rows) prove the measured plateau (w_design res 415-546 [honest negative; A1-boundary.json]) is far-tail TRUNCATION, not interior model error; 2D rbf rows report measured a-posteriori floor error; 3D full-support rows still showing residual >> 1e-6 isolate the FLOOR error (floored solve != free solve), measured per-row (B5).",
+    "precedence_fork_PINNED": "reviewer-r2 wording item (4) APPLIED - ONE pre-committed mapping, no ambiguity: (fork A) support beyond the clamp (w_s > min(H,W)/8 on ANY 2D claim grid) -> NOT-validated-guard, with w_s / s / coverage reported per grid; (fork B) w_s <= min(H,W)/8 but the 2D claim-pool median relative system residual > 1e-6 -> REFUTED-residual (reference-independent)."
+   },
+   "per_clause_reporting": "executed LITERALLY (reviewer-A note folded): gap_reduction_pct, relative_system_residual, w_guard, capture_vs_dst2_pct reported PER GRID and POOLED over the 2D claim pool; n_neg per grid/kernel; fail_fast rows per grid; cond(WTT) per grid; support rank s / distance w_s / coverage s/|T_w| per grid/kernel; 3D rows carry the same clauses per-domain under the floor caveat and feed NO pooled verdict; REFUTED attribution names the failing 2D claim-pool clause; NOT-validated attribution names the clause and the grid.",
+   "win_rule": "s1_prime (verbatim_label_table + iteration4_modifications M1/M2/M5 + reviewer-r2 wording items (1)-(5), all APPLIED in win_rules)",
+   "refuted": "iff the exact band solve still leaves median relative system residual > 1e-6 on the 2D claim pool OR the DST2-capture consequence fails (< 50% on the 2D pool) - reference-independent, per M5/M2 (reviewer-r2 A1).",
+   "not_validated": "if the w-guard is violated despite the clamp (fork A: w_s > min(H,W)/8 on a 2D claim grid; NOT-validated-guard with w_s/s/coverage reported) OR the rank/scope budget is exceeded on any pool grid OR the gap clause fails - per-clause reporting names the clause and the grid.",
+   "budgeted_subset": {
+    "2d": "128x128 seeds 0-9 (the full 30-row 128x128 pool is the minimum 128x128 scope; if the 20-min cap forces further truncation, 64x64 reduces to seeds 0-9 with disclosure). Iteration-3 template (INVALIDATED HISTORY): A1 exceeded its 25-min cap at 1530.3 s and was flagged - the disclosure protocol is pre-registered, not improvised.",
+    "3d": "PRE-COMMITTED (reviewer-r2 wording item (5)): 24^3 seeds 0-9 declared as the 3D seed subset (3 kernels x 10 seeds = 30 rows), executed per-domain under the floor caveat as budget permits; if the envelope forces truncation, the 3D subset reduces to seeds 0-2 per kernel (9 rows) - pre-committed mapping - with disclosure.",
+    "truncation_priority": "claim rows FIRST (2D claim pool retained before anything else), diagnostic rows SECOND, seeded subset (3D 24^3 rows) LAST - i.e., 3D rows are the first tier to be truncated under budget pressure, then diagnostic rows, and the 2D claim pool last; every truncation is disclosed (budget_exceeded / not-completed wording) per the iteration-3 disclosure template."
+   },
+   "metrics": ["gap_reduction_pct (vs BCCB wrap: 100*(1 - g_approx/g_bccb), g = ||f_approx - f_free||/||f_free||)", "relative_system_residual (pinned KKT convention ||(K_free + lam I) alpha_hat - y||/||y|| - the win-rule residual)", "capture_vs_dst2_pct (capture of the DST2 comparator's own gap reduction)", "w_guard per grid", "cond(WTT) per grid", "support rank s / support distance w_s / coverage s/|T_w| per grid/kernel", "interior_vs_band_residual_fraction", "n_negative_eigenvalues per grid/kernel", "fail_fast rows per grid", "iterations_to_tol + final relative residual for PCG references", "wall_clock_s, peak_rss_gb, est flops/bytes (metrics.py ResourceRecorder conventions)"]
+  },
+  "A2_F2": {
+   "name": "A2-F2 masked (contingent secondary: masked-Gram acceleration via preconditioned Anderson mixing - refined S2)",
+   "artifact": "results/iter4/A2-F2.json",
+   "budget_min": 18,
+   "shared_system": "(P_m K P_m^T + lam I) w = y_m - the SAME masked-Gram system the standard PCG reference solves (T1b convention); coefficients restricted to observed-cell support a = P_m^T w; spelled identically in the win rule and here.",
+   "tasks": {
+    "synthetic_2d": "synthetic 2D GRF, grids 64x64 and 128x128, random masks 10/30/50% + block masks, kernels matern32/matern52/rbf, seeds 0-19 (declared; budgeted subset seeds 0-4 with disclosure - iteration-3 executed 0-4 only [honest negative]).",
+    "synthetic_3d": "synthetic 3D GRF, grid 24^3, kernels matern32/matern52/rbf, random masks + block masks, seeds 0-9 (budgeted subset with disclosure; 3D masked rows carry the n_neg floor caveat per grid/kernel).",
+    "kaplan": "REAL Kaplan SST v2 36x72 fields via h5py (results/raw/real: fields.npy 2005x36x72, sentinel |x| > 1e30 cells missing, 53.4%); masks: polar caps, land, random 10/30/50%; future-blind split train idx 0..1919 (1856-01..2015-12) / test idx 1920..2003 (2016-01..2022-12); idx 2004 (2023-01) EXCLUDED from both splits; mask seed 7 (iteration-2/3 convention); pool = per-field masked solves across the split (train + test fields, valid-only cells; iteration-3 template: 132 kaplan rows = 44 fields x 3 masks - iteration-4 pool composition pre-disclosed per row class below)."
+   },
+   "solvers": {
+    "ssam_cam_nystrom": "Anderson mixing m = 5 (A5 ablation: ESSENTIAL - without it the solver stalls at the 500-iteration ceiling with relative residual ~4.1e5-7.4e5; with it 259-384 iterations to ~1e-6 [honest negative; results/iter3/A5-ablation.json]) + randomized-Nystrom preconditioner of the masked Gram (Frangella-Tropp-Udell 71; sketch sizes {64, 128, 256}, k disclosed per row, small-k sweep where budget permits) + spectral step O(N log N).",
+    "preconditioner_candidates": ["randomized_nystrom (primary; Frangella-Tropp-Udell 71)", "dst2_block (DST2/block-structure preconditioner - attempted-if-budget)", "deflation (dominant-eigenspace deflation - attempted-if-budget)"],
+    "pcg_ref": "standard PCG on the masked Gram (P_m K P_m^T + lam I), BTTB matvec + identity/floored-torus preconditioner (iteration-2 T1b convention)."
+   },
+   "termination": "KKT residual r_t := (P_m K P_m^T + lam I) w - y_m relative to ||y_m||, IDENTICAL convention for both solvers; primary gate < 1e-6 (matched secondary 1e-8); iteration ceiling 500.",
+   "pool_convention": "PRE-DISCLOSED (reviewer-fixed convention carried): pool n per row class and per-domain n stated in the plan and re-stated in the artifact - grf-2d (2 grids x 3 kernels x 4 masks x seeds 0-19 = 480 rows declared; budgeted subset seeds 0-4 = 120 rows), grf-3d (24^3 x 3 kernels x 4 masks x seeds 0-9 = 120 rows declared; budgeted subset seeds 0-2 = 36 rows), mnist-784 (n >= 10 images), kaplan-sst-v2 (per-field masked solves; 44-field x 3-mask = 132 rows template). The iteration-3 222-row wall-clock pool (60 synthetic block-mask rows without pcg/ssam wall_s) is INVALIDATED HISTORY - its pooling lesson (every pooling choice sat below the 1.5x REFUTED bar) is the disclosure template, not a pool for iteration-4. wall-clock pool and per-domain breakdowns stated in the artifact and paper.",
+   "win_rule": "s2_prime (verbatim_label_table + iteration4_modifications M3): median wall-clock speedup vs standard PCG >= 3x at equivalent KKT residual < 1e-6 (pooled; per-domain breakdown separate) with RMSE parity on the T1b valid-cell domain; REFUTED iff < 1.5x; 1.5-3x reported NOT-validated as a tie-band case.",
+   "budgeted_subset": "if the 18-min cap is exceeded: disclosure + seeds 0-4 at 64x64/128x128 (120 rows) and 24^3 seeds 0-2 (36 rows), per-domain reporting preserved; truncation priority: synthetic 2D first, synthetic 3D second, kaplan last (real-data rows preserved last under the future-blind lock).",
+   "metrics": ["median speedup vs pcg (wall-clock)", "KKT iterations to tol (both solvers)", "convergence fraction (both solvers)", "median relative KKT residual", "rmse_valid_only parity (T1b valid-cell domain)", "wall_clock_s, peak_rss_gb, est flops/bytes", "pool n per row class + per-domain n"]
+  },
+  "A3_multidomain": {
+   "name": "A3 benchmark (multidomain, G7; reviewer-fixed tieband/cost-clause conventions; strengthened coverage)",
+   "artifact": "results/iter4/A3-multidomain.json",
+   "budget_min": 7,
+   "domains": [
+    "grf-2d (synthetic free-boundary controlled, seeds 0-9 declared; iteration-3 executed seeds 0-2 [honest negative] - strengthened toward plan scope)",
+    "grf-3d (24^3, seeds 0-3 declared or budgeted subset with disclosure; iteration-3 executed seeds 0-1, n=2 [honest negative] - strengthening toward plan scope)",
+    "mnist-784 (28x28 grid KRR, RBF on pixel coordinates, per-image BCCB solves; held-out digit classes + patch masks locked before runs; n >= 10 images with disclosure; iteration-3 ran n=10 with 0/10 converged [honest negative])",
+    "kaplan-sst-v2 (real; future-blind split as iteration-2/3; train idx 0..1919 / test idx 1920..2003; idx 2004 excluded)"
+   ],
+   "methods": [
+    "f1_exact (dst2_exact_band - the iteration-4 boundary solver on the free-boundary operator)",
+    "standard_pcg (T1b convention)",
+    "dense_krr (exact Cholesky on subsample <= 4000 rows; 2D/mnist/kaplan ONLY - NOT pre-registered at 24^3, see dense_reference)",
+    "kiss_gp (inducing regular grid + local bi/tri-linear interpolation; Toeplitz-BTTB inducing Gram via circulant machinery)",
+    "rff (sklearn Ridge on RFF features, iteration-2 B-arm convention)"
+   ],
+   "metrics": ["rmse_valid_only (mask-excluded cells)", "wall_clock_s", "peak_rss_gb", "accuracy_per_flop", "accuracy_per_byte", "iterations_to_tol", "speedup_vs_pcg", "boundary_gap_reduction_pct"],
+   "conventions": [
+    "tieband_convention: per-domain median-RMSE ratio (method_median / best_median - 1), 0.5% relative band, applied UNIFORMLY to all domains and all method comparisons; no per-domain band tuning",
+    "LITERAL no-tieband sensitivity row REQUIRED (0.0% band -> strict winner counts) - verdict flips under the strict reading visible (iteration-3 sensitivity template: grf-2d dense-vs-PCG identical-system tie at 4.85e-07 relative; dense 0.154 s vs PCG 1.714 s; a literal no-tieband reading gives dense_wins=1, flipping grf-2d to REFUTED - this sensitivity MUST be reported [honest negative])",
+    "cost_clause_parse: win is RMSE-first (best or within the tie band), cost (wall-clock / peak RSS / accuracy-per-flop / accuracy-per-byte) is a CREDIBILITY GATE (equal-or-lower cost envelope; dense KRR's O(N^2)/O(N^3) class bound disclosed; randomized baselines report approximation error); ties reported; no cherry-picked exclusions",
+    "pool + per-domain n stated in the artifact and paper"
+   ],
+   "win_rule": "benchmark (verbatim_label_table): REFUTED iff KISS-GP wins >= 2 of 4 domains OR dense KRR wins >= 1 of 4 domains in RMSE at equal-or-lower cost envelope; ties reported; no cherry-picked exclusions. Otherwise not-refuted with tieband sensitivity reported (iteration-3: kiss_wins=0, dense_wins=0, not-refuted [honest negative]).",
+   "coverage_delta_registration": "plan-vs-executed coverage deltas are itemized as honest negatives: the plan declares grf-2d seeds 0-9, grf-3d seeds 0-3 (or budgeted subset with disclosure), mnist n >= 10, kaplan real future-blind; ANY executed shortfall is reported as a plan-vs-executed delta with the honest-negative wording (iteration-3 template: grf-2d 0-2 vs plan 0-19; grf-3d 0-1 n=2 vs plan 0-9; mnist n=10 with 0/10 converged [honest negatives])."
+  },
+  "A4_tooling": {
+   "name": "A4 tooling (grf_boundary.py selfcheck + A6-style tooling verification)",
+   "artifact": "results/iter4/A4-tooling.json",
+   "budget_min": 2,
+   "budget_note": "interleaved, envelope-charged tooling arm: executes at arm boundaries within the 45-min total (iteration-3 A6-tooling precedent: selfcheck 0.0453 s, mixed-boundary 36x72 sample 0.0043 s, arm clock 0.0 s [honest-negative provenance]); the 2-min cap is the stated ceiling.",
+   "deliverable": "scripts/grf_boundary.py selfcheck (free / Dirichlet-zero / Neumann-zero / mixed boundary-value sets; whole-sample-symmetric circulant-embedding exact sampling; Paciorek-Schervish non-stationary covariance path; seeds 0-19) + A6-style tooling verification: selfcheck_pass, wall_selfcheck_s, wall_mixed_boundary_36x72_sample_s, generator_description (iteration-3 template: selfcheck_pass=true, 0.0453 s / 0.0043 s [honest-negative provenance])."
+  }
+ },
+ "baselines": {
+  "dense_krr": "exact Cholesky solve of the dense Gram on subsample <= 4000 rows (CPU-only; O(N^2) memory / O(N^3) solve class that the structured solvers replace); 2D (64x64, 128x128), mnist-784, kaplan-sst-v2 ONLY - NOT pre-registered at 24^3 (see dense_reference); iteration-2 B-arm convention.",
+  "pcg": "standard PCG on the masked Gram (P_m K P_m^T + lam I) with BTTB matvec + identity/floored-torus preconditioner, relative-residual stopping (Templates entry 69), tol 1e-8 (T1b convention: rate means 245.1/276.1/280.9, span 233-291, final rel residual 4.69e-9..9.81e-9).",
+  "kiss_gp": "inducing regular grid + local (bi/tri)linear interpolation (Wilson & Nickisch 2015), Toeplitz-BTTB inducing Gram solved via circulant machinery.",
+  "rff": "sklearn Ridge on Random Fourier Features (Rahimi & Recht 2007), iteration-2 B-arm convention.",
+  "hss_structured_optional": "HSS (Ambikasaran et al., review entry 54): structured direct-solve candidate inside A1-F1's speed paths and as an optional A3 sixth method - attempted-if-budget, honest not-completed report if over-envelope."
+ },
+ "data": {
+  "synthetic_2d": "free-boundary GRFs on 64x64 and 128x128 via scripts/grf_boundary.py (controlled boundaries: free / Dirichlet-zero / Neumann-zero / mixed boundary-value sets), kernels matern32/matern52/rbf (ell = 4.0 grid units, rho = kernel range), seeds 0-19; labeled synthetic with full generator description.",
+  "synthetic_3d": "24^3 GRF blocks (3D analog of the 2D protocol; boundary-seeded, stationary within block), kernels matern32/matern52/rbf, seeds 0-9 (budgeted subset stated in arms.A1_F1.budgeted_subset.3d).",
+  "mnist784": "MNIST-784 (28x28) infilling: kernel = RBF on pixel coordinates; grid KRR on flattened raster = stationary BCCB per-image solves; held-out digit classes + patch-mask splits locked BEFORE runs; n >= 10 images; no post-hoc kernel/split selection.",
+  "kaplan_real": "REAL Kaplan SST v2 (results/raw/real: fields.npy 2005x36x72, index.npy, sst.mon.anom.nc; meta.json dataset.origin=real-kaplan-sst-v2); sentinel |x| > 1e30 cells missing (53.4%); masks polar caps / land / random 10/30/50%; future-blind train 1856-01..2015-12 (idxs 0..1919) / test 2016-01..2022-12 (idxs 1920..2003); 2023-01 (idx 2004) EXCLUDED; read via h5py exactly as iteration-2/3."
+ },
+ "kaplan_fallback": "pre-stated fallback (never silent): simulated-from-physics SST-anomaly stand-in (generated as scripts/data_gen.py, Kaplan-like covariance, iid noise std 0.35) with simulation_marker disclosure in EVERY artifact if the h5py route is unavailable under the allowed stack.",
+ "cv_leakage_rules": {
+  "future_blind_kaplan": "train strictly idx 0..1919 (1856-01..2015-12), test idx 1920..2003 (2016-01..2022-12), idx 2004 (2023-01) excluded from BOTH splits; valid-only denominators (masked cells excluded from training and from RMSE/coverage evaluation).",
+  "mask_regime": "masks defined ONCE (seed 7 for Kaplan random-mask draws; fixed construction as iteration-2/3); same mask schedule in CV folds and test; masked cells never in training nor in error/coverage denominators.",
+  "mnist": "held-out digit classes + held-out patch masks with NO overlap; both locked before fitting; no post-hoc selection.",
+  "valid_cell_domain": "A2-F2 RMSE parity and all A3 RMSE judged on the SAME valid-cell evaluation domain as T1b (mask-excluded valid cells), so parity is interpretable.",
+  "synthetic": "train interior / test boundary band + masked cells (iteration-3 benchmark convention, review G7); seeds fixed 0-19 (2D) / 0-9 (3D).",
+  "reporting": "per-domain breakdowns reported separately; pooled medians reported with per-field/per-seed detail; ties reported; no cherry-picked exclusions; every iteration-3 number carries the INVALIDATED-HISTORY / honest-negative attribution (canonical iteration-2 artifacts cited only)."
+ },
+ "metrics": [
+  {"name": "gap_reduction_pct", "definition": "relative free-boundary gap reduction vs standard BCCB wrapping: 100*(1 - g_approx/g_bccb), g = ||f_approx - f_free||/||f_free||", "unit": "%"},
+  {"name": "relative_system_residual", "definition": "the pinned boundary win-rule residual ||(K_free + lam I) alpha_hat - y||/||y|| (KKT-style, identical convention to the PCG reference); PCG ref per-field 4.69e-9..9.81e-9 at tol 1e-8 (T1b canonical)", "unit": "dimensionless"},
+  {"name": "capture_vs_dst2_pct", "definition": "S1' capture of the DST2 comparator's own gap reduction (>= 50% required for WIN)", "unit": "%"},
+  {"name": "w_guard", "definition": "w <= min(H,W)/8 per grid (structural via the clamp w_design = min(ceil(2.5*rho), min(H,W)/8))", "unit": "boolean"},
+  {"name": "cond_wtt", "definition": "measured per-grid condition estimate of the SPD center WTT = M^{-1}[T,T]", "unit": "dimensionless"},
+  {"name": "support_rank_s", "definition": "|S| with S = {cells: |H_r| > 1e-6 * max|H_r|} (support set of the tail coupling)", "unit": "count"},
+  {"name": "support_distance_w_s", "definition": "measured numerical support distance of the tail coupling", "unit": "grid units"},
+  {"name": "coverage_ratio", "definition": "s/|T_w| - band coverage of the full support, per grid/kernel", "unit": "dimensionless"},
+  {"name": "n_negative_eigenvalues", "definition": "per grid/kernel, on every boundary/masked artifact (iteration-3 A1 convention: n_negative_eigenvalues_by_grid)", "unit": "count"},
+  {"name": "rmse_valid_only", "definition": "RMSE on valid (mask-excluded) cells; valid-only denominator everywhere (T1b valid-cell domain)", "unit": "std field units"},
+  {"name": "wall_clock_s", "definition": "median wall-clock over repeats (warm-up excluded), monotonic timestamps around each arm, consistent with iteration-2/3 accounting; 0.1 s rounding disclosure honored", "unit": "s"},
+  {"name": "peak_rss_gb", "definition": "peak resident set size (resource.getrusage, metrics.py ResourceRecorder)", "unit": "GB"},
+  {"name": "iterations_to_tol", "definition": "iterations to relative KKT/system residual tolerance (PCG and masked solver, same convention)", "unit": "count"},
+  {"name": "relative_residual", "definition": "final relative residual r_t / ||y_m|| (masked arm) or ||(K+lam I) alpha_hat - y||/||y|| (boundary arm)", "unit": "dimensionless"},
+  {"name": "speedup_vs_pcg", "definition": "median wall-clock PCG / wall-clock masked solver at equivalent KKT residual < 1e-6 (primary) / 1e-8 (matched)", "unit": "x"},
+  {"name": "est_spectral_fit_flops", "definition": "rfft+irfft flop estimate (metrics.py est_spectral_fit_flops)", "unit": "flops"},
+  {"name": "est_spectral_bytes", "definition": "spectrum + field + alpha byte estimate (metrics.py est_spectral_bytes ~ 40*N)", "unit": "bytes"},
+  {"name": "accuracy_per_flop", "definition": "valid-only RMSE quality per estimated flop (solve-cost control framing)", "unit": "1/flop"},
+  {"name": "accuracy_per_byte", "definition": "valid-only RMSE quality per estimated byte (memory-control framing)", "unit": "1/byte"},
+  {"name": "fail_fast", "definition": "row flag: non-monotone w-sweep residual decay (boundary arm); recorded per grid (iteration-3: 9/141, all 64x64 [honest negative])", "unit": "boolean"}
+ ],
+ "win_rules": {
+  "label_table": "SINGLE pre-registration location (hypothesis-gate G2 item 8; plan-iter3-reconciliation-notes.md item 8; proposal-iter4-v4 win_rules): S1' win iff median free-boundary gap reduction >= 50% (2D CLAIM POOL - M5-pinned, superseding the historical pooled-pool literal of the item-8 quote (the phrase that pooled the 2D and 3D grids)) AND median relative system residual <= 1e-6 (pinned KKT convention, identical to the PCG reference) AND w <= min(H,W)/8 on every pool grid (structural clamp w_design = min(ceil(2.5*rho), min(H,W)/8)) AND capture >= 50% of the DST2 comparator's own gap reduction; REFUTED iff median relative system residual > 1e-6 on the 2D claim pool OR capture < 50%; else NOT-validated per clause (clause + grid named). S2' win iff median wall-clock speedup vs standard PCG >= 3x at equivalent KKT residual < 1e-6 (pooled; RMSE parity on the T1b valid-cell domain); REFUTED iff < 1.5x; 1.5-3x reported NOT-validated as a tie-band case. Benchmark REFUTED iff KISS-GP wins >= 2 of 4 domains or dense KRR wins >= 1 of 4 domains in RMSE at equal-or-lower cost envelope; ties reported, no cherry-picked exclusions; literal no-tieband sensitivity row REQUIRED.",
+  "verbatim_label_table": "'S1 boundary win iff median relative gap reduction >= 50% (2D claim pool) AND median reported residual bound <= 1e-6 AND w <= min(H,W)/8; else NOT-validated (if rank budget exceeded) or REFUTED (if the DCT/DST 50%-capture consequence fails). S2 speed win iff median wall-clock speedup vs PCG >= 3x at equivalent KKT residual < 1e-6 (A2 pooled, RMSE parity); REFUTED iff < 1.5x (design-brief section 5 semantics). Benchmark: REFUTED iff KISS-GP wins >= 2 domains or dense KRR >= 1 domain; ties reported, no cherry-picked exclusions. DCT/DST comparator: S1 must capture >= 50% of DCT/DST's own gap reduction, else the boundary claim is reported NOT validated against the strongest classical boundary-aware baseline.'",
+  "verbatim_reproduction_note": "reproduced from plan-iter3-reconciliation-notes.md item 8 (the historical single pre-registration location) with EXACTLY TWO documented ASCII edits, nothing else: (a) one literal edit to the pooled-composition phrase of the historical quote (the phrase that pooled the 2D and 3D grids), replaced by '(2D claim pool)' - pool-composition edit per reviewer-r2 A1 / M5 (PINNED: gates apply to the 2D claim pool; 24^3 rows per-domain under the floor caveat, never pooled), documented so the quote remains traceable; (b) the 'section sign' glyph of 'design-brief section 5' transcribed as ASCII 'section 5'. No other literal remains anywhere in this plan (verification requirement: the historical pooled-pool literal of the item-8 quote appears nowhere in this file).",
+  "iteration4_modifications_labeled": [
+   "M1 (DST2 comparator, rework r2): the DCT/DST comparator for the capture consequence is the DST2-class comparator (the empirically superior classical boundary-aware class on the measured regime: pooled median gap reduction 61.62% vs DCT1 -1872.63%; capture-hold evidence 0.7467/0.7284 [honest negatives]). DCT1 is still reported per grid as part of the boundary-class comparison.",
+   "M2 (F1 exact-band rule, rework r2 F1): S1' WIN iff median free-boundary gap reduction >= 50% (2D claim pool) AND median reported residual bound <= 1e-6 (pinned relative-system-residual convention) AND w <= min(H,W)/8 (structural via the pre-committed clamp w_design = min(ceil(2.5*rho), min(H,W)/8)) AND capture >= 50% of the DST2 comparator's own gap reduction; REFUTED iff the exact band solve still leaves median residual > 1e-6 OR the capture consequence fails; else NOT-validated (rank/scope exceeded) with per-clause reporting.",
+   "M3 (S2' tie band, rework r2 F2): S2' WIN iff median wall-clock speedup vs standard PCG >= 3x at equivalent KKT residual < 1e-6 (A2 pooled, RMSE parity on the T1b valid-cell domain); REFUTED iff < 1.5x; 1.5-3x reported NOT-validated as a tie-band case under the written tieband convention.",
+   "M4 (reviewer-fixed conventions, carried): tieband aggregation = ratio of per-domain medians (method_median / best_median - 1), 0.5% relative, applied uniformly to all domains, with a LITERAL no-tieband sensitivity row (0.0% band -> strict winner counts) required in the artifact and paper; cost-clause parse = RMSE-first win (tie within band or better RMSE), cost as credibility gate (equal-or-lower cost envelope), ties reported; pool n per row class and per-domain n pre-disclosed; per-domain breakdowns stated in the paper; wall-clock convention; falsification conditions as listed below.",
+   "M5 (S1' pool-composition PIN, reviewer-r2 A1): PINNED (reviewer-r2 A1): the S1' gap and residual gates apply to the 2D CLAIM POOL - all 64x64 and 128x128 w_design rows under the w-clamp (w_design = min(ceil(2.5*rho), min(H,W)/8), so w <= min(H,W)/8 holds by construction on both grids). The 24^3 rows are reported per-domain ONLY under the 3D floor caveat (n_neg 24^3 {matern32: 289, matern52: 4578, rbf: 7662} - Nexus note / A1 n_negative_eigenvalues_by_grid; floored solve != free solve) and NEVER enter the pooled medians. The REFUTED clause can therefore be triggered ONLY by a 2D claim-pool failure (median relative system residual > 1e-6 on the 2D pool OR capture < 50% on the 2D pool) - never by the 3D floor property. NOT-validated attribution names the failing clause and the grid. M5 SUPER-SEDES the historical pooled-pool literal of the verbatim label table (the phrase that pooled the 2D and 3D grids) and of any prior wording - the iteration-4 reading is '(2D claim pool)' everywhere in this plan."
+  ],
+  "s1_prime": {
+   "win": "median free-boundary gap reduction >= 50% (2D claim pool - M5-pinned; supersedes any historical pooled-over-2D-and-3D literal, see M5) AND median reported relative system residual <= 1e-6 (pinned convention: ||(K_free + lam I) alpha_hat - y|| / ||y||, identical to the PCG KKT convention) AND w <= min(H,W)/8 on every grid in the pool (structural clamp w_design = min(ceil(2.5*rho), min(H,W)/8)) AND capture >= 50% of the DST2 comparator's own gap reduction",
+   "not_validated": "if the w-guard is violated despite the clamp (fork A: support beyond the clamp, w_s > min(H,W)/8 on a 2D claim grid -> NOT-validated-guard with w_s/s/coverage reported) OR the rank/scope budget is exceeded (exact band solve needs more than O(nb^3)/O(nb^2) work/memory on any pool grid) OR the gap clause fails, with per-clause reporting (clause + grid named)",
+   "refuted": "if the exact band solve still leaves median relative system residual > 1e-6 on the 2D claim pool (fork B: w_s <= min(H,W)/8 but 2D-pool residual > 1e-6 -> REFUTED-residual) OR the DST2-capture consequence fails (< 50% on the 2D pool)",
+   "per_clause_reporting": "executed LITERALLY (reviewer-A note folded): gap_reduction_pct, relative_system_residual, w_guard, capture_vs_dst2_pct reported PER GRID and POOLED over the 2D claim pool; n_neg per grid/kernel; fail_fast rows per grid; cond(WTT) per grid; support rank s / distance w_s / coverage s/|T_w| per grid/kernel; 3D rows carry the same clauses per-domain under the floor caveat and feed NO pooled verdict; REFUTED attribution names the failing 2D claim-pool clause; NOT-validated attribution names the clause and the grid - so the verdict stays interpretable under the 3D floor caveat.",
+   "pool_semantics_PINNED": "PINNED (reviewer-r2 A1 / M5): the S1' gap and residual gates apply to the 2D CLAIM POOL - all 64x64 and 128x128 w_design rows under the w-clamp (w_design = min(ceil(2.5*rho), min(H,W)/8), so w <= min(H,W)/8 holds by construction on both grids). The 24^3 rows are reported per-domain ONLY under the 3D floor caveat (n_neg 24^3 {289, 4578, 7662} - floored solve != free solve) and NEVER enter the pooled medians. The REFUTED clause can therefore be triggered ONLY by a 2D claim-pool failure - never by the 3D floor property. NOT-validated attribution names the failing clause and the grid."
+  },
+  "s2_prime": {
+   "win": "median wall-clock speedup of the preconditioned-Anderson masked solver vs standard PCG >= 3x at equivalent KKT residual < 1e-6 (pooled; per-domain breakdown reported separately) with RMSE parity on the T1b valid-cell domain",
+   "refuted": "median speedup < 1.5x",
+   "tie_not_validated": "1.5-3x reported NOT-validated as a tie-band case under the written tieband convention (ratio of per-domain medians, 0.5% relative analysis band; sensitivity appendix confines verdict flips; iteration-3 template: grf-2d +0.47% at the 0.5% threshold [honest negative])"
+  },
+  "benchmark": {
+   "refuted": "iff KISS-GP wins >= 2 of 4 domains OR dense KRR wins >= 1 of 4 domains in RMSE at equal-or-lower cost envelope; ties reported; no cherry-picked exclusions",
+   "not_refuted": "otherwise, with tieband sensitivity reported (iteration-3: kiss_wins=0, dense_wins=0, not-refuted [honest negative])"
+  },
+  "tieband_convention": {
+   "definition": "per-domain median-RMSE ratio (method_median / best_median - 1), 0.5% relative band, applied UNIFORMLY to all domains and all method comparisons; no per-domain band tuning (iteration-3 analysis operationalization carried forward; NOT a plan number, stated as an analysis convention)",
+   "no_tieband_sensitivity_row": "a LITERAL no-tieband row (0.0% band -> strict winner counts) is REQUIRED in the A3 artifact and the paper, so verdict flips under the strict reading are visible (iteration-3: grf-2d dense-vs-PCG identical-system tie at 4.85e-07 relative; dense 0.154 s vs PCG 1.714 s; a literal no-tieband reading gives dense_wins=1, flipping grf-2d to REFUTED - this sensitivity MUST be reported [honest negative])",
+   "uniform_application": "the 0.5% band applies to every domain and every method comparison; no per-domain band tuning"
+  },
+  "cost_clause_parse": "Win is RMSE-first: a method wins a domain iff its RMSE is best or within the tie band; COST (wall-clock / peak RSS / accuracy-per-flop / accuracy-per-byte) is a CREDIBILITY GATE - a win requires an equal-or-lower cost envelope (dense KRR's O(N^2)/O(N^3) class bound; randomized baselines report approximation error); ties reported; no cherry-picked exclusions. (Locked parse from the analysis gate; not a plan number.)",
+  "pooling_and_per_domain": "iteration-4 A2/A3 PRE-DISCLOSE pool n per row class and per-domain n: grf-2d (480 rows declared: 2 grids x 3 kernels x 4 masks x seeds 0-19; budgeted subset seeds 0-4 = 120), grf-3d (24^3: 120 rows declared: 3 kernels x 4 masks x seeds 0-9; budgeted subset seeds 0-2 = 36), mnist-784 (n >= 10 images), kaplan-sst-v2 (44-field x 3-mask = 132-row template). The iteration-3 222-row wall-clock pool (60 synthetic block-mask rows carried no pcg/ssam wall_s) is INVALIDATED HISTORY and is cited ONLY as the disclosure template: every pooling choice in iteration-3 sat below the 1.5x REFUTED bar, so the iteration-3 verdict held under ALL pooling choices [honest negative]. Iteration-4 pools are stated in the artifact and paper with per-domain breakdowns.",
+  "budget_arithmetic_one_liner": "reviewer-r2 wording item (5) APPLIED: A1 claim-pool rows - 128x128 w_design row (nb = 2385, MEASURED deterministic T_size at w_design=10): center assembly ~ nb * L log L ~ 2.5e9 flops + dense Cholesky ~ nb^3/3 ~ 4.5e9 flops => ~7e9 flops/row; at the measured iteration-3 A4 effective rate ~3.7e8 flops/s (~0.37 GFLOP/s for the spectral machinery) that is ~19 s/row -> the 30 128x128 claim rows ~ 9.5 min and the 60 64x64 claim rows (nb ~ 1088, ~2 s/row) ~ 2 min: the 90-row 2D claim pool ~ 11.5 min, well inside the 20-min A1 cap (and the 45-min total). The 3 full-support diagnostic rows at nb = 4352: ~2.7e10 flops each (Cholesky-dominated) ~ 70-90 s each, ~ 4 min total, within the cap. 3D 24^3 rows (nb ~ 2500-5200 formula estimate): ~1e10-5e10 flops/row ~ 30-140 s/row - the full 30-row 3D seed set is NOT schedulable inside the 45-min envelope, which is why the 3D seed subset is PRE-COMMITTED (24^3 seeds 0-9 declared; truncation priority: claim rows first, diagnostic rows second, seeded subset last; disclosure if the envelope forces a smaller 3D subset).",
+  "falsification_conditions": [
+   "residual-tolerance convention IDENTICAL to the PCG KKT < 1e-6 relative convention for BOTH arms (boundary arm: pinned relative system residual ||(K_free + lam I) alpha_hat - y|| / ||y||; masked arm: KKT residual r_t/||y_m||); matched secondary 1e-8 (T1b canonical per-field residuals 4.69e-9..9.81e-9 at tol 1e-8 as the reference example)",
+   "pool composition PINNED (A1/M5): gates on the 2D claim pool only; 24^3 rows per-domain under the 3D floor caveat (n_neg 24^3 {289, 4578, 7662} - floored solve != free solve); REFUTED requires a failing 2D claim-pool clause, never the 3D floor property",
+   "3D floor caveat: non-PSD symmetric embeddings disclosed per grid/kernel (n_neg 24^3 {289, 4578, 7662}; 48^3 {0, 1468, 4222}; 2D rbf 11 at 64x64 / 3 at 128x128); floored solve != free solve; floor error reported per-row as a MEASURED a-posteriori quantity (B5) - no theorem-backed bound (no DCT/DST-class PSD floor theorem in the corpus; Nexus note)",
+   "rbf floor tiering (reviewer-r2 wording item (3)): only matern rows are PSD on the 2D diagnostic grids; the selfcheck-level ~1e-12 expectation applies to the MATERN rows; 2D rbf rows (n_neg 11 at 64x64 / 3 at 128x128) report the MEASURED a-posteriori floor error and are NEVER assumed at 1e-12, so REFUTED-residual cannot fire on the rbf floor artifact",
+   "precedence fork PINNED (reviewer-r2 wording item (4)): ONE pre-committed mapping - support beyond the clamp on a 2D claim grid (w_s > min(H,W)/8) -> NOT-validated-guard with w_s/s/coverage reported; w_s <= min(H,W)/8 but the 2D claim-pool median relative system residual > 1e-6 -> REFUTED-residual; mutually exclusive branches, no ambiguity",
+   "n_neg disclosure: n_negative_eigenvalues recorded per grid and kernel on every boundary/masked artifact (iteration-3 A1 convention: n_negative_eigenvalues_by_grid)",
+   "wall-clock measurement convention: monotonic timestamps around each arm (iteration-2/3 convention; median-of-3 with warm-up excluded where repeated); the 0.1 s rounding disclosure is honored (iteration-3 results_summary: per_arm_elapsed_sum 2296.4 vs measured total 2296.5 s, explicitly a rounding artifact, not a timing error [honest-negative disclosure template]) - iteration-4 summaries carry the same rounding-note convention",
+   "reference conventions: dense free-boundary reference = exact Cholesky at 64x64 only; 128x128 = PCG-1e-8 dense-equivalent (identical relative convention to T1b, iterations + final relative residual reported); 24^3 = dense Cholesky RE-ATTEMPTED only if the ~2 GB cgroup permits, else the container-forced PCG-1e-8 deviation is re-disclosed (iteration-3 A1 ref_attempts_log count 3 / ref_convention_notes [honest-negative disclosure template])",
+   "support/truncation (B3): coverage ratio s/|T_w| and support distance w_s measured per grid/kernel; full-support diagnostic rows separate truncation (2D PSD) from floor error (3D, non-PSD) and from any residual model error; if the clamp cannot contain the measured support, the per-clause report shows which clause fails (fork A)",
+   "budget truncation: claim rows first, diagnostic rows second, seeded subset (3D 24^3) last; any truncation disclosed (budget_exceeded / not-completed wording) per the iteration-3 disclosure template (A1 exceeded its 25-min cap at 1530.3 s and was flagged [honest negative])"
+  ]
+ },
+ "kernel_lambda_schedule": {
+  "kernels": [
+   {"name": "matern32", "ell": 4.0},
+   {"name": "matern52", "ell": 4.0},
+   {"name": "rbf", "ell": 4.0}
+  ],
+  "rho_note": "rho = kernel range in grid units = 4.0; w_design = min(ceil(2.5*rho), min(H,W)/8) = min(10, min(H,W)/8) -> 8 at 64x64, 10 at 128x128, 3 at 24^3 (24/8 = 3); w-sweep {1,2,3,4} checks monotonic residual decay (fail-fast guard).",
+  "lambda": {
+   "A1": "lam = 1e-3 fixed (same for dense reference, BCCB wrap, DST2/naive/DCT1 comparators, and the F1 solve)",
+   "A2": "lam = 1e-2 fixed (iteration-2 T1b masked convention)",
+   "A3": "lam fixed per task from the pre-registered set {1e-4, 1e-3, 1e-2} chosen by within-train valid-cell validation BEFORE seeing test cells; recorded in the artifact; no post-hoc selection",
+   "A4": "not applicable (tooling selfcheck)"
+  },
+  "spectral_floor": "spectra floored at 0 (PSD projection) before the ridge is added, with n_negative_eigenvalues recorded per grid and kernel (matern kernels PD on the 2D grids; 2D rbf n_neg 11 at 64x64 / 3 at 128x128; 3D non-PSD per the Nexus note: 24^3 {289, 4578, 7662})",
+  "conditioning": "M = K_emb + lam I SPD post-floor+ridge -> WTT = M^{-1}[T,T] SPD -> Cholesky-class symmetric center factor; cond(WTT) measured per grid (B2)."
+ },
+ "dense_reference": {
+  "cholesky_scope": "exact Cholesky on subsample <= 4000 rows for 2D (64x64, 128x128), mnist-784, kaplan-sst-v2 (dense_krr baseline; CPU-only; O(N^2) memory / O(N^3) solve class)",
+  "3d_reference": "24^3 dense Cholesky is NOT pre-registered: it is OOM under the ~2 GB cgroup (iteration-3 precedent: three 24^3 dense-Cholesky attempts OOM-killed, executed 24^3 reference = container-forced PCG-1e-8 deviation, disclosed in A1 ref_attempts_log count 3 / ref_convention_notes [honest negative]). The pre-registered 3D reference = PCG tol 1e-8 (identical relative convention to T1b; iterations + final relative residual reported); dense Cholesky at 24^3 is re-attempted ONLY if the cgroup permits, always with disclosure - never silently.",
+  "boundary_arm_references": "dense_free_ref = exact Cholesky of the free BTTB Gram at 64x64 ONLY; at 128x128 the free-boundary reference = PCG at tol 1e-8 (dense-equivalent, same residual convention as T1b); 24^3 per the container-forced deviation above."
+ },
+ "budget": {
+  "total_min": 45,
+  "per_arm_min": {"A1": 20, "A2": 18, "A3": 7, "A4": 2},
+  "sum_note": "A1+A2+A3 = 45 exactly (the primary-arm envelope, mirroring proposal-iter4-v4's per-arm caps). A4-tooling (<= 2 min) is an interleaved, envelope-charged arm (its iteration-3 analog A6-tooling clocked 0.0 s arm wall-clock / 0.0453 s selfcheck [honest-negative provenance]) - the four stated caps sum to 47 worst-case, which is PRE-ACKNOWLEDGED: the runner (scripts/run_iter4.py) enforces the 45-min total as a hard stop, truncates per the pre-committed priority (claim rows first, diagnostic rows second, seeded subset last), and discloses any truncation (budget_exceeded / not-completed wording) per the iteration-3 disclosure template (A1 exceeded its 25-min cap at 1530.3 s and was flagged [honest negative]). Declared/executed total <= 45.",
+  "cpu_only": true,
+  "cores": 12,
+  "cgroup_gb": 2.0,
+  "cgroup_note": "actual container cap ~2 GB (iteration-3 measured peak RSS 0.9786 GB within it); the project envelope-claim convention of <= 7 GB is NOT used for sizing - the plan is sized under ~2 GB (2D 128x128 center nb=2385 -> nb^2*8B ~ 45.5 MB; 24^3 center nb ~ 5184 max -> nb^2*8B ~ 215 MB; one field in memory at a time; est ~40B/cell spectral path).",
+  "measurement_note": "measurements amortized as iteration-2/3 (median-of-3 after warm-up where repeated; monotonic timestamps around each arm); results written to results/iter4/*.json with the 0.1 s rounding-note convention.",
+  "resource_recording": "ResourceRecorder (scripts/metrics.py): wall_clock_s via monotonic timestamps per arm; peak_rss_gb via getrusage(RUSAGE_SELF).ru_maxrss at arm boundaries; est flops/bytes per metrics.py conventions (est_spectral_fit_flops / est_spectral_bytes); accuracy-per-flop / accuracy-per-byte conventions.",
+  "budget_arithmetic": "see win_rules.budget_arithmetic_one_liner (est flops -> wall clock vs the 20-min A1 cap / 45-min total; incl. the pre-committed 3D seed subset).",
+  "disclosure_if_exceeded": "any arm exceeding its stated cap is flagged with the honest disclosure (iteration-3 template: budget_exceeded flag + per_arm_elapsed_sum rounding note [honest negative]); the 45-min total is a hard stop.",
+  "results_dir": "results/iter4/*.json"
+ },
+ "seeds": {
+  "kaplan_mask": 7,
+  "kaplan_split": {
+   "train": "idx 0..1919 (1856-01..2015-12)",
+   "test": "idx 1920..2003 (2016-01..2022-12)",
+   "excluded": "idx 2004 (2023-01) EXCLUDED from both splits",
+   "sentinel_rule": "h5py missing cells satisfy |x| > 1e30 (53.4% missing)"
+  },
+  "synthetic_2d": "0-19",
+  "synthetic_3d": "0-9 (24^3; budgeted subset pre-committed - full 0-9 declared, envelope-forced truncation reduces to 0-2 per kernel with disclosure)",
+  "bootstrap": 7,
+  "note": "Kaplan mask sampling and bootstrap use seed 7 (iteration-2/3 convention, preserved); per-domain random-mask draws seeded from it; seeds recorded in every results/iter4 artifact."
+ },
+ "honest_framing": {
+  "status": "complete",
+  "novelty_scoping": "no claim that DST2/DCT symmetric convolution, exact Toeplitz/Hankel inversion, Anderson mixing, randomized Nystrom preconditioning, or FFT kernels are new - classical components ONLY (reviewer-r2 guard verbatim): Martucci 45 (DST2/DCT symmetric-convolution classes - DST2 is the empirically superior boundary-aware classical class on the measured regime, pooled median gap reduction 61.62% vs DCT1 -1872.63% [honest negative]); ADMM/FISTA splitting family entries 46-52 (corpus convention; supersedes the iteration-3 '46-51' cluster label); Ambikasaran HSS 54; Trench 66 and Gohberg-Semencul 67 (exact Toeplitz/Hankel inversion); Stewart 73 (stabilized superfast Toeplitz solve, O(n log^3 n)); Graham 70 (CEM PSD conditions, general dimension - CIRCULANT-class floor-error conventions only; no DCT/DST-class PSD floor theorem in the corpus; B5); Barrowes-Teixeira-Kong 72 (3D multilevel block-Toeplitz matvec, O(N log N)); Frangella-Tropp-Udell 71 (randomized Nystrom preconditioning); Strang 42/74 (DCT/DST symmetric-boundary eigenbasis); T. Chan 43, Chan-Jin 44, Ng 52 (circulant/BTTB preconditioner lineage); Templates 69 (tolerance-based comparison). The claim is the grid-KRR-targeted INTEGRATION (F1: DST2 embedding + exact Woodbury-center band solve for free-boundary BCCB solves, G5; F2: preconditioned Anderson mixing for masked grids, G6) plus its pre-registered measurement.",
+  "artifact_traceability": "every number in the paper traces to results/iter4/*.json; no [simulated]-framing for real fields (dataset.origin=real-kaplan-sst-v2); synthetic GRF domains labeled synthetic with full generator description and seeds; iteration-3 numbers appear ONLY as explicitly attributed INVALIDATED-HISTORY honest negatives.",
+  "t1b_citation_lock": "T1b cited ONLY from results/iter2/T1b-CG-masked-train.json (rate means 245.1/276.1/280.9 iters at tol 1e-8; per-field span 233-291; final rel residual per-field 4.69e-9..9.81e-9; RMSE means 0.529-0.541; wall_clock_s 4.63; peak_rss_gb 0.907).",
+  "superseded_notes": "EXECUTION_NOTES.md and results/analysis.json carry explicit SUPERSEDED markers for the pre-fix T1b iteration-count / RMSE figures (the pre-fix iteration-count and RMSE values) - those figures are NEVER cited anywhere in this plan or downstream files; only the canonical results/iter2/T1b-CG-masked-train.json values are used.",
+  "invalidated_history_banner": "results/iter3/*.json are INVALIDATED HISTORY: cited ONLY as honest negatives under the G9+ attribution (median gap 47.3574% < 50% bar; residual 532.2245 >> 1e-6; per-grid plateaus 546.2021/415.7885; T_size 1233 pooled / 2385 at 128x128 w=10; guard {64_8: null, 128_16: true, 24_3: false}; 9 fail-fast rows; DST2 61.62% vs DCT1 -1872.63%; capture 0.7467/0.7284; speedups 0.2374x/0.1560x/0.1624x; iters 278.5 vs 192.0; conv 77.7% vs 100%; RMSE parity 0.3504163/0.3504185; Anderson no-variant stall 4.1e5-7.4e5 vs with-Anderson 259-384; A4 320x320 build 0.0074 s / naive 0.0394 s, 48^3 0.0115/0.0701 s; A6 selfcheck 0.0453 s / 0.0043 s; total 2296.5 s / 0.9786 GB; A1 exceeded cap at 1530.3 s) - never as qualifying claims.",
+  "acronym_unification": "F1 = 'DST2-embedding exact/mixed boundary solver' (solver spelling dst2_exact_band; replaces iteration-3's RE-ABLRC approximate Woodbury correction, which is INVALIDATED HISTORY); A2 solver = ssam_cam_nystrom (iteration-3 'SSAM-CAM' renamed by the added preconditioner class; no variant spellings); glossary line: RE-ABLRC = whole-sample-symmetric (2H-1)x(2W-1) [resp. 3D] DCT-I-class embedding - superseded; the iteration-4 embedding is the DST2-class form. No RE-ABLRC/RE-ABRLC type variants anywhere.",
+  "no_sota_claims": "no SOTA-ENSO-skill claim anywhere; every empirical number on real data is a reconstruction/efficiency measurement, not a forecast-skill claim; no exactness claim beyond the stated classes - 'exact' appears ONLY as 'exact band solves' (exact solution of the boundary system via classical formulas: Trench 66 / Gohberg-Semencul 67 / Stewart 73), never as an exactness claim for the overall free-boundary solve, whose residual is measured and gated at <= 1e-6.",
+  "no_o2_free_claims": "no O(N^2)-free claim for arbitrary kernels: all O(N log N) / O(N)-memory claims are scoped to the stationary BCCB/BTTB class on regular grids; the F1 center solve is O(nb^3)/O(nb^2) (dense center, measured nb) - disclosed, never hidden.",
+  "ties_and_negatives": "ties reported; failing arms reported honestly (WIN / NOT-validated / REFUTED / tie labels from the label table); no cherry-picked exclusions; the literal no-tieband sensitivity row is REQUIRED in A3 and the paper; benchmark verdict flips under the strict reading are visible.",
+  "rounding_note_0_1s": "the 0.1 s rounding disclosure is honored: iteration-3 results_summary per_arm_elapsed_sum (2296.4 s) vs measured total (2296.5 s) is a rounding artifact [honest-negative template]; iteration-4 summaries carry the same rounding-note convention.",
+  "artifact_names_unified": "iteration-4 artifact-name spelling UNIFIED across the plan and all downstream files: results/iter4/A1-F1.json, A2-F2.json, A3-multidomain.json, A4-tooling.json (plus meta.json and results_summary.json); no variant spellings (iteration-3 names A1-boundary.json / A2-masked.json / A3-multidomain.json / A4-scaling.json / A5-ablation.json / A6-tooling.json are INVALIDATED-HISTORY artifacts, cited only as such).",
+  "dataset_origin_simulation_marker": "every results/iter4 artifact carries dataset.origin and simulation_marker (or null for real Kaplan); simulated-only framing where applicable; h5py route with the pre-stated simulated-from-physics fallback (never silent).",
+  "container_cgroup_disclosure": "peak RSS envelope claim <= 7 GB (project convention) is superseded by the actual ~2 GB container cgroup; the plan is sized under ~2 GB; 24^3 dense Cholesky re-attempted only if the cgroup permits, else the container-forced PCG-1e-8 deviation is disclosed (iteration-3 ref_attempts_log / ref_convention_notes template [honest negative]).",
+  "3d_psd_caveat": "3D WSS-type symmetric embeddings are empirically non-PSD on the tested kernels/grids (n_neg 24^3 {289, 4578, 7662}; 48^3 {0, 1468, 4222}; 2D rbf 11 at 64x64 / 3 at 128x128 - Nexus note / A1 n_negative_eigenvalues_by_grid [honest negative]); n_neg recorded per grid/kernel; floored-spectrum solves with the floor error reported per-row as a MEASURED a-posteriori quantity (B5, Graham 70 convention); no theorem-backed floor bound claimed; no 3D exactness claim.",
+  "fallback_disclosure": "if F1 (and the A2/A3 lines) fail their gates again, the iteration-4 deliverable is the F3 negative-result + tooling study under the same pre-registered label table - acceptance = completeness of the honest-negative reporting (20-item honest-negatives list reported verbatim per results/analysis/analysis-iter3.json template; pools disclosed with per-domain breakdowns; tieband convention incl. the literal no-tieband sensitivity row; container-forced reference deviations disclosed) + tooling deliverables passing self-checks."
+ },
+ "corpus_anchors": {
+  "F1": [
+   "45 Martucci (DST2/DCT symmetric-convolution classes; DST2 empirically superior [honest negative])",
+   "66 Trench (exact O(N^2) Toeplitz inversion) / 67 Gohberg-Semencul (exact Toeplitz/Hankel inverse representation)",
+   "73 Stewart (stabilized superfast Toeplitz solve, O(n log^3 n) - A3/B4-unified exponent)",
+   "54 Ambikasaran HSS (2D/3D structured direct solve re-seeding candidate)",
+   "70 Graham-Kuo-Nuyens-Scheichl-Sloan (CEM PSD conditions, general dimension; CIRCULANT-class floor-error conventions - no DCT/DST-class PSD floor bound; B5)",
+   "72 Barrowes-Teixeira-Kong (3D multilevel block-Toeplitz matvec, O(N log N))",
+   "74 Strang 1999 (DCT/DST as eigenbasis of symmetric-boundary operators)",
+   "41-44, 52 (embedding + circulant/BTTB preconditioner lineage)",
+   "53 Woodbury (the replaced approximate component)",
+   "69 Templates (tolerance-based comparison convention)"
+  ],
+  "F2": [
+   "71 Frangella-Tropp-Udell (randomized Nystrom preconditioning of SPD/regularized systems)",
+   "46-52 (ADMM/FISTA splitting family, retained as the outer loop structure)",
+   "42 Strang / 43 T. Chan / 44 Chan-Jin / 52 Ng (circulant/BTTB preconditioner lineage)",
+   "69 Templates (tolerance-based comparison convention)",
+   "54 HSS (structured direct alternatives)",
+   "A5 ablation evidence (Anderson essential) is execution evidence, not corpus"
+  ],
+  "F3": [
+   "review.md 'FAIL-feedback-informed strategy families' F3; analysis-gate reviewers' Significance 3 note; A6/G8 tooling (boundary-controlled GRF generator), A4 scaling, A5 Anderson-essential ablation, A3 not-refuted-with-sensitivity, the 20-item honest-negatives list"
+  ]
+ },
+ "meta_json_convention": {
+  "file": "results/iter4/meta.json",
+  "fields": [
+   "iteration = 4",
+   "plan_ref = ideas/experiments/experiment-plan-iter4.json",
+   "proposal_ref = ideas/proposal-iter4-v4.json",
+   "T1b_citation_lock = results/iter2/T1b-CG-masked-train.json only (rate means 245.1/276.1/280.9 @ tol 1e-8, span 233-291, per-field residual 4.69e-9..9.81e-9, RMSE 0.529-0.541); EXECUTION_NOTES/analysis.json pre-fix figures SUPERSEDED, never cited",
+   "n_negative_eigenvalues_recorded = True (per grid/kernel: 24^3 {matern32: 289, matern52: 4578, rbf: 7662}; 48^3 {0, 1468, 4222}; 2D rbf 11 at 64x64 / 3 at 128x128; 320x320 rbf 2)",
+   "honest_framing = classical-components guard verbatim (Martucci 45 DCT/DST; ADMM/FISTA 46-52; Ambikasaran HSS 54; Trench 66; Gohberg-Semencul 67; Stewart 73 O(n log^3 n); Graham 70 circulant-class CEM PSD conditions only; Barrowes 72; Strang 42/74; T. Chan 43; Chan-Jin 44; Ng 52; Templates 69) - no new-mathematics claim; no SOTA-ENSO claim; no O(N^2)-free claim outside the stationary BCCB/BTTB class; iteration-3 artifacts INVALIDATED HISTORY (honest negatives only)",
+   "invalidated_history_banner = results/iter3/*.json cited ONLY as honest negatives under the G9+ attribution",
+   "rounding_note = 0.1 s rounding convention (iteration-3 template: per_arm_elapsed_sum 2296.4 vs measured total 2296.5 s)"
+  ]
+ },
+ "code_responsibilities": {
+  "scripts/fft_krr_embed.py": "EXTEND: add the DST2-embedding exact band solve path per the operator equation WTT = M^{-1}[T,T] - whole-sample-symmetric (2H-1)x(2W-1) [3D analog] DST2-class first-column embedding (embed_wss_dst2); spectral solve of the embedded system (floor at 0 disclosed via n_neg); Woodbury-center reduced system assembly on the band index set T (WTT = M^{-1}[T,T]; dense symmetric center; SPD post-floor+ridge); exact band solve (dense Cholesky-class factor; per-chain Toeplitz/Hankel solves via scipy.linalg.solve_toeplitz, Trench 66 / Gohberg-Semencul 67; Stewart 73 superfast attempted-if-budget; HSS 54 attempted-if-budget); map-back alpha = a0 - M^{-1}u in the spectral domain; residuals on the exact free operator (amatvec_nd); support-rank measurement S = {cells: |H_r| > 1e-6 * max|H_r|} (rank s, distance w_s, coverage s/|T_w|); cond(WTT) estimate per grid; w-sweep {1,2,3,4} + w_design with fail-fast; existing embed/spectral/preconditioner machinery reused.",
+  "scripts/grf_boundary.py": "REUSE: boundary-controlled GRF generator (free / Dirichlet-zero / Neumann-zero / mixed boundary-value sets; stationary kernels; Paciorek-Schervish non-stationary path; seeds 0-19) - A4 selfcheck + A1/A2/A3 data targets.",
+  "scripts/baselines.py": "REUSE: dense KRR (exact Cholesky subsample <= 4000), standard PCG (T1b convention), KISS-GP, RFF.",
+  "scripts/metrics.py": "REUSE: rmse/r2/ResourceRecorder + est_spectral_fit_flops / est_spectral_bytes for accuracy-per-flop / accuracy-per-byte.",
+  "scripts/data_gen.py": "REUSE for synthetic GRF fields and the Kaplan simulated-from-physics fallback stand-in (with simulation_marker).",
+  "scripts/run_iter4.py": "NEW orchestrator: runs arms A1-F1, A2-F2, A3-multidomain, A4-tooling within per-arm budgets and the hard 45-min envelope; enforces the pre-committed truncation priority (claim rows first, diagnostic rows second, seeded subset last), the budgeted subsets (2D 128x128 seeds 0-9; 3D 24^3 seeds 0-9 declared, 0-2 per kernel under envelope pressure), seed/mask/split locks; writes results/iter4/A1-F1.json, A2-F2.json, A3-multidomain.json, A4-tooling.json, meta.json, results_summary.json with dataset.origin, simulation_marker, seeds, w_design/w_sweep/rho, n_neg per grid/kernel, cond(WTT), support rank/distance/coverage, per-domain + pooled medians, win-rule labels; enforces the 0.1 s rounding-note convention.",
+  "scripts/verify_iter4.py": "NEW verification runner: re-reads results/iter4/*.json; recomputes the pooled medians (2D claim pool only for S1'); checks win-rule verdicts against the label table (S1'/S2'/benchmark); checks per-clause attribution (clause + grid named); checks n_neg / floor-caveat / tieband-no-tieband-row / pool-n pre-disclosure presence; checks artifact-name spelling (A1-F1.json, A2-F2.json, A3-multidomain.json, A4-tooling.json); checks the T1b citation lock (canonical values only, no pre-fix figures).",
+  "artifact_schema": "every results/iter4/*.json records: arm, dataset.origin, simulation_marker (or null), kernels, lambda, w_design/w_sweep/rho, seeds, per-domain + pooled medians, n_negative_eigenvalues per grid/kernel, cond(WTT) (A1-F1), support rank s / distance w_s / coverage s/|T_w| (A1-F1), wall_clock_s, peak_rss_gb, residual/tolerance, win-rule verdict (win / NOT-validated / REFUTED / tie) with clause attribution."
+ },
+ "verification": {
+  "planned_checks": [
+   "plan parses as JSON (python3 json.load)",
+   "win-rule label table matches proposal-iter4-v4 win_rules with the 5 reviewer-r2 wording items applied; the historical pooled-pool literal (pooling 2D and 3D) appears nowhere",
+   "budgets: per-arm caps stated (A1 <= 20, A2 <= 18, A3 <= 7, A4 <= 2), declared total <= 45 with the inter-arm sum note",
+   "honest-framing section complete (T1b citation lock + EXECUTION_NOTES/analysis.json superseded notes + iteration-3 invalidated-history banner + classical-components guard)",
+   "artifact-name spelling unified (A1-F1.json, A2-F2.json, A3-multidomain.json, A4-tooling.json)",
+   "no pre-fix T1b figures anywhere; iteration-3 numbers appear ONLY as honest negatives",
+   "ASCII-only content"
+  ]
+ }
+}

@@ -1,0 +1,34 @@
+{
+  "id": "proposal-it3-v1",
+  "iteration": 3,
+  "round": 1,
+  "status": "proposed",
+  "title": "Leakage-verified exact spectral kernel ridge regression on real climate grids: a CPU-only future-blind benchmark with calibrated reconstruction intervals and ENSO-transfer evaluation",
+  "problem": "On regular lat/lon climate fields, exact kernel ridge regression with a stationary kernel requires an N x N solve, so scalable treatments default to approximate routes (RFF, Nystrom) or structured but non-exact grid GPs. The closest circulant-KRR sibling in the corpus (Yin et al. 2019) is an approximate sketch on non-grid data, and none of the spectral/structured kernel papers (KISS-GP, Fastfood, GPyTorch) reports peak RSS or flop/byte cost on real climate anomaly fields. Climate-ML evaluation is benchmark-first with random-split leakage (corpus gaps G1-G3, now documented in the Gap Coverage section with entries 26-40). Missing: a systematic, honest, CPU-only evaluation of exact circulant-block KRR on real SST anomaly fields under a leakage-verified, future-blind protocol with resource accounting as a first-class axis.",
+  "method": "Exact BCCB spectral KRR on the Kaplan SST v2 5-deg anomaly grid (36x72): alpha = irfft2(rfft2(y) / max(rfft2(c_torus), 0) + lambda), O(N log N) time / O(N) memory, CPU-only. Sentinel-aware data handling (NCAR missing -9.96921e36 -> missing mask; impute with valid-cell monthly mean; missing cells excluded from every evaluation target). Four operating modes: (i) spectral masked-cell reconstruction; (ii) kernel-consistent Nino3.4 box functional (area-weighted box mean via spectral cross-correlation); (iii) frequency-domain transfer forecast (per-mode ridge transfer function H = sum(conj(F[:-h])F[h:])/(sum|F[:-h]|^2 + lam), DC pinned to 1, applied forward in time); (iv) FFT-preconditioned CG for masked-input exact free-boundary solves. Calibrated uncertainty via calendar-month-block conformal intervals (conformity score = absolute residual per held-out cell; threshold = 0.90 quantile of the 60 terminal in-train same-calendar-month scores; per-kernel). Significance via pre-registered win rules (transfer beats persistence AND train-only climatology AND train-only AR(1) in RMSE and skill, with margin vs the best baseline exceeding the year-block bootstrap 95% CI; support semantics fixed before test results).",
+  "experiment_design": {
+    "data": "Kaplan SST v2 monthly anomalies 1856-01..2023-01 (2005 months, 36x72); train 1856-01..2015-12 (1920 months); test 2016-01..2022-12 (84 months); 2023-01 excluded from both; temporal-block CV inside train; 2015/16 El Nino peak (Dec 2015) inside train so only the decay phase is test-side.",
+    "arms": [
+      "P0 pilot exactness gate on a real test-window field (spectral == dense floored-torus to 1e-6 rel; free-gap reported per kernel)",
+      "T1a masked-cell reconstruction on the 84 test months (random 10/30/50% + halo w1/w2/w4) with per-kernel calendar-month conformal coverage diagnostics",
+      "T1b masked-input exact free-boundary PCG (10/30/50%, tol 1e-8, max 3000 iters; rel-residual > 10x tol -> relaxed-tol marker, never silent)",
+      "T2 Nino3.4 functional index regression, 5-fold temporal-block CV vs zero-model and direct ridge head",
+      "T3 transfer forecast h in {1,3,6,12} vs persistence/climatology/AR(1); year-block bootstrap; seam (Dec-Jan boundary skill split) + truncation sweep + 2015-excluded-vs-retained",
+      "B sklearn baselines (exact subsample n in {2k,5k,10k} capped by valid-cell pool 4.8k; Nystrom 5000; RFF 5000) on the same real anomaly cells",
+      "S O(N log N)/O(N) scaling (synthetic grids through N=10,368; 0.25-deg resource extrapolation)"
+    ],
+    "critique_items_pinned": {
+      "a_grid_resolution_sensitivity": "identical protocol on the native 5-deg grid vs a 2x2-coarsened 10-deg version of the SAME anomaly fields (protocol stability check); explicit h=12 ENSO floor analysis with the same bootstrap machinery (transfer RMSE 0.923 vs AR(1) 0.879 vs climatology 0.773, skill -0.427)",
+      "b_real_data_threats": "Kaplan reconstruction-smoothing caveat stated (dataset is an optimally interpolated reconstruction; index std 0.794); land/polar missing masks (53.4% of cells missing, 100% polar caps -> valid-only evaluation); PCG non-convergence fallback pre-stated",
+      "c_coverage_tolerances": "global 0.90 +- 0.06; seam subset (2016-2017) 0.90 +- 0.06; decay-phase subset (2016, n=12) 0.90 +- 0.12; per calendar-month-block coverage reported separately",
+      "d_cholesky_ratio_control": "exact subsample arm on the same real anomaly cells, RBF kernel, one accuracy metric (pooled-cell RMSE on 2000 valid test cells), one flop estimate per method, bootstrap CI on accuracy-per-flop and accuracy-per-byte ratios",
+      "e_trailing_discard": "explicit 1-3 trailing-month (year) discard: truncation sweep cutoffs 2014-12 / 2013-12 / 2012-12 plus 2015-excluded-vs-retained split, test window FIXED 2016-2022",
+      "f_calibrated_interval_acceptance": "acceptance = mean |coverage - nominal| <= 0.06 globally with per-mask coverage reported; deviation disclosed in the abstract/limitations"
+    },
+    "win_rule": "supported at horizon h iff spectral transfer beats persistence AND train-only climatology AND train-only AR(1) in RMSE AND skill score AND margin vs best baseline (MSE) exceeds the year-block bootstrap 95% CI half-width; refuted if > half of horizons fail; indeterminate otherwise. No post-hoc reinterpretation.",
+    "resources": "CPU-only (NumPy/SciPy/scikit-learn; h5py for data reading), 12 cores / 7 GB / <= 90 min; measured full-benchmark 108 s wall, 1.55 GB peak RSS.",
+    "honest_framing": "no FFT-kernel newness, no spectral-regression newness, no SOTA-ENSO-skill claims; contribution = concrete circulant-block CPU implementation + real-data reconstruction/index benchmark + leakage-verified evaluation protocol + resource accounting; every artifact carries dataset.origin=real-kaplan-sst-v2 and no simulation marker."
+  },
+  "expected_significance": "Masked-cell reconstruction RMSE 0.0816-0.0880 (matern32, ~7-8% of field anomaly std) with calibrated coverage diagnostics; functional index RMSE 0.0856 vs direct ridge head 0.270 (3.2x) and zero-model 0.795 under strict temporal-block CV at O(N log N) cost; honest negative results documented (h=6 beats persistence but not AR(1); h=12 floor; spring-barrier skill degradation) under the pre-registered win rule; resource accounting 108 s / 1.55 GB; O(N) memory scaling.",
+  "originality": "(1) first CPU-only exact BCCB-KRR real-data benchmark with resource accounting in the indexed corpus (Yin 2019 is approximate and non-grid); (2) integrated leakage-verified evaluation protocol as a reusable practice (non-exchangeable conformal + bootstrap-DM win rules + seam/decay checks + truncation sweep), closing corpus gap G3; (3) honest negative-result reporting under pre-registered semantics."
+}

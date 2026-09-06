@@ -1,0 +1,29 @@
+{
+ "arm": "P0-pilot-gate-real",
+ "dataset.origin": "real-kaplan-sst-v2",
+ "simulation_marker": null,
+ "grid": [
+  36,
+  72
+ ],
+ "lambda": 0.001,
+ "field_index": 1920,
+ "results": {
+  "matern32": {
+   "spectral_vs_dense_torus_rel": 2.6179808940043544e-12,
+   "spectral_vs_dense_torus_inf": 1.7079315739465528e-09,
+   "torus_vs_free_gap_rel": 0.9496184881597887,
+   "torus_vs_free_gap_inf": 554.2726732408568
+  },
+  "rbf": {
+   "spectral_vs_dense_torus_rel": 1.1169587519107226e-12,
+   "spectral_vs_dense_torus_inf": 2.3642883206775878e-09,
+   "torus_vs_free_gap_rel": 0.1159217824943169,
+   "torus_vs_free_gap_inf": 247.60785230389604
+  }
+ },
+ "gate_definition": "spectral == dense floored-torus to 1e-6 rel (solve exactness); free-gap reported per kernel",
+ "gate_passed": true,
+ "wall_clock_s": 0.79,
+ "peak_rss_gb": 0.907
+}

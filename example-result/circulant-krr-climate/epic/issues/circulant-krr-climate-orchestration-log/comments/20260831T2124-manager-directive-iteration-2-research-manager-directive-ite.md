@@ -1,0 +1,3 @@
+# 2026-08-31T21:24 -- Comment
+
+**Agent**: [directive: iteration-2] Research manager directive: iterate project circulant-krr-climate back to the HYPOTHESIS IDEATION step, targeting a HIGHER-SIGNIFICANCE result. Constraint modification (sanctioned): REAL climate data is now permitted -- the Python stack limitation 'numpy/scipy/sklearn/matplotlib only' is lifted for data reading only (h5py added via apt for netCDF-4/HDF5; CPU-only 12-core/7GB/<=90-min envelope unchanged). Real-data target: NOAA PSL Kaplan SST v2 monthly anomalies (sst.mon.anom.nc, 5-deg 72x36 grid). Prior iteration's [simulated] results remain as history/benchmark; iteration 2 aims for real-data validation + a strong, honestly-framed result (significance upgrade).

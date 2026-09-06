@@ -1,0 +1,20 @@
+{
+  "data_mode": "real",
+  "source": "https://psl.noaa.gov/thredds/dodsC/Datasets/kaplan_sst/sst.mon.anom.nc.ascii?sst[0:1:1][0:1:1][0:1:1]",
+  "log": [
+    {
+      "candidate": "psl-thredds-dodsC-kaplan-sst-anom-ascii-small",
+      "status": 200,
+      "bytes": 508,
+      "head": "Dataset {\n    Grid {\n     ARRAY:\n        Float32 sst[time = 2][lat = 2][lon = 2];\n     MAPS:\n        Float64 time[time ="
+    },
+    {
+      "candidate": "full-slice",
+      "status": 200,
+      "bytes": 31711,
+      "head": "Dataset {\n    Grid {\n     ARRAY:\n        Float32 sst[time = 1][lat = 36][lon = 72];\n     MAPS:\n        Float64 time[time"
+    }
+  ],
+  "probe_file": "/workspace/research-project-manager/projects/circulant-krr-climate/results/raw/kaplan_probe_example.txt",
+  "full_slice_file": "/workspace/research-project-manager/projects/circulant-krr-climate/results/raw/kaplan_full_slice.txt"
+}

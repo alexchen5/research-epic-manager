@@ -1,0 +1,38 @@
+{
+ "total_wall_clock_s": 2296.5,
+ "peak_rss_gb": 0.9786376953125,
+ "arms": {
+  "A1": {
+   "verdict": "NOT-validated",
+   "rows": 141,
+   "elapsed_s": 1530.3,
+   "exceeded": true
+  },
+  "A2": {
+   "verdict": "REFUTED",
+   "rows": 282,
+   "elapsed_s": 385.1,
+   "exceeded": false
+  },
+  "A3": {
+   "verdict": "not-refuted",
+   "rows": 66,
+   "elapsed_s": 360.6,
+   "exceeded": false
+  },
+  "A4": {
+   "rows": 3,
+   "elapsed_s": 2.1
+  },
+  "A5": {
+   "rows": 6,
+   "elapsed_s": 18.3
+  },
+  "A6": {
+   "selfcheck": true,
+   "elapsed_s": 0.0
+  }
+ },
+ "per_arm_elapsed_sum": 2296.4,
+ "rounding_note": "total_wall_clock_s is the measured wall clock (2296.5 s); per-arm elapsed_s values are individually rounded, so their sum (2296.4 s) differs by 0.1 s (rounding artifact, not a timing error)."
+}

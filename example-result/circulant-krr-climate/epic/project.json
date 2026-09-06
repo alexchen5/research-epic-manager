@@ -1,0 +1,1439 @@
+{
+ "project": "circulant-krr-climate",
+ "epic": "circulant-krr-climate",
+ "status": "synthesised",
+ "project_workspace": "/workspace/research-project-manager/projects/circulant-krr-climate",
+ "control_issue_id": "circulant-krr-climate-orchestration-log",
+ "config": {
+  "project": {
+   "name": "circulant-krr-climate",
+   "topic": "Exact kernel ridge regression on regular-grid climate fields via block-circulant structure exploitation and the FFT",
+   "description": "Research project with the primary research question being an ALGORITHMIC / METHODOLOGICAL innovation in machine learning: making exact kernel ridge regression (and GP-style predictive uncertainty) tractable on regular latitude/longitude climate grids under consumer hardware by exploiting the block-circulant structure of stationary kernels with FFT-based solves (O(N log N) training, O(N) memory, no N-by-N kernel matrix). AI-for-climate is the experimental substrate: sea-surface temperature anomaly fields for field reconstruction/gap-filling and ENSO (Nino3.4 index) regression. Compared against scikit-learn baselines: exact KRR (subsampled), Nystrom approximation, and Random Fourier Features. Deliverable: a compiled 4-page PDF (4 pages main text excluding references) in NeurIPS-workshop LaTeX formatting compiled with tectonic, written as an ML methods paper with climate-domain experiments.\n"
+  },
+  "research": {
+   "boundaries": [
+    "PRIMARY research question is algorithmic/methodological: exact kernel ridge regression on regular-grid climate fields via block-circulant structure + FFT (training and prediction in O(N log N), memory O(N), no explicit NxN kernel matrix); the climate domain is the experimental substrate, not the claimed contribution",
+    "Methodological claims: (1) the circulant-block algorithm and its CPU-only NumPy/SciPy implementation; (2) honest resource accounting (wall-clock, peak RSS, flop/memory scaling) as first-class result axes; (3) accuracy-per-flop and accuracy-per-byte comparison against scikit-learn baselines: exact KRR on subsamples, Nystrom, Random Fourier Features; (4) honest block/leave-one-field-out cross-validation (no random point splits leaking spatial/temporal autocorrelation), calibration of predictive intervals, and applicability analysis",
+    "Experimental substrate: publicly available sea-surface temperature (SST) anomaly fields (open NOAA-family source if fetchable; otherwise bundled/synthetic-from-physics fallback WITH explicit simulation markers in every artifact and the paper); tasks: masked-field reconstruction (gap-filling) and Nino3.4 (ENSO) index regression",
+    "All quantitative results come from our own CPU-only runs; every number in the paper traces to an artifact JSON produced by the analysis code; data/model/container claims match artifacts exactly",
+    "Honest positioning: spectral/FFT kernel techniques exist in the literature; the contribution is the concrete circulant-block algorithm for grid fields, its consumer-hardware implementation, and the first systematic CPU-only benchmark of exact-vs-randomized kernel methods on climate fields under memory constraints",
+    "Deliverable is a compiled 4-page PDF: 4 pages of main text excluding references, NeurIPS-workshop LaTeX style compiled with tectonic (verified on this host); structure: abstract, introduction, related work, methods, experiments/results, discussion/limitations, references",
+    "Iteration 2 (research-manager directive, 2026-08-31): real data utilisation is permitted -- reading real netCDF-4/HDF5 climate data via h5py (installed via apt) is allowed; all other boundaries (CPU-only, ~12 cores, ~7 GB, <=90 min, honest claims, no FFT-kernel newness claim) unchanged"
+   ]
+  },
+  "execution": {
+   "constraints": [
+    "CPU-only: no GPU or accelerator hardware; ~12 cores, ~7 GB RAM available",
+    "Python scientific stack limited to what is installed: numpy, scipy, scikit-learn, matplotlib (no pandas/statsmodels/torch; stdlib otherwise)",
+    "Total wall-clock compute budget for all experiment runs: <= 90 minutes on this machine",
+    "All datasets publicly available and < 2 GB total on disk; if network fetch fails, fall back to bundled/synthetic-from-physics data ONLY with explicit simulation markers in all artifacts and the paper",
+    "Analysis code must run end-to-end via a single script or Makefile target and be committed to the project workspace repo"
+   ],
+   "workspace": "research-project-manager"
+  },
+  "planning": {
+   "dynamic_issues": true,
+   "issue_template": "default"
+  },
+  "autonomy": {
+   "mode": "autonomous"
+  },
+  "dispatch": {
+   "max_concurrent": 2,
+   "retry_on_block": true,
+   "max_retries": 3,
+   "collection_timeout": 600,
+   "manager_model": "auto",
+   "issue_model": "auto"
+  },
+  "ideation": {
+   "max_rounds": 3,
+   "reviewers": 2,
+   "on_exhaust": "block"
+  },
+  "review": {
+   "default_criteria": [
+    "correctness",
+    "clarity",
+    "coverage"
+   ],
+   "pass_threshold": 4,
+   "max_hypothesis_review_loops": 2,
+   "max_experiment_review_loops": 2,
+   "max_writeup_review_loops": 2,
+   "max_total_project_loops": 8,
+   "_writeup_loop_present": true
+  },
+  "synthesis": {
+   "format": "pdf-paper-4page",
+   "model": "auto",
+   "max_review_rounds": 0
+  },
+  "perspectives": [
+   "evaluate-for-correctness",
+   "evaluate-for-clarity",
+   "evaluate-for-algorithmic-novelty"
+  ],
+  "verifiers": {
+   "code": "python3 scripts/verify_code.py",
+   "data": "python3 scripts/verify_data.py"
+  }
+ },
+ "planning": {
+  "dynamic_issues": true
+ },
+ "issues": [
+  {
+   "issue_id": "circulant-krr-climate-orchestration-log",
+   "title": "Orchestration log (project-level events)",
+   "stage": "control",
+   "dependencies": [],
+   "issue_type": "control",
+   "status": "open",
+   "issue_path": "issues/circulant-krr-climate-orchestration-log/ISSUE.md",
+   "anchor": true,
+   "control": true,
+   "seeded_from": null
+  },
+  {
+   "issue_id": "literature-review-anchor-r1",
+   "title": "Literature review (structured kernel methods, randomized approximations, climate grid substrate)",
+   "stage": "literature_review",
+   "dependencies": [],
+   "issue_type": "anchor",
+   "status": "resolved",
+   "issue_path": "issues/literature-review-anchor-r1/ISSUE.md",
+   "anchor": true,
+   "acceptance_criteria": [
+    "Annotated bibliography >= 20 entries with provenance flags",
+    ">= 3 motivated gaps the circulant-block KRR algorithm addresses",
+    "Concepts section with 15-30 terms",
+    "docs/literature-review/review.md committed on literature-review-anchor-r1"
+   ],
+   "seeded_from": null,
+   "cost": {
+    "input_tokens": 60000,
+    "output_tokens": 25000,
+    "cache_read_tokens": 20000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   }
+  },
+  {
+   "issue_id": "hypothesis-ideation-r1",
+   "title": "Hypothesis ideation (proposal search and refinement)",
+   "stage": "hypothesis",
+   "dependencies": [
+    "literature-review-anchor-r1"
+   ],
+   "issue_type": "ideation",
+   "status": "resolved",
+   "issue_path": "issues/hypothesis-ideation-r1/ISSUE.md",
+   "anchor": true,
+   "acceptance_criteria": [
+    ">= 2 [proposal-v<n>] comments on the thread OR a recorded stop condition",
+    "ideas/proposal-final.json written on hypothesis-ideation-r1 with components, revision_history, stop_condition, aggregate_scores, flagged",
+    "Ideation critiques dispatcher-posted ([review-critique: ideation-r<n>])",
+    "Hypothesis gate verdict recorded in review_state.verdict_history"
+   ],
+   "seeded_from": "stage-2 entry (JIT); seeded [seeding]",
+   "cost": {
+    "input_tokens": 90000,
+    "output_tokens": 40000,
+    "cache_read_tokens": 30000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   }
+  },
+  {
+   "issue_id": "experiment-planning-anchor-r1",
+   "title": "Experiment planning (CPU-only plan from approved proposal)",
+   "stage": "experiment_planning",
+   "dependencies": [
+    "hypothesis-ideation-r1"
+   ],
+   "issue_type": "anchor",
+   "status": "resolved",
+   "issue_path": "issues/experiment-planning-anchor-r1/ISSUE.md",
+   "anchor": true,
+   "acceptance_criteria": [
+    "ideas/experiments/experiment-plan.json written on experiment-planning-anchor-r1",
+    "Per-arm budget table summing well under 90 min / 7 GB / 12 cores",
+    "Resource accounting mandated in every results table",
+    "Simulation-marker disclosure plan for the synthetic fallback"
+   ],
+   "seeded_from": "stage-3 entry (JIT); seeded [seeding]",
+   "cost": {
+    "input_tokens": 50000,
+    "output_tokens": 30000,
+    "cache_read_tokens": 20000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   }
+  },
+  {
+   "issue_id": "experiment-execution-anchor-r1",
+   "title": "Experiment execution (CPU-only runs, 90-min budget)",
+   "stage": "experiment_execution",
+   "dependencies": [
+    "experiment-planning-anchor-r1"
+   ],
+   "issue_type": "anchor",
+   "status": "resolved",
+   "issue_path": "issues/experiment-execution-anchor-r1/ISSUE.md",
+   "anchor": true,
+   "acceptance_criteria": [
+    "scripts/run_pipeline.sh end-to-end; wall-clock log; abort at 85 min",
+    "P0 pilot gate 32x32 exactness 1e-6 + embedding-error sweep",
+    "T1a halo/LOFO/block CV + optimism arm; T1b CG; T2 functional + ablation; baselines + matched-flops; scaling arm",
+    "Every artifact JSON with dataset.origin markers and resource axes",
+    "Committed on experiment-execution-anchor-r1, merged to master; total <= 90 min"
+   ],
+   "seeded_from": "stage-4 entry (JIT); seeded [seeding]",
+   "cost": {
+    "input_tokens": 60000,
+    "output_tokens": 35000,
+    "cache_read_tokens": 20000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   }
+  },
+  {
+   "issue_id": "analysis-anchor-r1",
+   "title": "Analysis of experiment results",
+   "stage": "analysis",
+   "dependencies": [
+    "experiment-execution-anchor-r1"
+   ],
+   "issue_type": "anchor",
+   "status": "resolved",
+   "issue_path": "issues/analysis-anchor-r1/ISSUE.md",
+   "anchor": true,
+   "acceptance_criteria": [
+    "results/analysis.json + results/claims.json on analysis-anchor-r1",
+    "Every claim traceable to artifact path + key",
+    "Data-mode disclosure + honest negative/positive claims",
+    "Committed on analysis-anchor-r1, merged to master"
+   ],
+   "seeded_from": "stage-5 entry (JIT); seeded [seeding]",
+   "cost": {
+    "input_tokens": 40000,
+    "output_tokens": 30000,
+    "cache_read_tokens": 15000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   }
+  },
+  {
+   "issue_id": "paper-writeup-anchor-r1",
+   "title": "Final paper synthesis (Phase E)",
+   "stage": "paper_writeup",
+   "dependencies": [
+    "analysis-anchor-r1"
+   ],
+   "issue_type": "anchor",
+   "status": "resolved",
+   "issue_path": "issues/paper-writeup-anchor-r1/ISSUE.md",
+   "anchor": true,
+   "acceptance_criteria": [
+    "4-page main.pdf via tectonic",
+    "Simulated-data disclosure + honest framing",
+    "Claims traceable to artifacts",
+    "Writeup clarity gate PASS (Clarity >= 4)",
+    "validate_execution.py Checks 1-11 pass",
+    "project.json status synthesised"
+   ],
+   "seeded_from": "stage-6 entry (JIT); seeded [seeding]",
+   "cost": {
+    "input_tokens": 30000,
+    "output_tokens": 20000,
+    "cache_read_tokens": 10000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   }
+  },
+  {
+   "issue_id": "hypothesis-ideation-r2",
+   "title": "Ideation (iteration 2): higher-significance direction with real data",
+   "stage": "hypothesis",
+   "dependencies": [
+    "literature-review-anchor-r1"
+   ],
+   "issue_type": "ideation",
+   "status": "resolved",
+   "issue_path": "issues/hypothesis-ideation-r2/ISSUE.md",
+   "anchor": false,
+   "acceptance_criteria": [
+    "Proposal triple (Problem/Method/Experiment Design) targeting higher significance",
+    "Real-data utilisation (Kaplan SST v2) in method or evaluation",
+    "Honest framing preserved (no overclaiming; contribution = circulant-block CPU implementation + real-data benchmark)",
+    "Stop condition recorded (pass/cap) with aggregate scores",
+    "ideas/proposal-final.json updated (iteration 2) on hypothesis-ideation-r2 branch, merged to master"
+   ],
+   "seeded_from": "iteration-2 re-entry (research-manager directive); seeded [seeding]"
+  },
+  {
+   "issue_id": "hypothesis-rework-r1",
+   "title": "Hypothesis rework (gate FAIL r1; items 1-7 folded into proposal-v4)",
+   "stage": "hypothesis",
+   "dependencies": [
+    "hypothesis-ideation-r2"
+   ],
+   "issue_type": "rework",
+   "status": "resolved",
+   "issue_path": "issues/hypothesis-rework-r1/ISSUE.md"
+  },
+  {
+   "issue_id": "literature-review-rework-r1",
+   "title": "Literature grounding rework (gate FAIL r2 re-entry; corpus enriched 492 entities)",
+   "stage": "literature_review",
+   "dependencies": [
+    "hypothesis-ideation-r2"
+   ],
+   "issue_type": "rework",
+   "status": "resolved",
+   "issue_path": "issues/literature-review-rework-r1/ISSUE.md"
+  },
+  {
+   "issue_id": "hypothesis-ideation-r3",
+   "title": "Hypothesis ideation (iteration 3): re-entered with enriched corpus; proposal-it3 final",
+   "stage": "hypothesis",
+   "dependencies": [
+    "literature-review-rework-r1"
+   ],
+   "issue_type": "ideation",
+   "status": "resolved",
+   "issue_path": "issues/hypothesis-ideation-r3/ISSUE.md"
+  },
+  {
+   "issue_id": "literature-review-r3",
+   "title": "Literature review (iteration 3): boundary-aware fast kernel solves, spectral-spatial alternating minimization, low-rank+Toeplitz corrections, non-stationary GRF simulation, grid benchmark tasks",
+   "stage": "literature_review",
+   "dependencies": [
+    "literature-review-anchor-r1"
+   ],
+   "issue_type": "rework",
+   "status": "resolved",
+   "issue_path": "issues/literature-review-r3/ISSUE.md",
+   "anchor": false
+  },
+  {
+   "issue_id": "hypothesis-ideation-r4",
+   "title": "Hypothesis ideation (iteration 3): novelty-upgrade proposal (RE-ABLRC boundary correction; SSAM-CAM masked solver) with pre-registered >=3x PCG speedup and >=50% free-boundary-gap-reduction thresholds; multi-domain benchmark",
+   "stage": "hypothesis",
+   "dependencies": [
+    "literature-review-r3"
+   ],
+   "issue_type": "ideation",
+   "status": "resolved",
+   "issue_path": "issues/hypothesis-ideation-r4/ISSUE.md"
+  },
+  {
+   "issue_id": "experiment-planning-anchor-r2",
+   "issue_type": "stage-anchor",
+   "status": "resolved",
+   "issue_path": "issues/experiment-planning-anchor-r2/ISSUE.md",
+   "anchor": true,
+   "stage": "experiment_planning",
+   "acceptance_criteria": [
+    "ideas/experiments/experiment-plan-iter3.json written: arms A1-A6 + joint S1xS2, datasets, metrics, CV/leakage rules, baseline sizes, kernel/lambda schedule, dense references (Cholesky 64x64/24^3; 128x128 PCG BTTB @1e-8 dense-equivalent), per-arm budget table summing <= 90 min",
+    "Win rules pre-registered exactly per plan-iter3-reconciliation-notes.md (single label table; w<=min(H,W)/8 guard; residual cap <= 1e-6; DCT/DST >=50%-capture consequence; S2 >=3x @ KKT <1e-6, REFUTED <1.5x; benchmark negatives)",
+    "S2 termination = KKT residual of shared masked-Gram (P_m K P_m^T + lam I) w = y_m, relative, identical convention to PCG (exact range 4.69e-9..9.81e-9 cited)",
+    "MNIST-784 arm pre-registered (RBF on pixel coords, stationary BCCB on flattened raster, held-out digits + patch masks)",
+    "Single end-to-end run target (scripts/run_iter3.py or run_pipeline_iter3.sh) committing results/iter3/*.json",
+    "Resource accounting mandated in every results table"
+   ],
+   "seeded_from": "iteration-3 hypothesis PASS (route experiment_planning); seeded [seeding]"
+  },
+  {
+   "issue_id": "experiment-execution-anchor-r2",
+   "issue_type": "stage-anchor",
+   "status": "resolved",
+   "issue_path": "issues/experiment-execution-anchor-r2/ISSUE.md",
+   "anchor": true,
+   "stage": "experiment_execution",
+   "seeded_from": "experiment_planning stage exit (plan artifact committed 844283a); seeded [seeding]"
+  },
+  {
+   "issue_id": "analysis-anchor-r2",
+   "issue_type": "stage-anchor",
+   "status": "superseded",
+   "issue_path": "issues/analysis-anchor-r2/ISSUE.md",
+   "anchor": true,
+   "stage": "analysis",
+   "seeded_from": "experiment_execution stage exit (execution anchor r2 resolved; tracker commit 43b17ba); seeded [seeding]"
+  },
+  {
+   "issue_id": "literature-review-rework-r2",
+   "issue_type": "stage-anchor",
+   "status": "resolved",
+   "issue_path": "issues/literature-review-rework-r2/ISSUE.md",
+   "anchor": true,
+   "stage": "literature_review",
+   "seeded_from": "analysis gate r2 FAIL routing -> literature_review (route_for_failure); [seeded-fail-feedback]"
+  },
+  {
+   "issue_id": "hypothesis-ideation-r5",
+   "issue_type": "stage-anchor",
+   "status": "resolved",
+   "issue_path": "issues/hypothesis-ideation-r5/ISSUE.md",
+   "anchor": true,
+   "stage": "hypothesis",
+   "seeded_from": "literature_review rework r2 resolved (JIT at stage entry); [seeding]"
+  },
+  {
+   "issue_id": "experiment-planning-anchor-r3",
+   "issue_type": "stage-anchor",
+   "status": "resolved",
+   "issue_path": "issues/experiment-planning-anchor-r3/ISSUE.md",
+   "anchor": true,
+   "stage": "experiment_planning",
+   "seeded_from": "hypothesis gate r2 PASS (proposal-iter4-v4); JIT at stage entry; [seeding]"
+  },
+  {
+   "issue_id": "analysis-anchor-r3",
+   "issue_type": "stage-anchor",
+   "status": "resolved",
+   "issue_path": "issues/analysis-anchor-r3/ISSUE.md",
+   "anchor": true,
+   "stage": "analysis",
+   "seeded_from": "execution anchor r3 resolved (iter4 artifacts 5c8c996); JIT at stage entry; [seeding]"
+  },
+  {
+   "issue_id": "writeup-anchor-r3",
+   "issue_type": "stage-anchor",
+   "status": "resolved",
+   "issue_path": "issues/writeup-anchor-r3/ISSUE.md",
+   "anchor": true,
+   "stage": "writeup",
+   "seeded_from": "analysis anchor r3 resolved (analyze-iter4.json de08484; gate PASS); JIT at stage entry; [seeding]"
+  }
+ ],
+ "dependencies": {
+  "hypothesis-ideation-r1": [
+   "literature-review-anchor-r1"
+  ],
+  "experiment-planning-anchor-r1": [
+   "hypothesis-ideation-r1"
+  ],
+  "experiment-execution-anchor-r1": [
+   "experiment-planning-anchor-r1"
+  ],
+  "analysis-anchor-r1": [
+   "experiment-execution-anchor-r1"
+  ],
+  "paper-writeup-anchor-r1": [
+   "analysis-anchor-r1"
+  ],
+  "hypothesis-ideation-r2": [
+   "literature-review-anchor-r1"
+  ],
+  "experiment-planning-anchor-r2": [
+   "hypothesis-ideation-r4"
+  ],
+  "experiment-execution-anchor-r2": [
+   "experiment-planning-anchor-r2"
+  ],
+  "analysis-anchor-r2": [
+   "experiment-execution-anchor-r2"
+  ],
+  "literature-review-rework-r2": [
+   "analysis-anchor-r2 (superseded via FAIL routing)",
+   "literature-review-anchor-r1 / -rework-r1 / -r3 (resolved history)"
+  ],
+  "hypothesis-ideation-r5": [
+   "literature-review-rework-r2"
+  ],
+  "experiment-planning-anchor-r3": [
+   "hypothesis-ideation-r5"
+  ],
+  "analysis-anchor-r3": [
+   "experiment-execution-anchor-r3"
+  ],
+  "writeup-anchor-r3": [
+   "analysis-anchor-r3"
+  ]
+ },
+ "stage_issues": {
+  "literature_review": [
+   "literature-review-anchor-r1",
+   "literature-review-rework-r1",
+   "literature-review-r3",
+   "literature-review-rework-r2"
+  ],
+  "hypothesis": [
+   "hypothesis-ideation-r1",
+   "hypothesis-ideation-r2",
+   "hypothesis-rework-r1",
+   "hypothesis-ideation-r3",
+   "hypothesis-ideation-r4",
+   "hypothesis-ideation-r5"
+  ],
+  "experiment_planning": [
+   "experiment-planning-anchor-r1",
+   "experiment-planning-anchor-r2",
+   "experiment-planning-anchor-r3"
+  ],
+  "experiment_execution": [
+   "experiment-execution-anchor-r1",
+   "experiment-execution-anchor-r2"
+  ],
+  "analysis": [
+   "analysis-anchor-r1",
+   "analysis-anchor-r2",
+   "analysis-anchor-r3"
+  ],
+  "paper_writeup": [
+   "paper-writeup-anchor-r1"
+  ],
+  "writeup": [
+   "writeup-anchor-r3"
+  ]
+ },
+ "artifacts": {
+  "literature_review": [
+   "docs/literature-review/review.md"
+  ],
+  "hypothesis": [
+   "ideas/proposal-iter4-v4.json"
+  ],
+  "experiment_planning": [
+   "ideas/experiments/experiment-plan-iter4.json"
+  ],
+  "analysis": [
+   "results/analyze-iter4.json"
+  ],
+  "paper_writeup": [
+   "docs/writeup-iter4.md"
+  ]
+ },
+ "interventions": [
+  {
+   "ts": "2026-08-31T21:24Z",
+   "issue_id": "circulant-krr-climate-orchestration-log",
+   "directive_digest": "iteration-2",
+   "note": "start iteration-2: re-enter hypothesis ideation with lifted constraints (real Kaplan SST v2 via h5py)"
+  },
+  {
+   "ts": "2026-08-31T21:50Z",
+   "issue_id": "circulant-krr-climate-orchestration-log",
+   "directive_digest": "iteration-2-routing",
+   "note": "hypothesis gate r2 FAIL -> route literature_review rework then hypothesis-ideation-r3"
+  },
+  {
+   "ts": "2026-09-02T00:00Z",
+   "issue_id": "circulant-krr-climate-orchestration-log",
+   "directive_digest": "iteration-3",
+   "note": "human directive: upgrade the circulant-block KRR paper into a qualifying novel ML contribution; iterate again from literature review; develop >=2 novel strategies for the torus boundary gap and masked-inversion degradation; multi-domain benchmark (synthetic 2D/3D non-stationary GRFs w/ controlled boundaries, standard regular-grid ML tasks, Kaplan SST v2) vs dense KRR / standard PCG / KISS-GP / RFF; pre-registered thresholds: >=3x PCG speedup at residual tol < 1e-6 and >=50% free-boundary gap reduction vs standard BCCB wrapping"
+  }
+ ],
+ "review_state": {
+  "loop_counters": {
+   "hypothesis_gate": 3,
+   "analysis_gate": 2,
+   "writeup_gate": 2,
+   "total_project_loops": 0
+  },
+  "verdict_history": [
+   {
+    "gate": "hypothesis",
+    "round": 1,
+    "verdict": "PASS",
+    "criteria_scores": {
+     "Significance": {
+      "score": 4,
+      "justification": "Aggregate of two gate reviewers (G1+G2), both 4."
+     },
+     "Originality": {
+      "score": 4,
+      "justification": "Aggregate of two gate reviewers (G1+G2), both 4."
+     }
+    },
+    "failing_criteria": [],
+    "routing": "experiment_execution",
+    "timestamp": "2026-08-31T15:12Z",
+    "note": "iteration-1 gate PASS"
+   },
+   {
+    "gate": "hypothesis",
+    "round": 1,
+    "verdict": "PASS",
+    "criteria_scores": {
+     "Significance": {
+      "score": 4,
+      "justification": "median r1 (A4/B4)"
+     },
+     "Originality": {
+      "score": 4,
+      "justification": "median r1 (A4/B4)"
+     }
+    },
+    "failing_criteria": [],
+    "routing": "analysis",
+    "timestamp": "2026-09-01T00:05Z",
+    "iteration": 3,
+    "note": "iteration-3 re-entry gate PASS (proposal-it3-v3)"
+   },
+   {
+    "gate": "analysis",
+    "round": 1,
+    "verdict": "PASS",
+    "criteria_scores": {
+     "Quality": {
+      "score": 4,
+      "justification": "median r1 (A4/B4): claims trace to artifacts; leakage-safe protocol"
+     },
+     "Significance": {
+      "score": 4,
+      "justification": "median r1 (A5/B4): G1-G3 closure with honest negatives + reusable protocol"
+     },
+     "Originality": {
+      "score": 4,
+      "justification": "median r1 (A5/B4): novel vs corpus; no FFT/SOTA overclaims"
+     }
+    },
+    "failing_criteria": [],
+    "routing": "paper_writeup",
+    "timestamp": "2026-09-01T00:45Z",
+    "note": "iteration-2 analysis gate PASS; claim-vs-number fixes folded (78.7 s/1.57 GB; per-method ratios; per-horizon not_supported)"
+   },
+   {
+    "gate": "writeup",
+    "round": 1,
+    "verdict": "FAIL",
+    "criteria_scores": {
+     "Clarity": {
+      "score": 3,
+      "justification": "median r1 (A3/B3): complete + traceable + honest, but h=12 origin claim contradicted by the paper's own table, pseudo-numbered Eq. (3), overfull Table 4, undefined masks/acronyms -> borderline below the bar"
+     }
+    },
+    "failing_criteria": [
+     "Clarity"
+    ],
+    "routing": "writeup_revision",
+    "revision_feedback": "12 items: h=12 origin rewording (material); Eq.(3) numbering; Table 4 overfull 52.7pt; underfull vbox 207; define halo/seam/decay; BCCB/BTTB/PCG/HAC/ACI/U; acc/flop orders header; month-index accounting; Fig 2 CV-vs-illustration scope; T1b residual span 4.69e-9..9.78e-9; Limitations (iii) violation-range wording; 0.04 GB array accounting",
+    "timestamp": "2026-09-01T01:50Z",
+    "iteration": 2,
+    "note": "writeup gate round 1 FAIL; revision round 2 dispatched (max 2 writeup review loops)"
+   },
+   {
+    "gate": "writeup",
+    "round": 1,
+    "iteration": 2,
+    "verdict": "FAIL",
+    "criteria_scores": {
+     "Clarity": {
+      "score": 3,
+      "justification": "median r1 (A3/B3): complete + traceable + honest, but h=12 origin claim contradicted by the paper's own table, pseudo-numbered Eq. (3), overfull Table 4, undefined masks/acronyms"
+     }
+    },
+    "failing_criteria": [
+     "Clarity"
+    ],
+    "routing": "writeup_revision",
+    "revision_feedback": "12 items (h=12 origin rewording material; Eq numbering; Table 4 overfull; halo/seam/decay definitions; BCCB/BTTB/PCG/HAC/ACI/U expansions; acc/flop orders header; month-index accounting; Fig2 CV-vs-illustration scope; T1b residuals; Limitations iii range; 0.04GB arrays)",
+    "timestamp": "2026-09-01T01:50Z",
+    "note": "writeup gate r1 FAIL (max 2 loops) -> revision round 2"
+   },
+   {
+    "gate": "writeup",
+    "round": 2,
+    "iteration": 2,
+    "verdict": "PASS",
+    "criteria_scores": {
+     "Clarity": {
+      "score": 4,
+      "justification": "median r2 (A4/B4): all 12 r1 fixes applied + verified; compile warning-free; 4 body pages + refs page 5; cosmetic nits folded by manager (commit 34bc2cb)"
+     }
+    },
+    "failing_criteria": [],
+    "routing": "finalization",
+    "revision_feedback": "cosmetic: October tuple lead-indexed; Limitations (iii) halo span scoped to w=2/w=4 masks; RFF expanded at first use",
+    "timestamp": "2026-09-01T02:00Z",
+    "note": "writeup gate r2 PASS"
+   },
+   {
+    "gate": "hypothesis",
+    "round": 1,
+    "verdict": "PASS",
+    "criteria_scores": {
+     "Significance": {
+      "score": 4,
+      "justification": "median r1 (G1 4 / G2 4): expected significance grounded in measured iteration-2 bottlenecks + corpus G5/G6 REMAINS-OPEN"
+     },
+     "Originality": {
+      "score": 4,
+      "justification": "median r1 (G1 4 / G2 4): both claimed integrations left open by corpus REMAINS-OPEN statements; components honestly credited"
+     }
+    },
+    "failing_criteria": [],
+    "routing": "experiment_execution",
+    "timestamp": "2026-09-02T04:00Z",
+    "iteration": 3,
+    "note": "iteration-3 hypothesis gate PASS (proposal-final.json); G1+G2 items folded into plan-iter3-reconciliation-notes; derived PASS route experiment_execution (planning stage is un-gated per engine gate_config_map)"
+   },
+   {
+    "gate": "analysis",
+    "round": 1,
+    "verdict": "FAIL",
+    "criteria_scores": {
+     "Quality": {
+      "score": 4,
+      "justification": "median r1 (A4/B4); every verdict recomputed byte-exact from artifacts; 17 honest negatives present"
+     },
+     "Significance": {
+      "score": 3,
+      "justification": "median r1 (A3/B3): primary gates unmet (S1 NOT-validated / S2 REFUTED); residue = negative-result + tooling + benchmark contribution, not a strong positive"
+     },
+     "Originality": {
+      "score": 4,
+      "justification": "median r1 (A4/B4): PASS/REFUTED labels per plan; no post-hoc storytelling; honest negatives complete"
+     }
+    },
+    "failing_criteria": [
+     "Significance"
+    ],
+    "routing": "analysis_revision",
+    "timestamp": "2026-09-02T06:30Z",
+    "iteration": 3,
+    "note": "analysis gate r1 FAIL on Significance (median 3); 7 artifact-fidelity fixes (none change verdicts); revision round 2 dispatched (max_experiment_review_loops=2)"
+   },
+   {
+    "gate": "analysis",
+    "round": 2,
+    "verdict": "FAIL",
+    "criteria_scores": {
+     "Quality": {
+      "score": 4,
+      "justification": "lower-middle r2 (A4/B4): every headline number recomputed byte-exact; all 12 fidelity items genuinely closed; 0.1 s total/per-arm rounding nit"
+     },
+     "Significance": {
+      "score": 3,
+      "justification": "lower-middle r2 (A3/B3): primary gates unmet (S1 NOT-validated / S2 REFUTED); benchmark not-refuted rests on analysis-invented 0.5% tieband - negative-result/tooling residue below qualifying bar"
+     },
+     "Originality": {
+      "score": 4,
+      "justification": "lower-middle r2 (A4/B4): PASS/REFUTED labels per plan; no post-hoc selection; coverage deltas disclosed"
+     }
+    },
+    "failing_criteria": [
+     "Significance"
+    ],
+    "routing": "literature_review",
+    "timestamp": "2026-09-02T07:00Z",
+    "iteration": 3,
+    "note": "analysis gate r2 FAIL on Significance (aggregate 3 < 4; loop max_experiment_review_loops=2 exhausted); route_for_failure -> literature_review; literature-review-rework-r2 opened + seeded fail-feedback; whole-stage downstream invalidation; analysis-anchor-r2 superseded"
+   },
+   {
+    "gate": "hypothesis",
+    "round": 1,
+    "verdict": "FAIL",
+    "criteria_scores": {
+     "Significance": {
+      "score": 3,
+      "justification": "lower-middle r1 (A4/B3): F1 falsification path real but primary mechanism under-specified (boundary-band system undefined; no bandwidth/cost/conditioning; T_size 1233 ~96% of 1280 rank budget yet residual 546 -> exact solve may not remove the binding failure); pooled-gate composition for 3D floor-limited rows unpinned"
+     },
+     "Originality": {
+      "score": 4,
+      "justification": "lower-middle r1 (A4/B4): DST2-class whole-sample-symmetric embedding + exact Toeplitz/banded boundary solves absent from 74-entry corpus; components honestly credited; no overclaims"
+     }
+    },
+    "failing_criteria": [
+     "Significance"
+    ],
+    "routing": "hypothesis_revision",
+    "timestamp": "2026-09-02T08:00Z",
+    "iteration": 4,
+    "note": "hypothesis gate r1 FAIL on Significance (median 3, A4/B3); revision round 2 dispatched (max_hypothesis_review_loops=2); items: B (boundary-band operator equation, bandwidth/cost justification, conditioning assumption, full-support coverage + discriminating diagnostic, Stewart 73 cost, Graham 70 attribution) + A (S1' 3D pool-composition semantics, interior-fraction range 0.433-0.901, Stewart reconciliation)"
+   },
+   {
+    "gate": "hypothesis",
+    "round": 2,
+    "verdict": "PASS",
+    "criteria_scores": {
+     "Significance": {
+      "score": 4,
+      "justification": "lower-middle r2 (A4/B4): 7 round-1 closures verified genuine; F1 mechanism now specified (operator equation WTT u_T = z0[T], WTT = M^{-1}[T,T], dense-center O(nb^3)/O(nb^2) reading adopted with retraction; conditioning SPD post-floor+ridge + spectral map-back; support-rank diagnostic pre-committed incl. 2D full-support rows); 2D claim-pool semantics PINNED (24^3 per-domain under floor caveat, REFUTED only by 2D-pool failure); A2 ranges recomputed from A1-boundary.json match; Stewart O(n log^3 n) unified; Graham-70 softened"
+     },
+     "Originality": {
+      "score": 4,
+      "justification": "lower-middle r2 (A4/B4): DST2 whole-sample-symmetric embedding + exact Woodbury-center boundary solves absent from 74-entry corpus; all components honestly credited (Martucci 45, Trench 66, Gohberg-Semencul 67, Stewart 73, HSS 54, Graham 70 softened, Barrowes 72, Strang 74); no new-mathematics/SOTA-ENSO overclaims"
+     }
+    },
+    "failing_criteria": [],
+    "routing": "experiment_execution",
+    "timestamp": "2026-09-02T09:00Z",
+    "iteration": 4,
+    "note": "hypothesis gate r2 PASS (loops 2/2); PASS_ROUTES[hypothesis] -> experiment_execution; residual low-severity wording items (win_s1_prime '(2D+3D pooled)' vs M5 pin; nb label at w=16 vs clamped w=10; 2D rbf n_neg wording; REFUTED-vs-NOT-validated fork precedence; 3D budget quantification) folded into the planning brief as M5-overrides + pre-registered precedence"
+   },
+   {
+    "gate": "analysis",
+    "round": 1,
+    "verdict": "PASS",
+    "criteria_scores": {
+     "Quality": {
+      "score": 4,
+      "justification": "lower-middle r1 (A4/B4): independently recomputed byte-exact; per-clause attribution; truncations/budget overruns disclosed; minor defects (bug-doc trail absent at 5c8c996, capture unit inconsistency, A3 coverage wording, f1_exact disclosure not in A3 artifact) folded into writeup brief"
+     },
+     "Significance": {
+      "score": 4,
+      "justification": "lower-middle r1 (A4/B4): pre-registered measured negative for both strategy families with mechanism-level findings (F1 full-support mirror coupling w_s 31/63 > clamps 8/16 closes the w-clamp family; F2 Nystrom-complement stall 1.385e-4 flat k=64-256); held at 4 not 5: 'cost not model error' partly extrapolated (matern32 32x32 9.19e-5 > 1e-6 gate)"
+     },
+     "Originality": {
+      "score": 4,
+      "justification": "single-score r1 (B4; odd merge): original measured finding the corpus G5-G8 sequence leaves open \u2014 threshold-aligned full-support mirror-coupling characterization closing the F1 family by mechanism, flat-k Nystrom-complement stall attributing F2 failure; classical components credited (Strang/Martucci/Trench-GohbergSemencul/Stewart/Graham), no new mathematics claimed, G5/G6 left honestly open"
+     }
+    },
+    "failing_criteria": [],
+    "routing": "paper_writeup",
+    "timestamp": "2026-09-02T10:00Z",
+    "iteration": 4,
+    "note": "amended to engine-consistent 3-criterion form (Quality/Significance/Originality per review_engine GATES, analysis spec) + PASS_ROUTES routing paper_writeup; supplementary Originality scoring (B 4) merged; 5 fold-in items carried into writeup brief"
+   },
+   {
+    "gate": "writeup",
+    "round": 1,
+    "verdict": "FAIL",
+    "criteria_scores": {
+     "Clarity": {
+      "score": 3,
+      "justification": "lower-middle r1 (A4/B3): every number recomputed from artifacts matches and the verdict chain is derivable from Sections 2-3, but the paper never defines the two quantities carrying the whole S1' verdict (w_s support distance; H_r coupling term), never states the capture metric formula (per-row F1/DST2 reduction ratio, median over 82-row subset -> 0.7531 is NOT 46.66/58.46=0.798), contains a wrong internal pointer (3.4 cites 4.3, lives in 4.2), and mislabels w_design vs clamp at 128x128 (10 vs 16)"
+     }
+    },
+    "failing_criteria": [
+     "Clarity"
+    ],
+    "routing": "writeup_revision",
+    "timestamp": "2026-09-02T10:30Z",
+    "iteration": 4,
+    "note": "writeup gate r1 FAIL on Clarity (A4/B3 lower-middle); loop 1 of max_writeup_review_loops=2; revision round 2 queued; combined items: A (3D gap max 4.87 vs quoted 3.96; monotonicity qualified to 81 non-fail-fast rows; non-monotone overstatement softened to kernel-dependent; abstract probe-row tuple harmonization; trim invalidated-history tag in 4.1) + B (define w_s + H_r at first use in 2.1; capture formula stated once with 82-row subset; fix 3.4->4.2 pointer; relabel w_design=(min(ceil(2.5 rho), min(H,W)/8)); fail-fast rows DO stay in 90-row pooled medians -- no verdict clause only; A2 ridge lambda 0.01 in 2.2; unit ambiguity cross-referenced to one place)"
+   },
+   {
+    "gate": "writeup",
+    "round": 2,
+    "verdict": "PASS",
+    "criteria_scores": {
+     "Clarity": {
+      "score": 4,
+      "justification": "lower-middle r2 (A4/B4): all 8 round-1 closures genuinely closed in-file and byte-exact vs artifacts (3D ranges min..max 2.2326..4.8683 / 2819.1..9871.6; 81/9 fail-fast + pool-membership; kernel-dependent exactness tier; abstract+3.2 probe-row tuple; H_r/w_s first-use definitions; capture formula once with 82-row subset 60+22 and 0.798 disambiguation; 4.2 pointer; w_design relabel; lambda 0.01; unit cross-ref); banned literals absent; verifiers rerun clean (248/0/2; 120/0); fork-A reader path derivable from Sections 2.1-3.1; two minor items (PCG matched range 6.9e-9..9.1e-9; per-grid capture subset clause) applied post-review (commit d7a4c8b)"
+     }
+    },
+    "failing_criteria": [],
+    "routing": "complete",
+    "timestamp": "2026-09-02T11:00Z",
+    "iteration": 4,
+    "note": "writeup gate r2 PASS (loops 2/2 consumed); PASS_ROUTES[writeup] -> complete; finalization: final_verdict APPROVE, status synthesised, deliverable docs/writeup-iter4.md @ d7a4c8b; validate_execution.py Checks 1-11 battery"
+   }
+  ],
+  "block_events": [],
+  "current_gate": null,
+  "current_route": "passed",
+  "blocked_reason": null
+ },
+ "results": {
+  "costs": {
+   "literature-review-anchor-r1": {
+    "input_tokens": 60000,
+    "output_tokens": 25000,
+    "cache_read_tokens": 20000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   },
+   "experiment-planning-anchor-r1": {
+    "input_tokens": 50000,
+    "output_tokens": 30000,
+    "cache_read_tokens": 20000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   },
+   "experiment-execution-anchor-r1": {
+    "input_tokens": 60000,
+    "output_tokens": 35000,
+    "cache_read_tokens": 20000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   },
+   "analysis-anchor-r1": {
+    "input_tokens": 40000,
+    "output_tokens": 30000,
+    "cache_read_tokens": 15000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   },
+   "hypothesis-ideation-r2": {
+    "input_tokens": 45000,
+    "output_tokens": 22000,
+    "cache_read_tokens": 30000,
+    "note": "gate-r2 re-entry ideation (proposals, reviewer rounds, routing comment); estimated tokens (exact session metering unavailable)"
+   },
+   "hypothesis-rework-r1": {
+    "input_tokens": 45000,
+    "output_tokens": 22000,
+    "cache_read_tokens": 30000,
+    "note": "hypothesis rework: proposal-v4 folding reviewer items 1-7; estimated tokens (exact session metering unavailable)"
+   },
+   "literature-review-rework-r1": {
+    "input_tokens": 45000,
+    "output_tokens": 22000,
+    "cache_read_tokens": 30000,
+    "note": "literature grounding rework: corpus enriched to 492 entities / 120786 co-occurrences (web research + indexing); estimated tokens (exact session metering unavailable)"
+   },
+   "hypothesis-ideation-r3": {
+    "input_tokens": 45000,
+    "output_tokens": 22000,
+    "cache_read_tokens": 30000,
+    "note": "iteration-3 ideation: proposal-it3 v1->v3, 2 reviewer rounds (ideation r1 + hypothesis gate r1), artifact post-processing; estimated tokens (exact session metering unavailable)"
+   },
+   "literature-review-r3": {
+    "input_tokens": 124000,
+    "output_tokens": 17800,
+    "cache_read_tokens": 308000,
+    "_note": "manager post-hoc estimate; all >0"
+   },
+   "hypothesis-ideation-r1": {
+    "input_tokens": 90000,
+    "output_tokens": 30000,
+    "cache_read_tokens": 40000,
+    "note": "iteration-1 ideation (legacy; manager estimate)"
+   },
+   "paper-writeup-anchor-r1": {
+    "input_tokens": 70000,
+    "output_tokens": 28000,
+    "cache_read_tokens": 30000,
+    "note": "iteration-1/2 paper writeup (legacy; manager estimate)"
+   },
+   "hypothesis-ideation-r4": {
+    "input_tokens": 45000,
+    "output_tokens": 22000,
+    "cache_read_tokens": 30000,
+    "note": "iteration-3 ideation r1-r3 (manager estimate; proposal v1/v2/v3 + final)"
+   },
+   "experiment-planning-anchor-r2": {
+    "input_tokens": 38000,
+    "output_tokens": 16000,
+    "cache_read_tokens": 24000,
+    "note": "iteration-3 planning worker (experiment-plan-iter3.json; manager estimate)"
+   },
+   "experiment-execution-anchor-r2": {
+    "input_tokens": 52000,
+    "output_tokens": 24000,
+    "cache_read_tokens": 30000,
+    "note": "iteration-3 execution worker (S1+S2 benchmark; manager estimate)"
+   },
+   "literature-review-rework-r2": {
+    "input_tokens": 32000,
+    "output_tokens": 15000,
+    "cache_read_tokens": 20000,
+    "note": "iteration-4 literature rework worker (G9+ corpus + F1/F2/F3); manager estimate"
+   },
+   "hypothesis-ideation-r5": {
+    "input_tokens": 30000,
+    "output_tokens": 14000,
+    "cache_read_tokens": 18000,
+    "note": "iteration-4 hypothesis ideation worker (v1-v4 chain incl. revision r2)"
+   },
+   "experiment-planning-anchor-r3": {
+    "input_tokens": 34000,
+    "output_tokens": 16000,
+    "cache_read_tokens": 21000,
+    "note": "iteration-4 planning worker (plan-iter4, F1/F2/A3 arms, label table, 5 wording items)"
+   },
+   "analysis-anchor-r3": {
+    "input_tokens": 36000,
+    "output_tokens": 15000,
+    "cache_read_tokens": 24000,
+    "note": "iteration-4 analysis worker (analyze-iter4.json + verify_analyze_iter4.py, commit de08484)"
+   },
+   "writeup-anchor-r3": {
+    "input_tokens": 38000,
+    "output_tokens": 17000,
+    "cache_read_tokens": 26000,
+    "note": "iteration-4 writeup worker (v1+v2, gate r1 FAIL revision, polish d7a4c8b)"
+   }
+  },
+  "literature-review-anchor-r1": {
+   "status": "resolved",
+   "findings": "Literature review complete (manager-executed fallback; dispatched worker stalled with no artifact). review.md has 25 annotated entries (13 web-verified via tavily in-session, 15 model-knowledge), 4 motivated gaps (G1 no CPU-exact KRR-on-grid recipe; G2 resource accounting absent from kernel/climate ML literature; G3 random-split leakage in field reconstruction evaluation; G4 off-grid ENSO-index prediction from grid fields), and a 25-term concept index. Grounding established: circulant/Toeplitz structure exploitation is proven exact via FFT (Gray 2006; Dietrich-Newsam 1997; KISS-GP 2015) yet no CPU-only exact-KRR-on-grid benchmark with accuracy-per-flop/per-byte accounting exists in the reviewed corpus.",
+   "outputs": [
+    "docs/literature-review/review.md",
+    "ideas/concept-index.json"
+   ],
+   "cost": {
+    "input_tokens": 60000,
+    "output_tokens": 25000,
+    "cache_read_tokens": 20000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   },
+   "verifier_result": {
+    "passed": true,
+    "evidence": "25 entries >= 20; gaps G1-G4 >= 3; concepts 25 in 15-30; ASCII-clean; committed on branch and merged",
+    "verifier_name": "epic-manager"
+   }
+  },
+  "ideation": {
+   "max_rounds": 3,
+   "rounds_completed": 3,
+   "revision_history": [
+    {
+     "round": 1,
+     "stop_condition": null,
+     "aggregate_scores": {
+      "Clarity": 4,
+      "Relevance": 5,
+      "Originality": 3,
+      "Feasibility": 3,
+      "Significance": 4
+     }
+    },
+    {
+     "round": 2,
+     "stop_condition": null,
+     "aggregate_scores": {
+      "Clarity": 3,
+      "Relevance": 5,
+      "Originality": 3,
+      "Feasibility": 3,
+      "Significance": 3
+     }
+    },
+    {
+     "round": 3,
+     "stop_condition": "pass",
+     "aggregate_scores": {
+      "Clarity": 4,
+      "Relevance": 4,
+      "Originality": 4,
+      "Feasibility": 4,
+      "Significance": 4
+     },
+     "aggregate_note": "E returned in-time (all-4); F returned late, after finalization. Post-hoc: median {E,F} = {4,5,4,4,4} (Clarity 4, Relevance 5, Originality 4, Feasibility 4, Significance 4) - all >= 4, so stop=pass confirmed by both reviewers."
+    }
+   ],
+   "last_reviewer_set": {
+    "round": 3,
+    "reviewers_returned": [
+     "E",
+     "F"
+    ],
+    "stale": []
+   },
+   "stop_condition": "pass",
+   "flagged": false,
+   "note": "Round 2 aggregate median over {C,D}; not pass, no plateau; cap round 3 in flight.",
+   "notes": [
+    {
+     "ts": "2026-08-31T15:00Z",
+     "event": "late-round-1-reviewer-A",
+     "detail": "Reviewer A (round 1) returned after the r1 aggregation was finalized; marked stale for aggregation (stale_subagent_ids). Its substantive points are preserved and forwarded to experiment_planning: (a) make the sample unit explicit (grid cell vs full field) and fix the ENSO task to the kernel-consistent linear-functional form (predictive mean over the Nino3.4 box = index); (b) disambiguate T1: reconstruction evaluated by training on complete fields and masking held-out fields at test time (G3-honoring), or explicitly document masked-solve machinery; (c) name boundary handling: non-periodic lat/lon grids need circulant embedding (Dietrich-Newsam / Wood-Chan 2N), state FFT sizes and memory for the chosen grid; (d) enumerate hyperparameter/CV schedule with per-fold costs, fixed n for exact-subsample baseline, Nystrom n_components, RFF feature counts, training-sample caps (<~1-2 GB feature matrices); (e) specify the synthetic-from-physics fallback generator precisely (circulant-embedded Matern fields with Kaplan-like EOF structure); (f) add a small-grid correctness sanity test (recover the direct N x N KRR solution) to pre-empt the exactness claim.",
+     "action": "forwarded to experiment-planning issue brief"
+    },
+    {
+     "ts": "2026-08-31T15:00Z",
+     "event": "corpus-preface-integrity-correction",
+     "detail": "Reviewer A flagged an integrity mismatch in ideation briefs: prefaces stated '13 web-verified, 15 model-knowledge' (sum 28), but the artifact review.md contains 25 annotations: entries 1-12 web-verified and 13-25 model-knowledge (12 + 13 = 25; the 13/15 figures came from counting flag tokens including prose mentions). Correction adopted: all future briefs state '25 annotated entries: 12 web-verified, 13 model-knowledge'. The review.md Limitations section already states 12/25 web-verified, which is consistent.",
+     "action": "correction adopted for all downstream briefs"
+    },
+    {
+     "ts": "2026-08-31T15:38Z",
+     "event": "late-round-3-reviewer-F-posthoc-confirmation",
+     "detail": "F returned after r3 finalization with {4,5,4,4,4}; median {E,F} all >= 4; stop=pass decision confirmed post-hoc. F feedback (numeric pilot thresholds, leak-safe protocol justification, dual ENSO protocol, ordered fallback datasets incl. 2.5-deg ERSST/WeatherBench, per-N resource table) folded into execution brief."
+    }
+   ],
+   "aggregate_scores": {
+    "Clarity": 4,
+    "Relevance": 4,
+    "Originality": 4,
+    "Feasibility": 4,
+    "Significance": 4
+   },
+   "iteration_2": {
+    "iteration": 2,
+    "max_rounds": 3,
+    "rounds_completed": 3,
+    "revision_history": [
+     {
+      "round": 1,
+      "aggregate_scores": {
+       "Clarity": 4,
+       "Relevance": 5,
+       "Originality": 3,
+       "Feasibility": 4,
+       "Significance": 4
+      },
+      "file": "ideas/proposal-it2-v1.json"
+     },
+     {
+      "round": 2,
+      "aggregate_scores": {
+       "Clarity": 4,
+       "Relevance": 4,
+       "Originality": 3,
+       "Feasibility": 4,
+       "Significance": 3
+      },
+      "file": "ideas/proposal-it2-v2.json"
+     },
+     {
+      "round": 3,
+      "aggregate_scores": {
+       "Clarity": 4,
+       "Relevance": 4,
+       "Originality": 3,
+       "Feasibility": 4,
+       "Significance": 4
+      },
+      "file": "ideas/proposal-it2-v3.json",
+      "selected": true
+     }
+    ],
+    "stop": {
+     "condition": "cap",
+     "round": 3,
+     "note": "ideation.max_rounds=3 reached; failing set narrowed to Originality in r3 (no plateau); v3 selected as best proposal"
+    },
+    "final_proposal": "ideas/proposal-final.json"
+   },
+   "iteration_3": {
+    "rounds_completed": 1,
+    "stop_condition": "pass",
+    "aggregate_scores": {
+     "Clarity": 4,
+     "Relevance": 4,
+     "Originality": 4,
+     "Feasibility": 5,
+     "Significance": 4
+    },
+    "proposal_final": "proposal-it3-v3.json",
+    "note": "re-entry after literature grounding rework; one ideation round then hypothesis gate r1 (median 4/4) -> PASS"
+   }
+  },
+  "experiment-planning-anchor-r1": {
+   "status": "resolved",
+   "findings": "Experiment plan complete (manager-executed fallback; dispatched worker stalled with no artifact). experiment-plan.json: 7 arms (P0 pilot gate 32x32, T1a exact spectral reconstruction with halo/LOFO/block CV, T1b FFT-preconditioned CG masked training, T2 Nino3.4 functional regression with 5-fold temporal-block CV + zero-model ablation, commensurable sklearn baselines with matched-flops variant, scaling model to 0.25-degree); budget table summing ~47 min < 90 min; resource axes mandated in every table; synthetic-from-physics fallback pre-committed with [simulated] markers (data-readiness probe found Kaplan SST netCDF-4/HDF5 unreadable by allowed stack).",
+   "outputs": [
+    "ideas/experiments/experiment-plan.json"
+   ],
+   "cost": {
+    "input_tokens": 50000,
+    "output_tokens": 30000,
+    "cache_read_tokens": 20000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   },
+   "verifier_result": {
+    "passed": true,
+    "evidence": "plan JSON schema-checked on read; arms >= 6; budget sum < 90 min; scripts/run_pipeline.sh contract defined",
+    "verifier_name": "epic-manager"
+   }
+  },
+  "experiment-execution-anchor-r1": {
+   "status": "resolved",
+   "findings": "6 arms in 57.0 s (12 cores/~7 GB/90-min envelope respected); data mode synthetic-[simulated]-from-physics with markers; pilot torus-exactness 2e-12 rel (PASS); T1a matern32 masked RMSE 0.071, conformal 0.90-0.92; T1b exact-free PCG conv, masked-input RMSE 0.78-0.83; T2 functional 0.0628 < ablation 0.0665 < climo 0.993 < direct 1.009; pooled baselines 1.25-1.27 (transfer negative); scaling O(N log N)/O(N), ~42 MB at 0.25-deg. Methodology adjustments in EXECUTION_NOTES (torus framing, spectral floor, exact-free matvec, pooled baseline framing, O(N) scaling correction).",
+   "outputs": [
+    "scripts/fft_krr.py",
+    "scripts/data_gen.py",
+    "scripts/baselines.py",
+    "scripts/run_pipeline.py",
+    "scripts/run_pipeline.sh",
+    "results/P0-pilot-gate.json",
+    "results/T1a-spectral-reconstruction.json",
+    "results/T1b-CG-masked-train.json",
+    "results/T2-ENSO-index.json",
+    "results/B-baselines.json",
+    "results/S-scaling.json",
+    "results/results_summary.json",
+    "EXECUTION_NOTES.md"
+   ],
+   "cost": {
+    "input_tokens": 60000,
+    "output_tokens": 35000,
+    "cache_read_tokens": 20000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   },
+   "verifier_result": {
+    "passed": true,
+    "evidence": "all 6 arm JSONs present with dataset.origin+resource axes; pilot gate_passed True; total_wall_clock_s 57.0; compiled+smoke-tested scripts",
+    "verifier_name": "epic-manager"
+   }
+  },
+  "analysis-anchor-r1": {
+   "status": "resolved",
+   "findings": "analysis.json + claims.json (C1-C10) merged b3b23f7",
+   "outputs": [
+    "results/analysis.json",
+    "results/claims.json"
+   ],
+   "cost": {
+    "input_tokens": 40000,
+    "output_tokens": 30000,
+    "cache_read_tokens": 15000,
+    "note": "manager-executed fallback (dispatched worker stalled); estimated tokens for inline execution (exact session metering unavailable)"
+   },
+   "verifier_result": {
+    "passed": true,
+    "evidence": "claims traceable to artifact keys; data-mode disclosure; negative results reported",
+    "verifier_name": "epic-manager"
+   }
+  },
+  "hypothesis": {
+   "iteration": 3,
+   "verdict_history": [
+    {
+     "gate": "hypothesis",
+     "round": 1,
+     "verdict": "FAIL",
+     "criteria_scores": {
+      "Significance": {
+       "score": 3,
+       "justification": "median r1 (A3/B3): reproducible real-data benchmark useful but capped by honest ceiling + 5-deg grid + near-persistence ENSO skill at long h"
+      },
+      "Originality": {
+       "score": 2,
+       "justification": "median r1 (A3/B2): textbook recombination (FFT spectral shrinkage, per-mode ridge, free-boundary PCG) well covered by indexed corpus; novelty rests on disclaimed protocol elements"
+      }
+     },
+     "failing_criteria": [
+      "Significance",
+      "Originality"
+     ],
+     "revision_feedback": "rework items 1-7 (win criteria pre-registration; calendar-month conformal; Cholesky control; grid-resolution note; data pinning; real-threat handling; numeric seam checks)",
+     "routing": "hypothesis_rework"
+    },
+    {
+     "gate": "hypothesis",
+     "round": 2,
+     "verdict": "FAIL",
+     "criteria_scores": {
+      "Significance": {
+       "score": 3,
+       "justification": "median r2 (A3/B4): benchmark credible and well-scoped but grid-resolution/threat-plan items left in-text vagueness; borderline"
+      },
+      "Originality": {
+       "score": 3,
+       "justification": "median r2 (A3/B4): integrated leakage-verified protocol genuine but components operationally vague (seam/decay tolerances, Cholesky ratio control); borderline"
+      }
+     },
+     "failing_criteria": [
+      "Significance",
+      "Originality"
+     ],
+     "revision_feedback": "items (a)-(f): grid-resolution sensitivity + h=12 ENSO floor; real-data threat plan; seam/decay coverage tolerances; operational Cholesky ratio control; trailing-month discard with truncation sweep; calibrated-interval acceptance tolerance",
+     "routing": "literature_review"
+    },
+    {
+     "gate": "hypothesis",
+     "round": 1,
+     "iteration": 3,
+     "verdict": "PASS",
+     "criteria_scores": {
+      "Significance": {
+       "score": 4,
+       "justification": "median r1 (A4/B4): executed artifacts close G1-G3 with resource accounting + reusable leakage-verified protocol; capped by methodological-not-climate-finding scope"
+      },
+      "Originality": {
+       "score": 4,
+       "justification": "median r1 (A4/B4): first CPU-only torus-exact BCCB-KRR real-data benchmark with flop/byte accounting + integrated protocol; no FFT/SOTA newness claimed"
+      }
+     },
+     "failing_criteria": [],
+     "routing": "analysis",
+     "revision_feedback": "aggregate of two gate reviewers (B4/4, A4/4); all integrity items folded into proposal-it3-v3 + artifacts",
+     "timestamp": "2026-09-01T00:05Z"
+    }
+   ],
+   "rework": {
+    "issues": [
+     "hypothesis-rework-r1"
+    ],
+    "rounds_used": 1
+   },
+   "iteration_2": {
+    "rounds": 2,
+    "verdict_history_rounds": [
+     1,
+     2
+    ],
+    "loop_budget": 2,
+    "loop_exhausted": true,
+    "routing": "literature_review (route_for_failure; corpus strengthening re-entry)",
+    "note": "r1 and r2 both below bar; audit preserved; re-enter hypothesis after literature grounding with fresh loop budget"
+   },
+   "iteration_3": {
+    "status": "accepted",
+    "issue": "hypothesis-ideation-r3 (resolved)",
+    "proposal_final": "proposal-it3-v3.json",
+    "ideation_rounds": 1,
+    "ideation_aggregate_r1": {
+     "Clarity": 4,
+     "Relevance": 4,
+     "Originality": 4,
+     "Feasibility": 5,
+     "Significance": 4
+    },
+    "gate_rounds": 1,
+    "gate_aggregate_r1": {
+     "Significance": 4,
+     "Originality": 4
+    },
+    "verdict_history": [
+     {
+      "gate": "hypothesis",
+      "round": 1,
+      "verdict": "FAIL",
+      "criteria_scores": {
+       "Significance": {
+        "score": 3,
+        "justification": "median r1 (A3/B3): reproducible real-data benchmark useful but capped by honest ceiling + 5-deg grid + near-persistence ENSO skill at long h"
+       },
+       "Originality": {
+        "score": 2,
+        "justification": "median r1 (A3/B2): textbook recombination (FFT spectral shrinkage, per-mode ridge, free-boundary PCG) well covered by indexed corpus; novelty rests on disclaimed protocol elements"
+       }
+      },
+      "failing_criteria": [
+       "Significance",
+       "Originality"
+      ],
+      "revision_feedback": "rework items 1-7 (win criteria pre-registration; calendar-month conformal; Cholesky control; grid-resolution note; data pinning; real-threat handling; numeric seam checks)",
+      "routing": "hypothesis_rework"
+     },
+     {
+      "gate": "hypothesis",
+      "round": 2,
+      "verdict": "FAIL",
+      "criteria_scores": {
+       "Significance": {
+        "score": 3,
+        "justification": "median r2 (A3/B4): benchmark credible and well-scoped but grid-resolution/threat-plan items left in-text vagueness; borderline"
+       },
+       "Originality": {
+        "score": 3,
+        "justification": "median r2 (A3/B4): integrated leakage-verified protocol genuine but components operationally vague (seam/decay tolerances, Cholesky ratio control); borderline"
+       }
+      },
+      "failing_criteria": [
+       "Significance",
+       "Originality"
+      ],
+      "revision_feedback": "items (a)-(f): grid-resolution sensitivity + h=12 ENSO floor; real-data threat plan; seam/decay coverage tolerances; operational Cholesky ratio control; trailing-month discard with truncation sweep; calibrated-interval acceptance tolerance",
+      "routing": "literature_review"
+     },
+     {
+      "gate": "hypothesis",
+      "round": 1,
+      "verdict": "PASS",
+      "criteria_scores": {
+       "Significance": {
+        "score": 4,
+        "justification": "median r1 (A4/B4): executed artifacts close G1-G3 with resource accounting + reusable leakage-verified protocol; capped by methodological-not-climate-finding scope"
+       },
+       "Originality": {
+        "score": 4,
+        "justification": "median r1 (A4/B4): first CPU-only torus-exact BCCB-KRR real-data benchmark with flop/byte accounting + integrated protocol; honest scope, no FFT/SOTA newness"
+       }
+      },
+      "note": "iteration-3 re-entry; all r2 critique items and r1 integrity items folded"
+     }
+    ]
+   }
+  },
+  "iteration_2": {
+   "verdict": "synthesised",
+   "headline": "real-data replication on Kaplan SST v2: torus-exact 2.62e-12 with free-gap 0.95/0.12; T1a matern32 0.082-0.088 (~14% of field std 0.60); T1b masked PCG converged; T2 functional 0.0856 corr 0.997 (3.2x vs direct head; CV method comparison); T3 transfer REFUTED 0/4 under pre-registered bootstrap-CI win rule (honest negative, h=12 floor, origin dependence); B ratio control spectral 0.0999 vs 0.82-0.82 (RFF 4.8e2x, ridge 5.3e4-7.5e5x, Nystrom 1.6e6x fewer flops); resolution 5-deg > 10-deg honest negative; 78.7 s / 1.57 GB CPU-only",
+   "honest_negatives": [
+    "T3 transfer superiority REFUTED (0/4 supported)",
+    "coverage violations disclosed per mask (halo w4 decay 0.739 / seam 0.836; rbf w2 global 0.816)",
+    "10-deg coarsening degrades recon 0.085->0.167 / functional 0.086->0.383 (corr 0.950)",
+    "free-boundary gap 0.95 (matern32) / 0.12 (rbf) -> exactness is torus-only"
+   ]
+  },
+  "iterations": {
+   "iter4": {
+    "path": "results/iter4/",
+    "commit": "5c8c996",
+    "verify": {
+     "checks": 248,
+     "failures": 0,
+     "warnings": 2
+    },
+    "arms": {
+     "A1-F1": {
+      "verdict": "NOT-validated-guard",
+      "elapsed_s": 1247.0,
+      "exceeded": true,
+      "clauses": {
+       "gap_pct": 46.66015125209701,
+       "res": 516.3154932313778,
+       "w_guard": true,
+       "capture_pct": 0.7531362234848058,
+       "w_s": {
+        "64x64": 31.0,
+        "128x128": 63.0
+       },
+       "floor": "w_s > clamp fork A"
+      }
+     },
+     "A2-F2": {
+      "verdict": "REFUTED",
+      "elapsed_s": 1099.6,
+      "median_speedup": 0.135
+     },
+     "A3": {
+      "verdict": "REFUTED",
+      "elapsed_s": 224.3,
+      "dense_wins": 1,
+      "kiss_wins": 0
+     },
+     "A4": {
+      "selfcheck": true,
+      "elapsed_s": 0.1
+     }
+    },
+    "total_s": 2571.3,
+    "peak_rss_gb": 1.048,
+    "hard_stop_45min": true,
+    "note": "S1' NOT-validated-guard (fork A: measured support distance w_s 31/63 exceeds clamp 8/16; fork B not reached); S2' REFUTED 0.135x < 1.5x; benchmark REFUTED dense_wins=1; A1/A2 budget-exceeded flagged honestly; 3D per-domain under floor caveat; A3 coverage deltas disclosed"
+   }
+  }
+ },
+ "paper_writing_subagent_id": "3db4abaa-90fe-4278-83e5-bc29791d389b",
+ "deliverable_path": "/workspace/research-project-manager/projects/circulant-krr-climate/docs/writeup-iter4.md",
+ "review_rounds": 2,
+ "final_verdict": "APPROVE",
+ "updated": "2026-09-02T00:45Z",
+ "writeup_gate": {
+  "gate": "writeup",
+  "criterion": "Clarity",
+  "rounds": [
+   {
+    "round": 1,
+    "scores": [
+     4,
+     4
+    ],
+    "outcome": "PASS"
+   }
+  ],
+  "pass_threshold": 4,
+  "outcome": "PASS",
+  "revision_notes": "polish items folded into main.tex (d7bed15); 4 pages exact",
+  "iteration_2": {
+   "criterion": "Clarity",
+   "pass_threshold": 4,
+   "rounds": [
+    {
+     "round": 1,
+     "scores": [
+      3,
+      3
+     ],
+     "outcome": "FAIL"
+    },
+    {
+     "round": 2,
+     "scores": [
+      4,
+      4
+     ],
+     "outcome": "PASS"
+    }
+   ],
+   "outcome": "PASS",
+   "revision_notes": "round-1 12-item fix list applied (c51dee4); round-2 cosmetic nits folded (34bc2cb)",
+   "comments": [
+    "20260901T0150-review-critique-writeup-r1.md",
+    "20260901T0200-review-critique-writeup-r2.md"
+   ]
+  }
+ },
+ "final_verdict_note": "iteration-2 writeup gate PASS (Clarity 4/4 r2); deliverable = real-data 4-page main.pdf (references on page 5)"
+}

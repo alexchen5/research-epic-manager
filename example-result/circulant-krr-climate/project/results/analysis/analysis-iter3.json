@@ -1,0 +1,1143 @@
+{
+ "id": "analysis-iter3",
+ "plan_ref": "ideas/experiments/experiment-plan-iter3.json",
+ "win_rule_verdicts": {
+  "S1": {
+   "verdict": "NOT-validated",
+   "criteria": {
+    "label_table": "S1 win iff median relative free-boundary gap reduction >= 50% (2D+3D pooled) AND median reported residual bound <= 1e-6 AND w <= min(H,W)/8; else NOT-validated (rank budget exceeded) or REFUTED (DCT/DST 50%-capture consequence fails).",
+    "gap_reduction_threshold_pct": 50.0,
+    "reported_residual_cap": 1e-06,
+    "w_guard": "w = ceil(2.5*rho) = 10 at rho=4; claimable only where w <= min(H,W)/8",
+    "pool": "2D+3D pooled (executed: w_design rows are 2D-only; see budget note)"
+   },
+   "evidence": [
+    "A1-boundary.json: pooled.median_gap_reduction_w_design_vs_bccb_pct = 47.3574 (< 50.0 pre-registered bar; first win clause FAILS). Median computed over the 75 w_design rows (60/60 at 64x64 + 15/60 at 128x128); 0 w_design rows at 24^3.",
+    "A1-boundary.json: pooled.median_res_w_design = 532.2245 (>> 1e-6 cap; second win clause FAILS). Rank budget |T| = O(w(H+W)) is insufficient: pooled median rank/T_size 1233; per-grid corrected residuals plateau at 546.2 (64x64) / 415.8 (128x128), i.e. ~1e2-1e3, never ~1e-6.",
+    "A1-boundary.json: pooled.w_claimable_guard = {64_8: null, 128_16: true, 24_3: false}. With w_design=10 the guard holds only at 128x128 (16 >= 10); it fails at 64x64 (8 < 10) and 24^3 (3 < 10): the O(N log N) + low-rank regime claim is NOT claimable on 2 of 3 grids (64_8 recorded null = not claimable in the artifact).",
+    "A1-boundary.json: 9 rows flagged re_fail_fast (non-monotone w-sweep residual decay), all at 64x64 (matern32 seeds 7,9,13,14,18; matern52 seeds 13,14,18; rbf seed 9).",
+    "A1-boundary.json: pooled.median_gap_reduction_naive_vs_bccb_pct = 35.6448 - naive whole-sample symmetric embedding without the correction also stays below the 50% bar."
+   ]
+  },
+  "S2": {
+   "verdict": "REFUTED",
+   "criteria": {
+    "label_table": "S2 win iff median wall-clock speedup vs standard PCG >= 3x at equivalent KKT residual < 1e-6 (A2 pooled across synthetic + Kaplan; per-domain separate) with RMSE parity; REFUTED iff median speedup < 1.5x.",
+    "speedup_threshold_x": 3.0,
+    "refuted_below_x": 1.5,
+    "kkt_residual_cap": 1e-06,
+    "rmse_parity": "required on the T1b valid-cell domain (mask-excluded valid cells)"
+   },
+   "evidence": [
+    "A2-masked.json: pooled.median_speedup_ssam_vs_pcg_synthetic = 0.2374 (artifact pooled block). Computed per-domain/all-row medians: kaplan-sst-v2 0.1560; wall-clock pool 0.1624 = median over the 222 rows with pcg/ssam wall_s recorded (60 synthetic block-mask rows - 30 at 64x64, 30 at 128x128 - carry no pcg/ssam wall_s in the artifact, nor re_naive, nor rmse_ssam_vs_pcg, so the pool is 222 rows, not 282). Every pooling convention is far below the 1.5x REFUTED bar.",
+    "A2-masked.json: pooled.median_iters_pcg_synthetic = 192.0 vs pooled.median_iters_ssam_synthetic = 278.5: SSAM-CAM needs MORE KKT iterations than PCG at the same < 1e-6 convention.",
+    "A2-masked.json: pooled.ssam_converged_frac = 0.7766 vs pooled.pcg_converged_frac = 1.0: 22.3% of SSAM-CAM runs hit the 500-iteration ceiling without converging (synthetic: 39/150; kaplan: 24/132).",
+    "A2-masked.json: pooled.median_rmse_masked_pcg_kaplan = 0.350416 vs pooled.median_rmse_masked_ssam_kaplan = 0.350419 (RMSE parity HOLDS on the Kaplan valid-cell domain); synthetic rmse_ssam_vs_pcg median 1.73e-05 (parity holds). Parity does not rescue the speed gate."
+   ]
+  },
+  "benchmark": {
+   "verdict": "not-refuted",
+   "criteria": {
+    "label_table": "Benchmark REFUTED iff KISS-GP wins >= 2 of 4 domains or dense KRR wins >= 1 of 4 domains in RMSE at equal-or-lower cost envelope; ties reported; no cherry-picked exclusions.",
+    "kiss_gp_wins_refuted_at": 2,
+    "dense_wins_refuted_at": 1,
+    "n_domains": 4,
+    "tie_reporting": "the plan's label table states only 'ties reported'; the 0.5% relative tieband is an ANALYSIS operationalization of that rule, not a plan term. Sensitivity: grf-2d RE+SSAM +0.47% sits AT the 0.5% threshold (a tighter band flips it to a loss). The benchmark verdict is CONDITIONAL on the tieband application (per reviewer-B fix 6). Resolution (a) adopted: dense-vs-PCG on grf-2d is a TIE under the 0.5% band, because dense Cholesky and PCG solve the IDENTICAL masked-Gram system (P_m K P_m^T + lambda I) w = y_m on the same valid-cell domain - dense exactly (n_sub = n_observed = full observed cells) and PCG to KKT rel-res ~1e-6 - so the RMSE delta 4.85e-07 relative (dense 0.0809996662 vs pcg 0.0809997055) is a solver-tolerance artifact, not a method-level win. Dense is additionally at LOWER cost (median 0.154 s vs pcg 1.714 s). Sensitivity (disclosed): under a strict literal reading with NO tieband, dense_wins = 1 on grf-2d (numerically best AND cheaper) and the plan rule would make the benchmark REFUTED; this analysis reports not-refuted under resolution (a) with the identical-system justification on record. The 0.5% band now explicitly applies to BOTH RE+SSAM-vs-dense/PCG and dense-vs-PCG."
+   },
+   "evidence": [
+    "A3-multidomain.json: kiss_wins = 0, dense_wins = 0, benchmark_verdict = not-refuted (artifact). KISS-GP median RMSE 0.6917-1.5311 (never wins; inducing grid too coarse), RFF 0.1788-0.4154, dense-vs-PCG per-domain medians: grf-2d dense 0.0809996662 vs pcg 0.0809997055 (rel delta 4.85e-07, 0.000049% - classified TIE under the 0.5% band; both solve the identical masked-Gram to KKT 1e-6, dense exactly at n_sub = n_observed; dense median cost 0.154 s LOWER than pcg 1.714 s; literal no-tieband reading would give dense_wins=1 -> REFUTED; resolution (a) applied); mnist-784 0.0836724912 vs 0.0836724910 (tie); kaplan 0.3996687026 vs 0.3996686960 (tie); grf-3d dense LOSES (1.0925 vs pcg 0.0777).",
+    "A3-multidomain.json per_domain medians (recomputed from rows, identical to artifact): dense-vs-PCG classified as ties under the 0.5% band wherever both solve the identical masked-Gram (resolution (a)): grf-2d dense 0.0810 / pcg 0.0810 / re_ssam 0.0814; grf-3d pcg 0.0777 / re_ssam 0.0902; mnist-784 dense 0.0837 / pcg 0.0837 / re_ssam 0.0955; kaplan-sst-v2 dense 0.3997 / pcg 0.3997 / re_ssam 0.3997 (all three).",
+    "A3-multidomain.json: RE+SSAM within the 0.5% analysis tieband of dense/PCG on grf-2d (+0.47%, at the threshold) and kaplan (approx 0%); NOT within the tieband on mnist-784 (+14.2%) and grf-3d (+16.1%). The 0.5% tieband is an analysis operationalization of the plan's 'ties reported' rule (plan term: ties reported; 0.5% is NOT a plan number). Benchmark verdict unaffected: kiss_wins = 0, dense_wins = 0.",
+    "A3-multidomain.json: RE+SSAM-CAM converged only 14/66 rows at the 500-iteration ceiling (grf-2d 3/18, grf-3d 0/2, mnist 0/10, kaplan 11/36); PCG converged 66/66. Median speedup vs PCG per domain 0.162-0.957x (slower)."
+   ]
+  },
+  "dct_dst_consequence": {
+   "verdict": "holds (consequence does NOT fail)",
+   "criteria": {
+    "label_table": "DCT/DST comparator: S1 must capture >= 50% of the DCT/DST symmetric-convolution comparator's own gap reduction, else the boundary claim is reported NOT validated against the strongest classical boundary-aware baseline.",
+    "capture_threshold_pct": 50.0
+   },
+   "evidence": [
+    "A1-boundary.json rows (computed): median DST2 gap reduction 61.62% (129/141 rows improve the BCCB gap); median DCT1 gap reduction -1872.6% (only 11/141 rows improve - DCT-I on average WORSENS the gap; recorded as a comparator negative).",
+    "A1-boundary.json rows (computed): median capture ratio = RE-ABLRC w_design reduction / DST2 reduction, taken over the 70 w_design rows (of 75 rows that carry both re_w_design and gap_dst2) in which the DST2 comparator reduction is POSITIVE, = 0.7467 (74.7%). All-75 robustness median (including the 5 rows where DST2 does not reduce the gap, all 128x128: matern32 x4, rbf x1) = 0.7284 (72.8%). Both >= 50%, so the capture consequence HOLDS under either subset; S1 is NOT additionally disqualified by the DCT/DST rule, and its NOT-validated label rests on the primary gates (gap reduction 47.36% < 50%, residual 532.2 >> 1e-6, w guard fails at 64x64/24^3)."
+   ]
+  }
+ },
+ "claim_traceability": [
+  {
+   "claim": "S1 pooled median gap reduction (RE-ABLRC w_design vs BCCB wrap)",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "pooled.median_gap_reduction_w_design_vs_bccb_pct",
+   "value": 47.357394387537596
+  },
+  {
+   "claim": "S1 pooled median naive gap reduction (WSS embedding only)",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "pooled.median_gap_reduction_naive_vs_bccb_pct",
+   "value": 35.64479846738635
+  },
+  {
+   "claim": "S1 pooled median corrected residual (w_design)",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "pooled.median_res_w_design",
+   "value": 532.2244857049865
+  },
+  {
+   "claim": "S1 pooled median naive residual",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "pooled.median_naive_res",
+   "value": 896.4332431132681
+  },
+  {
+   "claim": "S1 pooled median correction rank (T_size)",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "pooled.median_rank_w_design",
+   "value": 1233.0
+  },
+  {
+   "claim": "S1 pooled median BCCB baseline gap",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "pooled.median_gap_bccb",
+   "value": 3.6751367505095462
+  },
+  {
+   "claim": "S1 w-claimable guard",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "pooled.w_claimable_guard",
+   "value": {
+    "64_8": null,
+    "128_16": true,
+    "24_3": false
+   }
+  },
+  {
+   "claim": "S1 w_design row coverage",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "pooled.w_design_coverage",
+   "value": {
+    "n_rows_with_w_design": 75,
+    "n_rows_total": 141
+   }
+  },
+  {
+   "claim": "S1 fail-fast count (computed from rows)",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "rows[].re_fail_fast (computed count)",
+   "value": 9
+  },
+  {
+   "claim": "S1 3D WSS embedding not PSD: n_negative_eigenvalues at 24^3",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "n_negative_eigenvalues_by_grid['24,24,24']",
+   "value": {
+    "matern32": 289,
+    "matern52": 4578,
+    "rbf": 7662
+   }
+  },
+  {
+   "claim": "S1 3D WSS embedding not PSD: n_negative_eigenvalues at 48^3",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "n_negative_eigenvalues_by_grid['48,48,48']",
+   "value": {
+    "matern32": 0,
+    "matern52": 1468,
+    "rbf": 4222
+   }
+  },
+  {
+   "claim": "S1 per-grid 64x64 medians (computed from rows)",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "rows[grid=[64,64]] (computed)",
+   "value": {
+    "n_rows": 60,
+    "median_gap_bccb": 2.6303698603825945,
+    "median_gap_naive": 1.4117184040451471,
+    "median_naive_res": 889.6064653470827,
+    "median_gap_reduction_naive_pct": 46.25879498783554,
+    "median_gap_reduction_w_design_pct": 47.742379810110194,
+    "median_res_w_design": 546.2021462907054,
+    "median_gap_reduction_dct1_pct": -450.40421852998895,
+    "median_gap_reduction_dst2_pct": 61.04408141164395,
+    "n_fail_fast": 9,
+    "n_with_w_design": 60
+   }
+  },
+  {
+   "claim": "S1 per-grid 128x128 medians (computed from rows)",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "rows[grid=[128,128]] (computed)",
+   "value": {
+    "n_rows": 60,
+    "median_gap_bccb": 8.072136434344277,
+    "median_gap_naive": 5.461451978091778,
+    "median_naive_res": 646.3849340263545,
+    "median_gap_reduction_naive_pct": 30.247978573581236,
+    "median_gap_reduction_w_design_pct": 46.950115247678816,
+    "median_res_w_design": 415.7884931741434,
+    "median_gap_reduction_dct1_pct": -3560.5983367100025,
+    "median_gap_reduction_dst2_pct": 41.021487915509894,
+    "n_fail_fast": 0,
+    "n_with_w_design": 15
+   }
+  },
+  {
+   "claim": "S1 per-grid 24^3 medians (computed from rows)",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "rows[grid=[24,24,24]] (computed)",
+   "value": {
+    "n_rows": 21,
+    "median_gap_bccb": 20.150828797530416,
+    "median_gap_naive": 6.524043604826741,
+    "median_naive_res": 28456.952628768442,
+    "median_gap_reduction_naive_pct": 69.76978106972136,
+    "median_gap_reduction_w_design_pct": null,
+    "median_res_w_design": null,
+    "median_gap_reduction_dct1_pct": 1.0360626685327667,
+    "median_gap_reduction_dst2_pct": 95.06436404115503,
+    "n_fail_fast": 0,
+    "n_with_w_design": 0
+   }
+  },
+  {
+   "claim": "S1 3D reference = container-forced deviation to PCG-1e-8 (plan pre-registered 24^3 dense Cholesky; PCG-1e-8 pre-registered for 128x128 only); disclosed in ref_convention_notes",
+   "artifact": "results/iter3/A1-boundary.json",
+   "field": "ref_convention_notes (value read from artifact, amended in fidelity round 2)",
+   "value": "64x64: dense Cholesky reference (pre-registered). 128x128: PCG tol 1e-8 as the pre-registered dense-equivalent reference. 24^3: the plan pre-registered a DENSE CHOLESKY reference at 24^3; the ~2 GB container cgroup makes the 24^3 dense Cholesky infeasible, so the executed 3D reference is a CONTAINER-FORCED DEVIATION to the PCG-1e-8 convention (PCG-1e-8 was pre-registered for 128x128 only, NOT for 24^3), recorded honestly and disclosed."
+  },
+  {
+   "claim": "S2 median speedup, synthetic domain (artifact pooled block)",
+   "artifact": "results/iter3/A2-masked.json",
+   "field": "pooled.median_speedup_ssam_vs_pcg_synthetic",
+   "value": 0.23744422743561644
+  },
+  {
+   "claim": "S2 median speedup, kaplan domain (computed from rows)",
+   "artifact": "results/iter3/A2-masked.json",
+   "field": "rows[domain=kaplan-sst-v2] pcg.wall_s/ssam.wall_s (computed median)",
+   "value": 0.15597
+  },
+  {
+   "claim": "S2 median speedup, pool = 222 rows with wall_s recorded (computed from rows)",
+   "artifact": "results/iter3/A2-masked.json",
+   "field": "rows[].pcg.wall_s/ssam.wall_s on the 222 rows where both are recorded (computed median)",
+   "value": 0.16238,
+   "pool_note": "60 synthetic block-mask rows (30 64x64, 30 128x128) carry no pcg/ssam wall_s in A2-masked.json (nor re_naive, nor rmse_ssam_vs_pcg); the wall-clock pool is therefore 222 of 282 rows."
+  },
+  {
+   "claim": "S2 median KKT iterations (synthetic): PCG",
+   "artifact": "results/iter3/A2-masked.json",
+   "field": "pooled.median_iters_pcg_synthetic",
+   "value": 192.0
+  },
+  {
+   "claim": "S2 median KKT iterations (synthetic): SSAM-CAM",
+   "artifact": "results/iter3/A2-masked.json",
+   "field": "pooled.median_iters_ssam_synthetic",
+   "value": 278.5
+  },
+  {
+   "claim": "S2 SSAM-CAM converged fraction",
+   "artifact": "results/iter3/A2-masked.json",
+   "field": "pooled.ssam_converged_frac",
+   "value": 0.776595744680851
+  },
+  {
+   "claim": "S2 PCG converged fraction",
+   "artifact": "results/iter3/A2-masked.json",
+   "field": "pooled.pcg_converged_frac",
+   "value": 1.0
+  },
+  {
+   "claim": "S2 RMSE parity (Kaplan valid cells): PCG median",
+   "artifact": "results/iter3/A2-masked.json",
+   "field": "pooled.median_rmse_masked_pcg_kaplan",
+   "value": 0.3504163481654986
+  },
+  {
+   "claim": "S2 RMSE parity (Kaplan valid cells): SSAM median",
+   "artifact": "results/iter3/A2-masked.json",
+   "field": "pooled.median_rmse_masked_ssam_kaplan",
+   "value": 0.3504185203984058
+  },
+  {
+   "claim": "S2 synthetic RMSE parity (rmse_ssam_vs_pcg, computed median)",
+   "artifact": "results/iter3/A2-masked.json",
+   "field": "rows[domain=synthetic-2d].rmse_ssam_vs_pcg (computed median)",
+   "value": 1.7300632523063854e-05
+  },
+  {
+   "claim": "S2 masked naive-embed residual (computed median)",
+   "artifact": "results/iter3/A2-masked.json",
+   "field": "rows[].re_naive.rel_res (computed median over 222 rows)",
+   "value": 117.43144067619582
+  },
+  {
+   "claim": "S2 executed synthetic seed scope (artifact records 0-4; plan stated 0-19)",
+   "artifact": "results/iter3/A2-masked.json",
+   "field": "seeds.synthetic",
+   "value": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  {
+   "claim": "Benchmark per-domain median RMSE (computed from rows == artifact block)",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "field": "per_domain (verified)",
+   "value": {
+    "grf-2d": {
+     "dense": 0.08099966621259799,
+     "pcg": 0.08099970552584146,
+     "kiss": 0.6916740708506983,
+     "rff": 0.22046896189794507,
+     "re_ssam": 0.08138026412342239
+    },
+    "grf-3d": {
+     "dense": 1.092462449696773,
+     "pcg": 0.0776529113408696,
+     "kiss": 1.5311302053973475,
+     "rff": 0.19521157631656,
+     "re_ssam": 0.09016658061065286
+    },
+    "mnist-784": {
+     "dense": 0.08367249119531081,
+     "pcg": 0.08367249095892537,
+     "kiss": 0.4364603265381103,
+     "rff": 0.17876942502580181,
+     "re_ssam": 0.09553819341904356
+    },
+    "kaplan-sst-v2": {
+     "dense": 0.3996687025969349,
+     "pcg": 0.39966869596449695,
+     "kiss": 0.560800119814209,
+     "rff": 0.4153515710008435,
+     "re_ssam": 0.3996687278824146
+    }
+   }
+  },
+  {
+   "claim": "Benchmark tieband rel% vs best (computed)",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "field": "per_domain medians (computed rel% vs best)",
+   "value": {
+    "grf-2d": {
+     "dense": 0.0,
+     "pcg": 0.0,
+     "kiss": 753.92,
+     "rff": 172.19,
+     "re_ssam": 0.47,
+     "best_median_rmse": 0.08099966621259799
+    },
+    "grf-3d": {
+     "dense": 1306.85,
+     "pcg": 0.0,
+     "kiss": 1871.76,
+     "rff": 151.39,
+     "re_ssam": 16.11,
+     "best_median_rmse": 0.0776529113408696
+    },
+    "mnist-784": {
+     "dense": 0.0,
+     "pcg": 0.0,
+     "kiss": 421.63,
+     "rff": 113.65,
+     "re_ssam": 14.18,
+     "best_median_rmse": 0.08367249095892537
+    },
+    "kaplan-sst-v2": {
+     "dense": 0.0,
+     "pcg": 0.0,
+     "kiss": 40.32,
+     "rff": 3.92,
+     "re_ssam": 0.0,
+     "best_median_rmse": 0.39966869596449695
+    }
+   }
+  },
+  {
+   "claim": "Benchmark KISS-GP domain wins",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "field": "kiss_wins",
+   "value": 0
+  },
+  {
+   "claim": "Benchmark dense KRR domain wins",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "field": "dense_wins",
+   "value": 0
+  },
+  {
+   "claim": "Benchmark verdict",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "field": "benchmark_verdict",
+   "value": "not-refuted"
+  },
+  {
+   "claim": "Benchmark RE+SSAM convergence at 500-iteration ceiling (computed)",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "field": "rows[].re_ssam.conv (counts)",
+   "value": {
+    "grf-2d": 3,
+    "grf-3d": 0,
+    "mnist-784": 0,
+    "kaplan-sst-v2": 11
+   }
+  },
+  {
+   "claim": "Benchmark RE+SSAM speedup vs PCG per domain (computed)",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "field": "rows[].pcg.wall_s/re_ssam.wall_s (computed median)",
+   "value": {
+    "grf-2d": 0.5553975073686068,
+    "grf-3d": 0.9568447405552033,
+    "mnist-784": 0.4314469255132356,
+    "kaplan-sst-v2": 0.16242066232524466
+   }
+  },
+  {
+   "claim": "Benchmark HSS optional method",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "field": "rows[].hss (absent)",
+   "value": "not attempted (honest not-completed per plan; 5 methods executed)"
+  },
+  {
+   "claim": "A4 320x320 (N=102400) embedding build / naive solve / PCG-60",
+   "artifact": "results/iter3/A4-scaling.json",
+   "field": "rows[0]",
+   "value": {
+    "grid": [
+     320,
+     320
+    ],
+    "kernel": "matern32",
+    "N": 102400,
+    "wall_build_embedding_s": 0.0074106669053435326,
+    "wall_naive_solve_s": 0.03936316701583564,
+    "wall_pcg_60iters_s": 0.9197186259552836,
+    "pcg_iters": 60,
+    "pcg_rel_res": 0.03401863717876794,
+    "naive_rel_res": 97.01067291523046,
+    "est_spectral_flops": 17350508.738329317,
+    "est_spectral_bytes": 4096000.0,
+    "est_flops_per_sec": 370944762.9964969
+   }
+  },
+  {
+   "claim": "A4 48^3 (N=110592) embedding-only / naive solve / floor-limited rel res",
+   "artifact": "results/iter3/A4-scaling.json",
+   "field": "rows[1]",
+   "value": {
+    "grid": [
+     48,
+     48,
+     48
+    ],
+    "kernel": "matern32",
+    "N": 110592,
+    "wall_build_embedding_s": 0.01152895879931748,
+    "wall_naive_solve_s": 0.07006445899605751,
+    "wall_pcg_60iters_s": null,
+    "pcg_iters": null,
+    "pcg_rel_res": null,
+    "naive_rel_res": 1830.9407333161844,
+    "est_spectral_flops": 18861341.186392624,
+    "est_spectral_bytes": 4423680.0,
+    "est_flops_per_sec": 231162533.64571956
+   }
+  },
+  {
+   "claim": "A4 320x320 rbf embedding build / naive solve / PCG-60",
+   "artifact": "results/iter3/A4-scaling.json",
+   "field": "rows[2]",
+   "value": {
+    "grid": [
+     320,
+     320
+    ],
+    "kernel": "rbf",
+    "N": 102400,
+    "wall_build_embedding_s": 0.0072525420691818,
+    "wall_naive_solve_s": 0.038044749991968274,
+    "wall_pcg_60iters_s": 0.9408795421477407,
+    "pcg_iters": 60,
+    "pcg_rel_res": 0.10755693023833511,
+    "naive_rel_res": 450.09736741379453,
+    "est_spectral_flops": 17350508.738329317,
+    "est_spectral_bytes": 4096000.0,
+    "est_flops_per_sec": 383036335.03977716
+   }
+  },
+  {
+   "claim": "A5 Anderson mixing essential (A5-scoped); A1 same-config naive->w_design residual drop as the boundary-correction evidence",
+   "artifact": "results/iter3/A5-ablation.json",
+   "field": "rows[].full / .no_anderson / .re_nocorr + A1 rows per-grid medians (computed)",
+   "value": {
+    "full_iters_range": [
+     259,
+     384
+    ],
+    "no_anderson": {
+     "iters": 500,
+     "rel_res_range": [
+      410264.94,
+      744158.54
+     ]
+    },
+    "re_nocorr_rel_res_range": [
+     44.81,
+     85.6
+    ],
+    "re_nocorr_note": "A5-scoped (lambda 1e-2, 128x128); A1 same-config pair per grid: 64x64 889.6->546.2, 128x128 646.4->415.8 (lambda 1e-3)"
+   }
+  },
+  {
+   "claim": "A6 G8 tooling self-check",
+   "artifact": "results/iter3/A6-tooling.json",
+   "field": "selfcheck_pass",
+   "value": true
+  },
+  {
+   "claim": "Resource: total wall clock and peak RSS",
+   "artifact": "results/iter3/results_summary.json",
+   "field": "total_wall_clock_s / peak_rss_gb",
+   "value": {
+    "total_wall_clock_s": 2296.5,
+    "peak_rss_gb": 0.9786376953125
+   }
+  },
+  {
+   "claim": "A1 arm budget exceeded (25-min cap)",
+   "artifact": "results/iter3/results_summary.json",
+   "field": "arms.A1",
+   "value": {
+    "verdict": "NOT-validated",
+    "rows": 141,
+    "elapsed_s": 1530.3,
+    "exceeded": true
+   }
+  },
+  {
+   "claim": "Joint S1xS2 verdicts",
+   "artifact": "results/iter3/joint-S1xS2.json",
+   "field": "s1_verdict / s2_verdict",
+   "value": {
+    "s1_verdict": "NOT-validated",
+    "s2_verdict": "REFUTED"
+   }
+  },
+  {
+   "claim": "Meta: T1b citation lock and honest framing",
+   "artifact": "results/iter3/meta.json",
+   "field": "T1b_citation_lock / honest_framing",
+   "value": {
+    "T1b_citation_lock": "results/iter2/T1b-CG-masked-train.json only",
+    "honest_framing": "no new circulant/FFT/GRF-simulation mathematics; O(N log N)+low-rank claims only for the stationary BCCB/BTTB class; S1 bounded-residual approximate; S2 masked-Gram equivalence empirically tested; components all classical: Martucci DCT/DST symmetric convolution (entry 45), ADMM/FISTA spectral-spatial splitting (entries 46-52), Ambikasaran HSS low-rank (entry 54), Trench direct Toeplitz solve (66), Gohberg-Semencul (67); no new-mathematics claim; the claim is the grid-KRR-targeted integration (whole-sample symmetric embedding + boundary-banded low-rank correction G5; spectral-spatial AM with circulant-accelerated Anderson mixing G6) plus its empirical evaluation"
+   }
+  },
+  {
+   "claim": "T1b canonical (iter-2): rate means, span, rel-res range, RMSE means",
+   "artifact": "results/iter2/T1b-CG-masked-train.json",
+   "field": "rate_10%/rate_30%/rate_50% blocks",
+   "value": {
+    "iters_means": [
+     280.875,
+     276.125,
+     245.125
+    ],
+    "iters_span": [
+     233,
+     291
+    ],
+    "final_rel_res_range": [
+     4.693513779172392e-09,
+     9.807048555130524e-09
+    ],
+    "rmse_masked_means": [
+     0.5411600910146437,
+     0.5293230086582621,
+     0.5312442642778648
+    ]
+   }
+  },
+  {
+   "claim": "P0 pilot (iter-2): torus-vs-free gap",
+   "artifact": "results/iter2/P0-pilot-gate-real.json",
+   "field": "results.matern32.torus_vs_free_gap_rel / results.rbf.torus_vs_free_gap_rel",
+   "value": {
+    "matern32": 0.9496184881597887,
+    "rbf": 0.1159217824943169
+   }
+  },
+  {
+   "claim": "Iteration-2 total resource (context)",
+   "artifact": "results/iter2/results_summary.json",
+   "field": "total_wall_clock_s / peak_rss_gb",
+   "value": {
+    "total_wall_clock_s": 78.74,
+    "peak_rss_gb": 1.573
+   }
+  }
+ ],
+ "honest_negatives": [
+  {
+   "negative": "S1 NOT-validated: median w_design gap reduction 47.36% < pre-registered 50% bar",
+   "artifact": "results/iter3/A1-boundary.json",
+   "note": "First win clause fails on its own; the pooled median is over the 75 w_design rows (2D-only in practice, all 64x64 + first 15 of 128x128; A1 budget-exceeded at 1530.3 s)."
+  },
+  {
+   "negative": "S1 residual-cap failure: median corrected residual 532.22 >> 1e-6; rank budget |T| = O(w(H+W)) insufficient",
+   "artifact": "results/iter3/A1-boundary.json",
+   "note": "Correction rank plateaus at ~1e2-1e3 (per-grid medians 546.2 at 64x64, 415.8 at 128x128; median T_size 1233). S1 is a BOUNDED-RESIDUAL approximate solve, NOT an exact free-boundary solve."
+  },
+  {
+   "negative": "S1 w-claimable guard fails on 2 of 3 grids: w_design=10 > min(H,W)/8 at 64x64 (8) and 24^3 (3); only 128x128 (16 >= 10) is claimable",
+   "artifact": "results/iter3/A1-boundary.json",
+   "note": "pooled.w_claimable_guard = {64_8: null, 128_16: true, 24_3: false}; 64_8 recorded null (interpreted not-claimable)."
+  },
+  {
+   "negative": "S1 fail-fast: 9/141 rows flagged re_fail_fast (non-monotone w-sweep), all at 64x64",
+   "artifact": "results/iter3/A1-boundary.json",
+   "note": "matern32 seeds 7,9,13,14,18; matern52 seeds 13,14,18; rbf seed 9."
+  },
+  {
+   "negative": "Naive WSS embedding alone: pooled median gap reduction 35.64% (< 50%); at 24^3 it cuts the gap ~69.8% but with floor-limited residuals (median naive_res 28456.9)",
+   "artifact": "results/iter3/A1-boundary.json",
+   "note": "3D WSS embedding is NOT PSD: n_negative_eigenvalues 24^3 = {matern32: 289, matern52: 4578, rbf: 7662}, 48^3 = {matern32: 0, matern52: 1468, rbf: 4222}; the floored-spectrum solve is not the free solve, so the 24^3 naive gap cut is not claimable as free-boundary accuracy."
+  },
+  {
+   "negative": "24^3 coverage reduced under budget: 21 rows (matern32 x10, matern52 x10, rbf x1) against the plan's 30 (plan: 3 kernels x 10 seeds)",
+   "artifact": "results/iter3/A1-boundary.json",
+   "note": "rbf 3D coverage dropped to seed 0; no w_design runs at 24^3; the 3D arm is embedding/naive/DST2-only in the executed artifact."
+  },
+  {
+   "negative": "S2 REFUTED: median speedup vs PCG 0.237x (synthetic), 0.156x (kaplan), 0.162x (222 rows with wall_s; 60 synthetic block-mask rows carry no pcg/ssam wall_s in the artifact); SSAM-CAM strictly SLOWER than PCG",
+   "artifact": "results/iter3/A2-masked.json",
+   "note": "All pooling conventions < 1.5x REFUTED bar; per plan the S2 gate pools synthetic + Kaplan."
+  },
+  {
+   "negative": "S2 convergence failure: SSAM-CAM converged 77.7% vs PCG 100%; 22.3% of SSAM runs hit the 500-iteration ceiling without converging",
+   "artifact": "results/iter3/A2-masked.json",
+   "note": "Non-converged synthetic rows concentrate on block masks (21), random_0.5 (10), random_0.3 (8); kaplan 24/132 non-converged."
+  },
+  {
+   "negative": "S2 iteration cost higher: synthetic median KKT iters 278.5 (SSAM) vs 192.0 (PCG)",
+   "artifact": "results/iter3/A2-masked.json",
+   "note": "SSAM-CAM misses the < 60-90 target-iteration design expectation and needs more iterations than PCG at the same < 1e-6 KKT convention."
+  },
+  {
+   "negative": "A3: RE+SSAM does NOT tie dense/PCG within the 0.5% tieband on mnist-784 (0.0955 vs 0.0837, +14.2%) or grf-3d (0.0902 vs 0.0777, +16.1%)",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "note": "Tieband holds only on grf-2d (+0.47%) and kaplan (approx 0%); per-domain deltas reported, no exclusions."
+  },
+  {
+   "negative": "A3: RE+SSAM converged only 14/66 rows at the 500-iteration ceiling (grf-2d 3/18, grf-3d 0/2, mnist 0/10, kaplan 11/36)",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "note": "Median RMSE still ties dense/PCG on grf-2d and kaplan despite non-convergence, but median speedup vs PCG is 0.16-0.96x (slower)."
+  },
+  {
+   "negative": "A3 pre-registered negative baselines: KISS-GP wins 0 domains (median RMSE 0.69-1.53), dense KRR wins 0 domains",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "note": "kiss_wins=0, dense_wins=0; benchmark not-refuted under resolution (a). Sensitivity: dense KRR is numerically best on grf-2d (0.0809996662 vs 0.0809997055, rel 4.85e-07) at LOWER cost (0.154 s vs 1.714 s); classified as a TIE because dense and PCG solve the identical masked-Gram to KKT 1e-6; a literal no-tieband reading would flip dense_wins to 1 and REFUTE the benchmark. Disclosed, not hidden."
+  },
+  {
+   "negative": "HSS optional method not attempted (A3 ran 5 methods, not 6)",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "note": "Per plan HSS is attempted-if-budget; honest not-completed report as pre-registered."
+  },
+  {
+   "negative": "24^3 dense-Cholesky reference infeasible in-container: the ~2 GB cgroup OOM-kills it; the executed 3D reference is a CONTAINER-FORCED DEVIATION to PCG-1e-8 (plan pre-registered 24^3 dense Cholesky; PCG-1e-8 was pre-registered for 128x128 ONLY)",
+   "artifact": "results/iter3/A1-boundary.json",
+   "note": "ref_convention_notes records the deviation; attempt count = 3 is execution-log provenance in ref_attempts_log (not an artifact measurement); disclosed, not hidden"
+  },
+  {
+   "negative": "A2 executed scope: synthetic seeds 0-4 rather than the plan's 0-19 (recorded in artifact)",
+   "artifact": "results/iter3/A2-masked.json",
+   "note": "Scope reduction disclosed; verdict unaffected because the speedup deficit is orders of magnitude below the 1.5x bar."
+  },
+  {
+   "negative": "DCT1 comparator is a negative result: median DCT-I gap reduction -1872.6% (only 11/141 rows improve the gap)",
+   "artifact": "results/iter3/A1-boundary.json",
+   "note": "The DCT/DST family's gap reduction is carried by DST2 (median +61.62%, 129/141 rows); reported so the 'strongest classical boundary-aware baseline' comparison is not inflated."
+  },
+  {
+   "negative": "A2 wall-clock pool excludes 60 synthetic block-mask rows: A2-masked.json records no pcg/ssam wall_s (nor re_naive, nor rmse_ssam_vs_pcg) for them (30 at 64x64, 30 at 128x128)",
+   "artifact": "results/iter3/A2-masked.json",
+   "note": "SSAM convergence flags exist for all 282 rows (conv recorded per row); only the wall-clock/timing pool is 222 rows. Disclosed so pooled speedup figures are not over-stated; the REFUTED verdict holds under every convention (all < 1.5x)."
+  },
+  {
+   "negative": "A3 executed coverage delta vs plan: plan 2D GRF seeds 0-19 and 3D GRF 24^3 seeds 0-9; executed grf-2d 18 rows (seeds 0-2, masks random_0.1/0.3/0.5, 64x64) and grf-3d 2 rows (seeds 0-1, mask random_0.3, 24^3); 66 rows total (grf-2d 18, grf-3d 2, mnist 10, kaplan 36)",
+   "artifact": "results/iter3/A3-multidomain.json",
+   "note": "Mirrors the A1 21-vs-30 and A2 seeds-0-4 disclosures; per-domain medians and the verdict (kiss_wins=0, dense_wins=0, not-refuted) hold on the executed subset; no claim over the plan's full seed range."
+  },
+  {
+   "negative": "A5 ablation variant coverage 2 of 4: no_circulant_preconditioner and torus_bccb_vs_free_operator variants omitted (budget-capped)",
+   "artifact": "results/iter3/A5-ablation.json",
+   "note": "variant_status field records executed = [re_without_correction, no_anderson_mixing] and omitted = [no_circulant_preconditioner, torus_bccb_vs_free_operator]; honest not-completed report per plan A5 budget (5 min)."
+  },
+  {
+   "negative": "Superseded EXECUTION_NOTES figures (420-550 iters / RMSE 0.78-0.83) never cited",
+   "artifact": "results/iter2/T1b-CG-masked-train.json",
+   "note": "T1b cited ONLY from the canonical iteration-2 artifact (rate means 245.1/276.1/280.9, span 233-291, rel res 4.69e-9..9.81e-9, RMSE 0.529-0.541); per meta.json T1b citation lock."
+  }
+ ],
+ "numbers_pack": {
+  "pooled": {
+   "s1_median_gap_bccb": 3.6751367505095462,
+   "s1_median_gap_naive": 2.160959956518465,
+   "s1_median_gap_reduction_naive_pct": 35.64479846738635,
+   "s1_median_gap_reduction_w_design_pct": 47.357394387537596,
+   "s1_median_res_w_design": 532.2244857049865,
+   "s1_median_naive_res": 896.4332431132681,
+   "s1_median_rank_w_design": 1233.0,
+   "s1_dct1_median_gap_reduction_pct": -1872.63,
+   "s1_dst2_median_gap_reduction_pct": 61.62,
+   "s1_dct_dst_capture_vs_dst2_median": 0.7467,
+   "s2_median_speedup_ssam_vs_pcg_synthetic": 0.23744422743561644,
+   "s2_median_speedup_ssam_vs_pcg_kaplan": 0.15597,
+   "s2_median_iters_pcg_synthetic": 192.0,
+   "s2_median_iters_ssam_synthetic": 278.5,
+   "s2_median_rel_res_pcg": 8.641536482500882e-07,
+   "s2_median_rel_res_ssam": 9.81274681493777e-07,
+   "s2_ssam_converged_frac": 0.776595744680851,
+   "s2_pcg_converged_frac": 1.0,
+   "s2_kaplan_rmse_pcg_median": 0.3504163481654986,
+   "s2_kaplan_rmse_ssam_median": 0.3504185203984058,
+   "s2_synthetic_rmse_diff_median": 1.7300632523063854e-05,
+   "s2_masked_naive_embed_rel_res_median": 117.43144067619582,
+   "s1_dct_dst_capture_all75_median": 0.7284,
+   "s1_dct_dst_capture_subset_note": "0.7467 = median over the 70 w_design rows with positive DST2 reduction; 0.7284 = median over all 75 w_design rows (5 excluded rows are 128x128 with negative DST2 reduction); both >= 50%",
+   "s2_median_speedup_ssam_vs_pcg_222rows_with_walls": 0.16238,
+   "s2_pool_note": "wall-clock pool = 222 rows with pcg/ssam wall_s recorded; 60 synthetic block-mask rows (30 64x64, 30 128x128) carry no wall_s (nor re_naive, nor rmse_ssam_vs_pcg) in A2-masked.json"
+  },
+  "per_domain": {
+   "a1_grid_64x64": {
+    "n_rows": 60,
+    "median_gap_bccb": 2.6303698603825945,
+    "median_gap_naive": 1.4117184040451471,
+    "median_naive_res": 889.6064653470827,
+    "median_gap_reduction_naive_pct": 46.25879498783554,
+    "median_gap_reduction_w_design_pct": 47.742379810110194,
+    "median_res_w_design": 546.2021462907054,
+    "median_gap_reduction_dct1_pct": -450.40421852998895,
+    "median_gap_reduction_dst2_pct": 61.04408141164395,
+    "n_fail_fast": 9,
+    "n_with_w_design": 60
+   },
+   "a1_grid_128x128": {
+    "n_rows": 60,
+    "median_gap_bccb": 8.072136434344277,
+    "median_gap_naive": 5.461451978091778,
+    "median_naive_res": 646.3849340263545,
+    "median_gap_reduction_naive_pct": 30.247978573581236,
+    "median_gap_reduction_w_design_pct": 46.950115247678816,
+    "median_res_w_design": 415.7884931741434,
+    "median_gap_reduction_dct1_pct": -3560.5983367100025,
+    "median_gap_reduction_dst2_pct": 41.021487915509894,
+    "n_fail_fast": 0,
+    "n_with_w_design": 15
+   },
+   "a1_grid_24x24x24": {
+    "n_rows": 21,
+    "median_gap_bccb": 20.150828797530416,
+    "median_gap_naive": 6.524043604826741,
+    "median_naive_res": 28456.952628768442,
+    "median_gap_reduction_naive_pct": 69.76978106972136,
+    "median_gap_reduction_w_design_pct": null,
+    "median_res_w_design": null,
+    "median_gap_reduction_dct1_pct": 1.0360626685327667,
+    "median_gap_reduction_dst2_pct": 95.06436404115503,
+    "n_fail_fast": 0,
+    "n_with_w_design": 0
+   },
+   "a2_synthetic_2d": {
+    "n_rows": 150,
+    "median_speedup": 0.23744,
+    "ssam_converged_frac": 0.74
+   },
+   "a2_kaplan_sst_v2": {
+    "n_rows": 132,
+    "median_speedup": 0.15597,
+    "ssam_converged_frac": 0.8182
+   },
+   "a3_grf_2d": {
+    "dense": 0.08099966621259799,
+    "pcg": 0.08099970552584146,
+    "kiss": 0.6916740708506983,
+    "rff": 0.22046896189794507,
+    "re_ssam": 0.08138026412342239
+   },
+   "a3_grf_3d": {
+    "dense": 1.092462449696773,
+    "pcg": 0.0776529113408696,
+    "kiss": 1.5311302053973475,
+    "rff": 0.19521157631656,
+    "re_ssam": 0.09016658061065286
+   },
+   "a3_mnist_784": {
+    "dense": 0.08367249119531081,
+    "pcg": 0.08367249095892537,
+    "kiss": 0.4364603265381103,
+    "rff": 0.17876942502580181,
+    "re_ssam": 0.09553819341904356
+   },
+   "a3_kaplan_sst_v2": {
+    "dense": 0.3996687025969349,
+    "pcg": 0.39966869596449695,
+    "kiss": 0.560800119814209,
+    "rff": 0.4153515710008435,
+    "re_ssam": 0.3996687278824146
+   },
+   "a3_tieband_rel_pct_vs_best": {
+    "grf-2d": {
+     "dense": 0.0,
+     "pcg": 0.0,
+     "kiss": 753.92,
+     "rff": 172.19,
+     "re_ssam": 0.47,
+     "best_median_rmse": 0.08099966621259799
+    },
+    "grf-3d": {
+     "dense": 1306.85,
+     "pcg": 0.0,
+     "kiss": 1871.76,
+     "rff": 151.39,
+     "re_ssam": 16.11,
+     "best_median_rmse": 0.0776529113408696
+    },
+    "mnist-784": {
+     "dense": 0.0,
+     "pcg": 0.0,
+     "kiss": 421.63,
+     "rff": 113.65,
+     "re_ssam": 14.18,
+     "best_median_rmse": 0.08367249095892537
+    },
+    "kaplan-sst-v2": {
+     "dense": 0.0,
+     "pcg": 0.0,
+     "kiss": 40.32,
+     "rff": 3.92,
+     "re_ssam": 0.0,
+     "best_median_rmse": 0.39966869596449695
+    }
+   },
+   "a3_tieband_note": "0.5% tieband is an analysis operationalization of the plan's 'ties reported' rule (not a plan term); grf-2d +0.47% sits at the threshold; verdict (kiss_wins=0, dense_wins=0) unaffected."
+  },
+  "resource": {
+   "total_wall_clock_s": 2296.5,
+   "peak_rss_gb": 0.9786376953125,
+   "envelope": "12 cores / 7 GB / <= 90 min",
+   "per_arm_elapsed_s": {
+    "A1": 1530.3,
+    "A2": 385.1,
+    "A3": 360.6,
+    "A4": 2.1,
+    "A5": 18.3,
+    "A6": 0.0
+   },
+   "budget_note": "total 2296.5 s (~38.3 min) <= 90-min cap; peak RSS 0.9786 GB below the 7 GB plan envelope; A1 exceeded its 25-min per-arm cap (1530.3 s); 24^3 dense-Cholesky reference attempts OOM-killed by the ~2 GB cgroup (count 3 = execution-log provenance in A1 ref_attempts_log); the executed 24^3 reference uses PCG-1e-8 as a container-forced deviation, disclosed"
+  }
+ },
+ "per_arm_summary": {
+  "A1": {
+   "name": "A1 boundary (free-boundary gap reduction)",
+   "verdict": "NOT-validated",
+   "n_rows": 141,
+   "elapsed_s": 1530.3,
+   "budget_exceeded": true,
+   "key_numbers": {
+    "pooled_median_gap_reduction_w_design_pct": 47.357394387537596,
+    "pooled_median_res_w_design": 532.2244857049865,
+    "pooled_median_gap_reduction_naive_pct": 35.64479846738635,
+    "n_fail_fast_rows": 9,
+    "w_claimable_guard": {
+     "64_8": null,
+     "128_16": true,
+     "24_3": false
+    },
+    "dct_dst_capture_vs_dst2_median": 0.7467
+   },
+   "notes": [
+    "S1 verdict NOT-validated: gap reduction 47.36% < 50%, corrected residual 532.22 >> 1e-6, w-claimable guard fails at 64x64 and 24^3.",
+    "Naive WSS embedding alone: 35.64% pooled; 24^3 naive ~69.8% gap cut is floor-limited (naive_res median 28456.9; 3D WSS embedding not PSD).",
+    "3D: 21 rows (matern32 x10, matern52 x10, rbf x1; plan target 30); A1 exceeded its 25-min cap (1530.3 s) so w_design ran on 75/141 rows (2D only).",
+    "3D reference = CONTAINER-FORCED DEVIATION to PCG tol 1e-8: the plan pre-registered a dense Cholesky reference at 24^3, and PCG-1e-8 was pre-registered only for 128x128; the ~2 GB cgroup made 24^3 dense Cholesky infeasible (3 attempts, execution-log provenance in A1 ref_attempts_log); recorded honestly in ref_convention_notes.",
+    "24^3 rbf coverage reduced to seed 0 only (budget); DST2 still achieves 95.06% median reduction on 24^3 rows, but DST2 itself is the classical comparator - S1 does not inherit its reduction."
+   ]
+  },
+  "A2": {
+   "name": "A2 masked (SSAM-CAM vs PCG on the shared masked-Gram system)",
+   "verdict": "REFUTED",
+   "n_rows": 282,
+   "elapsed_s": 385.1,
+   "budget_exceeded": false,
+   "key_numbers": {
+    "synthetic_median_speedup": 0.23744,
+    "kaplan_median_speedup": 0.15597,
+    "synthetic_median_iters_pcg_ssam": [
+     192.0,
+     278.5
+    ],
+    "ssam_converged_frac": 0.776595744680851,
+    "pcg_converged_frac": 1.0,
+    "kaplan_rmse_pcg_ssam": [
+     0.3504163481654986,
+     0.3504185203984058
+    ],
+    "synthetic_rmse_diff_median": 1.7300632523063854e-05,
+    "mask_design": {
+     "synthetic_2d": {
+      "block": 60,
+      "random_0.1": 30,
+      "random_0.3": 30,
+      "random_0.5": 30
+     },
+     "kaplan_sst_v2": {
+      "random_0.1": 84,
+      "polar": 12,
+      "land": 12,
+      "random_0.3": 12,
+      "random_0.5": 12
+     }
+    },
+    "non_converged_ssam": {
+     "synthetic_2d": {
+      "total": 39,
+      "by_mask": {
+       "block": 21,
+       "random_0.5": 10,
+       "random_0.3": 8
+      }
+     },
+     "kaplan_sst_v2": {
+      "total": 24,
+      "by_mask": {
+       "polar": 12,
+       "land": 12
+      }
+     }
+    },
+    "median_speedup_222_rows_with_walls": 0.16238
+   },
+   "notes": [
+    "Shared system (P_m K P_m^T + lambda I) w = y_m solved by both solvers at the identical KKT-residual < 1e-6 convention.",
+    "RMSE parity HOLDS (kaplan 0.350416 vs 0.350419; synthetic median diff 1.73e-05) but the speed gate fails by an order of magnitude (SSAM strictly slower).",
+    "Executed synthetic seeds 0-4 (plan 0-19), recorded in the artifact. Wall-clock pool = 222 rows: 60 synthetic block-mask rows (30 at 64x64, 30 at 128x128) carry no pcg/ssam wall_s in the artifact (nor re_naive, nor rmse_ssam_vs_pcg), so pooled timing/residual-by-naive medians exclude them.",
+    "22.3% of SSAM runs non-converged at the 500-iteration ceiling: 39/150 synthetic rows (block 21, random_0.5 10, random_0.3 8) and 24/132 kaplan rows (polar 12, land 12); PCG converged 282/282."
+   ]
+  },
+  "A3": {
+   "name": "A3 multidomain benchmark",
+   "verdict": "not-refuted",
+   "n_rows": 66,
+   "elapsed_s": 360.6,
+   "budget_exceeded": false,
+   "key_numbers": {
+    "kiss_wins": 0,
+    "dense_wins": 0,
+    "per_domain_median_rmse": {
+     "grf-2d": {
+      "dense": 0.08099966621259799,
+      "pcg": 0.08099970552584146,
+      "kiss": 0.6916740708506983,
+      "rff": 0.22046896189794507,
+      "re_ssam": 0.08138026412342239
+     },
+     "grf-3d": {
+      "dense": 1.092462449696773,
+      "pcg": 0.0776529113408696,
+      "kiss": 1.5311302053973475,
+      "rff": 0.19521157631656,
+      "re_ssam": 0.09016658061065286
+     },
+     "mnist-784": {
+      "dense": 0.08367249119531081,
+      "pcg": 0.08367249095892537,
+      "kiss": 0.4364603265381103,
+      "rff": 0.17876942502580181,
+      "re_ssam": 0.09553819341904356
+     },
+     "kaplan-sst-v2": {
+      "dense": 0.3996687025969349,
+      "pcg": 0.39966869596449695,
+      "kiss": 0.560800119814209,
+      "rff": 0.4153515710008435,
+      "re_ssam": 0.3996687278824146
+     }
+    },
+    "re_ssam_converged": {
+     "grf-2d": 3,
+     "grf-3d": 0,
+     "mnist-784": 0,
+     "kaplan-sst-v2": 11
+    },
+    "re_ssam_speedup_vs_pcg_median": {
+     "grf-2d": 0.5553975073686068,
+     "grf-3d": 0.9568447405552033,
+     "mnist-784": 0.4314469255132356,
+     "kaplan-sst-v2": 0.16242066232524466
+    }
+   },
+   "notes": [
+    "Benchmark REFUTED iff KISS-GP wins >= 2 domains or dense KRR wins >= 1 domain: neither happened, so not-refuted; ties reported.",
+    "RE+SSAM ties dense/PCG within 0.5% on grf-2d and kaplan; exceeds the tieband on mnist (+14.2%) and grf-3d (+16.1%) - honest per-domain deltas.",
+    "KISS-GP median RMSE 0.69-1.53 (inducing grid too coarse); RFF 0.18-0.42; dense KRR loses grf-3d (1.0925).",
+    "HSS optional not attempted (5 methods executed); lambda per task from within-train valid-cell selection over {1e-4, 1e-3, 1e-2} (executed 1e-3 / 1e-4).",
+    "RE+SSAM converged only 14/66 rows at the 500-iteration ceiling; median speedup vs PCG 0.16-0.96x (slower).",
+    "Plan-vs-executed coverage delta: grf-2d 18 rows (seeds 0-2) vs plan seeds 0-19; grf-3d 2 rows (seeds 0-1) vs plan seeds 0-9; itemized in honest_negatives."
+   ]
+  },
+  "A4": {
+   "name": "A4 scaling (O(N log N)/O(N) verification)",
+   "n_rows": 3,
+   "elapsed_s": 2.1,
+   "key_numbers": {
+    "320x320_build_s": 0.0074106669053435326,
+    "320x320_naive_solve_s": 0.03936316701583564,
+    "320x320_pcg_60iters_s": 0.9197186259552836,
+    "320x320_naive_rel_res": 97.01067291523046,
+    "48cube_build_s": 0.01152895879931748,
+    "48cube_naive_solve_s": 0.07006445899605751,
+    "48cube_naive_rel_res": 1830.9407333161844,
+    "est_spectral_flops_320x320": 17350508.738329317,
+    "est_spectral_bytes_320x320": 4096000.0,
+    "est_spectral_flops_48cube": 18861341.186392624,
+    "est_spectral_bytes_48cube": 4423680.0
+   },
+   "notes": [
+    "2D 320x320 (N=102400): embedding build 0.0074 s, naive solve 0.039 s, PCG-60 0.92 s (rel res 0.034); 48^3 (N=110592): embedding-only 0.0115 s, naive 0.070 s with floor-limited rel res 1830.9 (3D Woodbury/PCG not run - pre-registered cap).",
+    "Estimated spectral envelope at N ~ 1e5: ~1.7e7 flops / ~4.1e6 bytes (2D); ~1.9e7 flops / 4.4e6 bytes (48^3) - consistent with the O(N log N)/O(N) claim scope for the embedding+spectral-solve path."
+   ]
+  },
+  "A5": {
+   "name": "A5 ablation (marginal contributions)",
+   "n_rows": 6,
+   "elapsed_s": 18.3,
+   "key_numbers": {
+    "full_with_anderson_iters_range": [
+     259,
+     384
+    ],
+    "no_anderson": {
+     "iters": 500,
+     "rel_res_range": [
+      410264.94,
+      744158.54
+     ]
+    },
+    "re_without_correction_rel_res_range": [
+     44.81,
+     85.6
+    ]
+   },
+   "notes": [
+    "Anderson mixing ESSENTIAL: without it SSAM-CAM stalls at the 500-iteration ceiling with rel res ~4.1e5-7.4e5; with it, converges in 259-384 iters to ~1e-6.",
+    "RE without the boundary correction leaves rel res 44.8-85.6 in A5 (lambda 1e-2, 128x128, 6 rows) - A5-scoped and NOT directly comparable to A1's lambda-1e-3 pool. The within-A1 same-config evidence that the boundary correction helps is the per-grid naive -> w_design residual drop on the SAME rows at lambda 1e-3: 64x64 889.6 -> 546.2, 128x128 646.4 -> 415.8 (computed per-grid medians from A1-boundary.json rows).",
+    "Variant coverage 2 of 4 (no_circulant_preconditioner, torus_bccb_vs_free_operator omitted, budget-capped); recorded in A5-ablation.json variant_status and itemized in honest_negatives."
+   ]
+  },
+  "A6": {
+   "name": "A6 G8 tooling (boundary-controlled GRF generator)",
+   "selfcheck_pass": true,
+   "elapsed_s": 0.0,
+   "key_numbers": {
+    "wall_selfcheck_s": 0.04528866708278656,
+    "wall_mixed_boundary_36x72_sample_s": 0.004322750028222799
+   },
+   "notes": [
+    "scripts/grf_boundary.py self-check passes (free/Dirichlet-zero/Neumann-zero/mixed boundary-value sets; Paciorek-Schervish non-stationary path is small-grid dense tooling only, no O(N log N) non-stationary claim)."
+   ]
+  }
+ },
+ "paper_numbers_checklist": [
+  {
+   "item": "S1 verdict label (NOT-validated) with the three failing clauses",
+   "value": "gap reduction 47.36% < 50%; corrected residual 532.22 >> 1e-6; w guard fails at 64x64 (8<10) and 24^3 (3<10)",
+   "artifact": "results/iter3/A1-boundary.json"
+  },
+  {
+   "item": "S2 verdict label (REFUTED) with speedup",
+   "value": "0.237x synthetic / 0.156x kaplan / 0.162x (222 rows with wall_s; 60 block-mask rows carry no wall_s) - all < 1.5x",
+   "artifact": "results/iter3/A2-masked.json"
+  },
+  {
+   "item": "S2 RMSE parity statement (holds; does not rescue the speed gate)",
+   "value": "kaplan 0.350416 vs 0.350419; synthetic rmse diff median 1.73e-05",
+   "artifact": "results/iter3/A2-masked.json"
+  },
+  {
+   "item": "Benchmark verdict (not-refuted) with win counts",
+   "value": "kiss_wins 0, dense_wins 0 (dense-vs-PCG grf-2d = tie under 0.5% band, resolution (a); literal no-tieband reading -> dense_wins 1 -> REFUTED; sensitivity disclosed)",
+   "artifact": "results/iter3/A3-multidomain.json"
+  },
+  {
+   "item": "Benchmark per-domain RE+SSAM vs dense/PCG tieband",
+   "value": "grf-2d +0.47% (at threshold), kaplan ~0% (tie), mnist +14.2% (no tie), grf-3d +16.1% (no tie); 0.5% tieband is an analysis operationalization of the plan's 'ties reported', not a plan term; verdict unaffected",
+   "artifact": "results/iter3/A3-multidomain.json"
+  },
+  {
+   "item": "DCT/DST consequence (holds; capture 74.7% >= 50% of DST2 reduction; DCT1 negative)",
+   "value": "capture holds: 0.7467 (70-row positive-DST2 subset, of the 75 rows carrying both fields) / 0.7284 (all-75 robustness); DST2 median reduction 61.62%; DCT1 negative -1872.6%; both capture figures >= 50%",
+   "artifact": "results/iter3/A1-boundary.json"
+  },
+  {
+   "item": "Honest negatives list (must appear verbatim in the paper)",
+   "value": "20 items in honest_negatives above; the negatives section of the paper must carry all 20 verbatim, no exclusions",
+   "artifact": "results/analysis/analysis-iter3.json"
+  },
+  {
+   "item": "S1 bounded-residual framing (NOT exact)",
+   "value": "median corrected residual 532.22, plateau ~1e2-1e3; naive floor-limited at 24^3",
+   "artifact": "results/iter3/A1-boundary.json"
+  },
+  {
+   "item": "S2 masked-Gram equivalence empirically tested (NOT a proof)",
+   "value": "shared system + identical KKT convention; convergence 77.7% vs 100%",
+   "artifact": "results/iter3/A2-masked.json"
+  },
+  {
+   "item": "T1b cited from canonical iteration-2 artifact ONLY",
+   "value": "rate means 245.1/276.1/280.9; span 233-291; rel res 4.69e-9..9.81e-9; RMSE means 0.529-0.541",
+   "artifact": "results/iter2/T1b-CG-masked-train.json"
+  },
+  {
+   "item": "P0 pilot gap context (iteration-2)",
+   "value": "torus-vs-free gap matern32 0.9496, rbf 0.1159",
+   "artifact": "results/iter2/P0-pilot-gate-real.json"
+  },
+  {
+   "item": "Resource accounting",
+   "value": "total 2296.5 s (~38.3 min) <= 90 min; peak RSS 0.9786 GB; A1 1530.3 s exceeded its 25-min cap",
+   "artifact": "results/iter3/results_summary.json"
+  },
+  {
+   "item": "Scaling numbers",
+   "value": "320x320 build 0.007 s / naive 0.039 s; 48^3 build 0.012 s / naive 0.070 s (rel res 1830.9); est ~1.7e7 flops / ~4.1e6 bytes at N ~ 1e5",
+   "artifact": "results/iter3/A4-scaling.json"
+  },
+  {
+   "item": "Ablation result",
+   "value": "Anderson mixing essential (no-Anderson 500-iter stall at rel res 4.1e5-7.4e5; with-Anderson 259-384 iters to ~1e-6); RE-without-correction rel res 44.8-85.6 (A5-scoped, lambda 1e-2); same-config A1 pair naive->w_design residual 889.6->546.2 (64x64) and 646.4->415.8 (128x128) at lambda 1e-3",
+   "artifact": "results/iter3/A5-ablation.json"
+  },
+  {
+   "item": "A6 tooling self-check",
+   "value": "selfcheck_pass true",
+   "artifact": "results/iter3/A6-tooling.json"
+  },
+  {
+   "item": "No new-mathematics / no-SOTA claim guard",
+   "value": "carried verbatim in meta.json honest_framing (extended in fidelity round 2): components all classical (Martucci DCT/DST 45; ADMM/FISTA 46-52; Ambikasaran HSS 54; Trench 66; Gohberg-Semencul 67); no new-mathematics claim; claim = grid-KRR-targeted integration (G5/G6) + empirical evaluation",
+   "artifact": "results/iter3/meta.json"
+  },
+  {
+   "item": "Superseded figures never cited (EXECUTION_NOTES pre-fix T1b)",
+   "value": "420-550 iters / RMSE 0.78-0.83 NOT cited anywhere in this analysis",
+   "artifact": "results/iter2/T1b-CG-masked-train.json"
+  }
+ ]
+}
