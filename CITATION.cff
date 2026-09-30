@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the accompanying paper."
+title: "Research Epic Manager"
+type: software
+repository-code: "https://github.com/alexchen5/research-epic-manager"
+
+preferred-citation:
+  type: article
+  title: "Autonomous Research Project Management as an Agent Skill: A Case Study in Exact Spectral Spatial Regression"
+  authors:
+    - family-names: "Chen"
+      given-names: "Alexander"
+    - family-names: "Meng"
+      given-names: "Jeffrey"
+    - family-names: "Hoex"
+      given-names: "Bram"
+    - family-names: "Xie"
+      given-names: "Tong"
+  year: 2026
+  doi: "10.48550/arXiv.2609.31683"
+  url: "https://arxiv.org/abs/2609.31683"
