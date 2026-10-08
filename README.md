@@ -17,12 +17,12 @@ revisions.
 
 ## Paper
 
-This repository contains the agent skills and case-study artifacts described in:
-
 **Autonomous Research Project Management as an Agent Skill:
 A Case Study in Exact Spectral Spatial Regression**
 
-[arXiv:2609.31683](https://arxiv.org/abs/2609.31683)
+- **Full paper:** [arXiv:2609.31683](https://arxiv.org/abs/2609.31683)
+- **Venue:** [Accepted poster, AutoMLR Workshop at NeurIPS 2026](https://automlr.com/papers/)
+
 
 ## Installation
 
